@@ -18,8 +18,10 @@ example details
 
 ## API
 ### Commands
-- createGame( loginToken, userId, userName, side )
+- createGame( loginToken, userId, userName, side, timePerSide )
     - return gameId
+- joinGame( loginToken, userId, userName, gameId )
+    - return side
 - getGame( id )
     - return: game
 - getPlayerGames( player )

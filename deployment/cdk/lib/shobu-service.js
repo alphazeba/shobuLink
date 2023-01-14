@@ -13,21 +13,20 @@ class ShobuService extends Construct {
         // ddb tables
         const gameTable = new ddb.Table( this, "GameTable", {
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING }
-        })
+        });
 
         // lambda functions
         const lambdaEnv = {
             AdminPasswordHash: "",
             region: props.env.region,
-            gameTableName: gameTable.name
+            gameTableName: gameTable.tableName
         }
         const lambdaFns = [
             "GetGame",
             "Login",
-            "CreateGame"
+            "CreateGame",
+            "JoinGame"
         ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv ) );
-
-        
 
         for( const fn of lambdaFns ){
             console.log( fn )

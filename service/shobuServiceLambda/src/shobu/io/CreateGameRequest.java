@@ -10,6 +10,6 @@ public class CreateGameRequest {
     public int timePerSide;
 
     public PlayerSide getSide(){
-        return PlayerSide.parsePlayerSide( side );
+        return PlayerSide.parse( side );
     }
 }

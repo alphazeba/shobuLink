@@ -1,9 +1,10 @@
 package shobu.data.sub;
 
 public enum GameState {
+    // pending
+    waitingForPlayer,
     // active
     blackMove, whiteMove,
-
     // complete
     blackResigned, whiteResigned,
     blackWon, whiteWon,
