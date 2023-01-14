@@ -1,0 +1,6 @@
+deployment/cdk/cdk.out
+**/node_modules
+**/.npmignore
+**/.DS_Store
+service/shobuServiceLambda/.idea
+service/shobuServiceLambda/out
