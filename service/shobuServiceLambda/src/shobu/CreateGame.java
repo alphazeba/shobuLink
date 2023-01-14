@@ -1,6 +1,7 @@
 package shobu;
 
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import shobu.dataAccess.Games;
 import shobu.dataAccess.LoginTokens;
@@ -9,6 +10,7 @@ import shobu.io.CreateGameRequest;
 import shobu.io.CreateGameResponse;
 import shobu.io.general.GatewayInput;
 import shobu.io.general.GatewayOutput;
+import shobu.util.Log;
 import shobu.util.Parser;
 
 public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
@@ -16,9 +18,12 @@ public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
     private Games games;
 
     public GatewayOutput handleRequest(final GatewayInput rawInput, final Context context ){
+        Log.setLogger( context.getLogger() );
+        Log.log("Entering the create game fn");
         games = new Games( context );
         try{
             CreateGameResponse response = run( Parser.fromJson( rawInput.body, CreateGameRequest.class ) );
+            Log.log("about to exit function");
             return new GatewayOutput(
                     Parser.toJson( response ),
                     GatewayOutput.buildSimpleHeaders("application/json"),

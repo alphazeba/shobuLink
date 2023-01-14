@@ -1,18 +1,19 @@
 package shobu.data;
 
-import org.joda.time.DateTime;
+
+import java.util.Date;
 
 public class LoginToken {
     public String token;
-    public DateTime lastRefreshTime;
+    public Date lastRefreshTime;
     public String userId;
-    public DateTime originalCreationTime;
+    public Date originalCreationTime;
 
     public LoginToken(){}
 
     public LoginToken( String userId ){
-        lastRefreshTime = DateTime.now();
-        originalCreationTime = DateTime.now();
+        lastRefreshTime = new Date();
+        originalCreationTime = new Date();
         this.userId = userId;
         token = generateToken();
     }

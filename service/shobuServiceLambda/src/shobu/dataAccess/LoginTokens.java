@@ -2,6 +2,7 @@ package shobu.dataAccess;
 
 import shobu.data.LoginToken;
 import shobu.exception.ExceptionToReturn;
+import shobu.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,9 +13,11 @@ public class LoginTokens {
     }};
 
     public void VerifyLogin( String userId, String token ) throws ExceptionToReturn {
-        if( !fakeLoginToken.equals(fakeLoginToken) ){
+        Log.log("Verifying login");
+        if( !fakeLoginToken.equals( token ) ){
             throw new ExceptionToReturn( "Please login again", 401 );
         }
+        Log.log("finished verifying login");
     }
 
     public LoginToken LoginUser(String userId ){

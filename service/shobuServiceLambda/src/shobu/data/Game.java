@@ -3,7 +3,7 @@ package shobu.data;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBHashKey;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBTable;
-import org.joda.time.DateTime;
+import java.util.Date;
 import shobu.data.sub.GameState;
 import shobu.data.sub.Move;
 import shobu.data.sub.PlayerSide;
@@ -30,7 +30,7 @@ public class Game {
     @DynamoDBAttribute(attributeName = "moves")
     public List<Move> moves;
     @DynamoDBAttribute(attributeName = "startTime")
-    public DateTime startTime;
+    public Date startTime;
     @DynamoDBAttribute(attributeName = "state")
     public GameState state;
     @DynamoDBAttribute(attributeName = "secs")
@@ -45,6 +45,7 @@ public class Game {
         this.id = Guid.newGuid();
         this.secs = timePerSide;
         this.state = GameState.waitingForPlayer;
+        this.startTime = new Date();
     }
 
     private boolean gameIsJoinable(){
