@@ -18,7 +18,7 @@ example details
 
 ## API
 ### Commands
-- createGame( loginToken )
+- createGame( loginToken, userId, userName, side )
     - return gameId
 - getGame( id )
     - return: game

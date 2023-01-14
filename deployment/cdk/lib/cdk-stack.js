@@ -12,7 +12,7 @@ class CdkStack extends Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
   
-    new ShobuService.ShobuService( this, "ShobuService" )
+    new ShobuService.ShobuService( this, "ShobuService", props )
     // The code that defines your stack goes here
 
     // example resource

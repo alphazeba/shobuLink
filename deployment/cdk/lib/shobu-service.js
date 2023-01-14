@@ -7,22 +7,27 @@ const lambda = require("aws-cdk-lib/aws-lambda");
 const ddb = require("aws-cdk-lib/aws-dynamodb");
 
 class ShobuService extends Construct {
-    constructor( scope, id ){
+    constructor( scope, id, props ){
         super( scope, id );
-
-        // lambda functions
-        const lambdaEnv = {
-            AdminPasswordHash: ""
-        }
-        const lambdaFns = [
-            "GetGame",
-            "Login"
-        ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv ) );
 
         // ddb tables
         const gameTable = new ddb.Table( this, "GameTable", {
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING }
         })
+
+        // lambda functions
+        const lambdaEnv = {
+            AdminPasswordHash: "",
+            region: props.env.region,
+            gameTableName: gameTable.name
+        }
+        const lambdaFns = [
+            "GetGame",
+            "Login",
+            "CreateGame"
+        ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv ) );
+
+        
 
         for( const fn of lambdaFns ){
             console.log( fn )

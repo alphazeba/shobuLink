@@ -11,5 +11,6 @@
     <orderEntry type="library" name="amazonaws.aws.java.sdk.lambda" level="project" />
     <orderEntry type="library" name="amazonaws.aws.lambda.java.core" level="project" />
     <orderEntry type="library" name="springframework.security.spring.crypto" level="project" />
+    <orderEntry type="library" name="amazonaws.aws.java.sdk.dynamodb" level="project" />
   </component>
 </module>

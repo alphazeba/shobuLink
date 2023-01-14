@@ -26,7 +26,7 @@ public class Login implements RequestHandler<GatewayInput, GatewayOutput>{
 
     public GatewayOutput handleRequest( final GatewayInput rawInput, final Context context ){
         try {
-            LoginResponse response = run(Parser.fromJson(rawInput.body, LoginRequest.class));
+            LoginResponse response = run( Parser.fromJson(rawInput.body, LoginRequest.class ) );
             return new GatewayOutput(
                     Parser.toJson( response ),
                     GatewayOutput.buildSimpleHeaders("application/json"),
