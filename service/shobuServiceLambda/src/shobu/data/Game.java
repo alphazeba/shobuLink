@@ -89,6 +89,7 @@ public class Game {
         PlayerSide side = getMissingPlayerSide();
         setPlayer( id, name, side );
         state = GameState.blackMove;
+        startTime = Time.getNow(); // update the startTime again, because now the games is actually started.
         return side;
     }
 
