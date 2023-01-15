@@ -2,12 +2,15 @@ package shobu.data.sub;
 
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBAttribute;
 import com.amazonaws.services.dynamodbv2.datamodeling.DynamoDBDocument;
-import java.util.Date;
 
 @DynamoDBDocument
 public class Move {
     @DynamoDBAttribute(attributeName = "fullMove")
-    public String fullMove;
+    public String getFullMove(){ return fullMove; }
+    public void setFullMove( String fullMove ){ this.fullMove = fullMove; }
+    private String fullMove;
     @DynamoDBAttribute(attributeName = "time")
-    public Date time;
+    public long getTime(){ return time; }
+    public void setTime( long time ){ this.time = time; }
+    private long time;
 }

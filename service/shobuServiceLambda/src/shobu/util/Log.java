@@ -1,7 +1,6 @@
 package shobu.util;
 
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
-import org.joda.time.DateTime;
 
 public class Log {
     private static LambdaLogger logger;
@@ -12,7 +11,7 @@ public class Log {
 
     public static void log( String s ){
         if( logger != null ){
-            logger.log(DateTime.now().toString() + s );
+            logger.log(Time.getNowString() + "::" + s );
         }
     }
 }

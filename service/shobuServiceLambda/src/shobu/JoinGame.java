@@ -14,10 +14,8 @@ import shobu.util.Parser;
 
 public class JoinGame implements RequestHandler<GatewayInput, GatewayOutput> {
     private final LoginTokens loginTokens = new LoginTokens();
-    private Games games;
 
     public GatewayOutput handleRequest( final GatewayInput rawInput, final Context context ){
-        games = new Games( context );
         try {
             JoinGameResponse response = run(Parser.fromJson(rawInput.body, JoinGameRequest.class));
             return new GatewayOutput(
@@ -33,7 +31,7 @@ public class JoinGame implements RequestHandler<GatewayInput, GatewayOutput> {
 
     private JoinGameResponse run(JoinGameRequest request ) throws ExceptionToReturn {
         loginTokens.VerifyLogin( request.userId, request.loginToken );
-        PlayerSide side = games.joinGame( request.userId, request.userName, request.gameId );
+        PlayerSide side = Games.getGames().joinGame( request.userId, request.userName, request.gameId );
         return new JoinGameResponse( side );
     }
 }

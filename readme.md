@@ -22,7 +22,7 @@ example details
     - return gameId
 - joinGame( loginToken, userId, userName, gameId )
     - return side
-- getGame( id )
+- getGame( gameId )
     - return: game
 - getPlayerGames( player )
     - return: [ game, ... ]

@@ -11,20 +11,11 @@ class ShobuService extends Construct {
     constructor( scope, id, props ){
         super( scope, id );
 
-        // vpc 
-        const shobuVpc = new ec2.Vpc( this, "shobuVpc", {
-            /*
-            DYNAMODB: {
-                service: ec2.GatewayVpcEndpointAwsService.DYNAMODB
-            }*/
-        });
-
         // ddb tables
         const gameTableName = "GameTable"
         const gameTable = new ddb.Table( this, "GameTable", {
             tableName: gameTableName,
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
-            vpc: shobuVpc
         });
 
         // lambda functions
@@ -38,7 +29,7 @@ class ShobuService extends Construct {
             "Login",
             "CreateGame",
             "JoinGame"
-        ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv, shobuVpc ) );
+        ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv ) );
 
         for( const fn of lambdaFns ){
             gameTable.grantReadWriteData( fn );
@@ -52,7 +43,6 @@ function buildShobuLambda( scope, functionName, env, vpc ){
         code: lambda.Code.fromAsset( "../../service/shobuServiceLambda/out/artifacts/" + functionName + "_jar/shobuServiceLambda.jar" ),
         handler: "shobu." + functionName + "::handleRequest",
         environment: env,
-        vpc: vpc
     } );
 }
 

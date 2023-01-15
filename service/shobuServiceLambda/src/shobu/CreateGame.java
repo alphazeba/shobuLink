@@ -15,13 +15,12 @@ import shobu.util.Parser;
 
 public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
     private LoginTokens loginTokens = new LoginTokens();
-    private Games games;
 
     public GatewayOutput handleRequest(final GatewayInput rawInput, final Context context ){
         Log.setLogger( context.getLogger() );
         Log.log("Entering the create game fn");
-        games = new Games( context );
         try{
+            Log.log( rawInput.body );
             CreateGameResponse response = run( Parser.fromJson( rawInput.body, CreateGameRequest.class ) );
             Log.log("about to exit function");
             return new GatewayOutput(
@@ -36,9 +35,11 @@ public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
     }
 
     private CreateGameResponse run( CreateGameRequest request ) throws ExceptionToReturn {
+        Log.log( request.userId );
+        Log.log( request.userName );
         loginTokens.VerifyLogin(request.userId, request.loginToken);
         // need to handle actually creating a game.
-        String gameId = games.createGame(  request.userId, request.userName, request.getSide(), request.timePerSide );
+        String gameId = Games.getGames().createGame(  request.userId, request.userName, request.getSide(), request.timePerSide );
         return new CreateGameResponse( gameId );
     }
 }
