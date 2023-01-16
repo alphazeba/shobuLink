@@ -3,6 +3,7 @@ package shobu;
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import shobu.dataAccess.Games;
 import shobu.dataAccess.LoginTokens;
 import shobu.exception.ExceptionToReturn;
@@ -13,7 +14,7 @@ import shobu.io.general.GatewayOutput;
 import shobu.util.Log;
 import shobu.util.Parser;
 
-public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
+public class daCreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
     private LoginTokens loginTokens = new LoginTokens();
 
     public GatewayOutput handleRequest(final GatewayInput rawInput, final Context context ){
@@ -29,7 +30,10 @@ public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
                     200
             );
         }
-        catch( ExceptionToReturn e ){
+        catch( JsonProcessingException e ){
+            return new ExceptionToReturn("Issue parsing json", 403 ).output;
+        }
+        catch(ExceptionToReturn e ){
             return e.output;
         }
     }

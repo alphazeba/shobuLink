@@ -2,6 +2,7 @@ package shobu;
 
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import shobu.data.sub.PlayerSide;
 import shobu.dataAccess.Games;
 import shobu.dataAccess.LoginTokens;
@@ -23,6 +24,9 @@ public class JoinGame implements RequestHandler<GatewayInput, GatewayOutput> {
                     GatewayOutput.buildSimpleHeaders("application/json"),
                     200
             );
+        }
+        catch( JsonProcessingException e ){
+            return new ExceptionToReturn("Issue parsing json", 403 ).output;
         }
         catch( ExceptionToReturn e ){
             return e.output;

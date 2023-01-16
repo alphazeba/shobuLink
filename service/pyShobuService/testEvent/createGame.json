@@ -1,0 +1,3 @@
+{
+    "body": "{ \"loginToken\": \"LOGGEDIN\",\n  \"userId\": \"abc123\",\n  \"userName\": \"Chad\",\n  \"side\": \"Black\",\n  \"timePerSide\": 300 }"
+}

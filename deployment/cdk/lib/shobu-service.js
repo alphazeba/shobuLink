@@ -31,13 +31,21 @@ class ShobuService extends Construct {
             "JoinGame"
         ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv ) );
 
+        const pythonLambdaFn = new lambda.Function( this, "pyShobuLambda", {
+            runtime: lambda.Runtime.PYTHON_3_9,
+            code: lambda.Code.fromAsset( '../../service/pyShobuService/src'),
+            handler: "main.lambda_handler",
+            environment: lambdaEnv
+        });
+        gameTable.grantReadWriteData( pythonLambdaFn )
+
         for( const fn of lambdaFns ){
             gameTable.grantReadWriteData( fn );
         }
     }
 }
 
-function buildShobuLambda( scope, functionName, env, vpc ){
+function buildShobuLambda( scope, functionName, env ){
     return new lambda.Function( scope, functionName + "Lambda", {
         runtime: lambda.Runtime.JAVA_11,
         code: lambda.Code.fromAsset( "../../service/shobuServiceLambda/out/artifacts/" + functionName + "_jar/shobuServiceLambda.jar" ),
