@@ -22,26 +22,15 @@ class ShobuService extends Construct {
         const lambdaEnv = {
             AdminPasswordHash: "",
             region: props.env.region,
-            //gameTableName: gameTableName
         }
-        const lambdaFns = [
-            "GetGame",
-            "Login",
-            "CreateGame",
-            "JoinGame"
-        ].map( ( fnName ) => buildShobuLambda( this, fnName, lambdaEnv ) );
-
         const pythonLambdaFn = new lambda.Function( this, "pyShobuLambda", {
             runtime: lambda.Runtime.PYTHON_3_9,
             code: lambda.Code.fromAsset( '../../service/pyShobuService/src'),
             handler: "main.lambda_handler",
             environment: lambdaEnv
         });
+        // permissions
         gameTable.grantReadWriteData( pythonLambdaFn )
-
-        for( const fn of lambdaFns ){
-            gameTable.grantReadWriteData( fn );
-        }
     }
 }
 
