@@ -1,5 +1,5 @@
 
-import eventIo.ddb as ddb
+import handler.eventIO.ddb as ddb
 
 gameTable = ddb.getTable( "GameTable" )
 

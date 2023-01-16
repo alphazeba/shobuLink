@@ -4,9 +4,9 @@ import util.time as time
 
 def new( fullMove ):
     return {
-        "time": time.getNow(),
-        "fullMove": fullMove
+        "t": time.getNow(),
+        "m": fullMove
     }
 
 def getFullMove( this ):
-    return this["fullMove"]
+    return this["m"]

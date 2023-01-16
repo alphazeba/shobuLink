@@ -28,7 +28,7 @@ example details
     - return: [ game, ... ]
 - getRecentGames( )
     - return: [ game, ... ]
-- playMove( gameId, move, loginToken )
+- playMove( gameId, move, loginToken, userId )
     - return: updateGame
 - createUser( userName, password )
     - return: userId

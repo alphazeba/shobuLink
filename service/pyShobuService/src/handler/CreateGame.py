@@ -1,7 +1,7 @@
 
 import logic.Game as Game
 import dataAccess.GameTable as GameTable
-from eventIo.eventValidation import getValidatedOptionValue, getValidatedRangeValue, getValidatedStringValue
+from handler.eventIO.eventValidation import getValidatedOptionValue, getValidatedRangeValue, getValidatedStringValue
 import data.playerSide as PlayerSide
 
 def CreateGame( event, context ):

@@ -1,7 +1,8 @@
 
 import logic.shobu.move as M
-import logic.shobu.board as B
 import logic.shobu.helpers as h
+import logic.shobu.token as t
+from exception.ExceptionToReturn import ExceptionToReturn
 
 def parseMove( moveString ):
     if len( moveString ) == 10:
@@ -42,11 +43,11 @@ def parseSpot( locationString ):
 
 def parseSide( sideCharacter ):
     if sideCharacter == "B":
-        return B.SIDE_BLACK
+        return t.SIDE_BLACK
     elif sideCharacter == "W":
-        return B.SIDE_WHITE
+        return t.SIDE_WHITE
     else:
         error( "character " + sideCharacter + " must be either B or W" )
 
 def error( message ):
-    return False
+    raise ExceptionToReturn( message, 403 )

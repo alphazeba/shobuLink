@@ -2,7 +2,7 @@
 
 import logic.Game as Game
 import dataAccess.GameTable as GameTable
-from eventIo.eventValidation import getValidatedStringValue
+from handler.eventIO.eventValidation import getValidatedStringValue
 
 def JoinGame( event, context ):
     loginToken = getValidatedStringValue( "loginToken", event )

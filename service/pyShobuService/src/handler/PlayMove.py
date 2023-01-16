@@ -1,5 +1,5 @@
 
-from eventIo.eventValidation import getValidatedStringValue
+from handler.eventIO.eventValidation import getValidatedStringValue
 import dataAccess.GameTable as GameTable
 import logic.Game as Game
 
@@ -15,5 +15,5 @@ def PlayMove( event, context ):
     Game.playMove( game, playerSide, fullMove )
     GameTable.saveGame( game )
     return {
-        "game"
+        "game": game
     }

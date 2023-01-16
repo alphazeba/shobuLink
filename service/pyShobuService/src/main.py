@@ -1,6 +1,6 @@
 
-from eventIo.event import buildResponse
-from eventIo.eventValidation import getValidatedMapKey
+from handler.eventIO.event import buildResponse
+from handler.eventIO.eventValidation import getValidatedMapKey
 from handler.CreateGame import CreateGame
 from handler.GetGame import GetGame
 from handler.JoinGame import JoinGame
