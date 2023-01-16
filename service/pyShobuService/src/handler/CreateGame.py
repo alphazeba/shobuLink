@@ -1,8 +1,8 @@
 
-import logic_Game as Game
-import dataAccess_GameTable as GameTable
-from io_event_validation import getValidatedOptionValue, getValidatedRangeValue, getValidatedStringValue
-import data_playerSide as PlayerSide
+import logic.Game as Game
+import dataAccess.GameTable as GameTable
+from eventIo.eventValidation import getValidatedOptionValue, getValidatedRangeValue, getValidatedStringValue
+import data.playerSide as PlayerSide
 
 def CreateGame( event, context ):
     # validate incoming data

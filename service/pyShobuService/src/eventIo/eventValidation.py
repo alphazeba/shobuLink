@@ -1,5 +1,5 @@
 
-from exception_ExceptionToReturn import ExceptionToReturn
+from exception.ExceptionToReturn import ExceptionToReturn
 
 def getValidatedMapKey( key, event, map ):
     fn = lambda value: _validateOptions( key, value, map.keys() )

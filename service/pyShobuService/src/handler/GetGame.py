@@ -1,6 +1,6 @@
 
-import dataAccess_GameTable as GameTable
-from io_event_validation import getValidatedStringValue
+import dataAccess.GameTable as GameTable
+from eventIo.eventValidation import getValidatedStringValue
 
 def GetGame( event, context ):
     gameId = getValidatedStringValue( 'gameId', event )

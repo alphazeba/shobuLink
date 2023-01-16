@@ -1,5 +1,5 @@
 
-import logic_shobu_token as t
+import logic.shobu.token as t
 
 def vectorToUnitAndSteps( vector ):
     x,y = vector

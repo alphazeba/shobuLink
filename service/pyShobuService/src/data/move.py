@@ -1,5 +1,5 @@
 
-import util_time as time
+import util.time as time
 
 
 def new( fullMove ):

@@ -1,5 +1,5 @@
 
-from io_event import buildResponse
+from eventIo.event import buildResponse
 
 class ExceptionToReturn( Exception ):
     def __init__( self, message, statusCode ):

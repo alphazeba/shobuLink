@@ -1,13 +1,13 @@
 
-import data_playerSide as PlayerSide
-import data_gameState as GameState
-from exception_ExceptionToReturn import ExceptionToReturn
-import util_time as time
-from util_guid import newGuid
-import data_move as Move
-import logic_shobu_board as B
-import logic_shobu_moveValidation as mv
-import logic_shobu_moveParser as mp
+import data.playerSide as PlayerSide
+import data.gameState as GameState
+from exception.ExceptionToReturn import ExceptionToReturn
+import util.time as time
+from util.guid import newGuid
+import data.move as Move
+import logic.shobu.board as B
+import logic.shobu.moveValidation as mv
+import logic.shobu.moveParser as mp
 
 _id = "id"
 _buId = "buId"

@@ -1,8 +1,8 @@
 
 
-import logic_Game as Game
-import dataAccess_GameTable as GameTable
-from io_event_validation import getValidatedStringValue
+import logic.Game as Game
+import dataAccess.GameTable as GameTable
+from eventIo.eventValidation import getValidatedStringValue
 
 def JoinGame( event, context ):
     loginToken = getValidatedStringValue( "loginToken", event )

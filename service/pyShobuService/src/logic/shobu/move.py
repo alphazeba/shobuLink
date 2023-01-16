@@ -1,5 +1,5 @@
 
-import logic_shobu_helpers as h
+import logic.shobu.helpers as h
 
 def buildMove( passiveMove, activeMove ):
     return {

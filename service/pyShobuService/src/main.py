@@ -1,11 +1,11 @@
 
-from io_event import buildResponse
-from io_event_validation import getValidatedMapKey
-from handler_CreateGame import CreateGame
-from handler_GetGame import GetGame
-from handler_JoinGame import JoinGame
-from handler_PlayMove import PlayMove
-from exception_ExceptionToReturn import ExceptionToReturn
+from eventIo.event import buildResponse
+from eventIo.eventValidation import getValidatedMapKey
+from handler.CreateGame import CreateGame
+from handler.GetGame import GetGame
+from handler.JoinGame import JoinGame
+from handler.PlayMove import PlayMove
+from exception.ExceptionToReturn import ExceptionToReturn
 
 def lambda_handler( event, context ):
     try:
