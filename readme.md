@@ -29,7 +29,7 @@ example details
 - getRecentGames( )
     - return: [ game, ... ]
 - playMove( gameId, move, loginToken )
-    - return: success
+    - return: updateGame
 - createUser( userName, password )
     - return: userId
 - login( userName, password )
