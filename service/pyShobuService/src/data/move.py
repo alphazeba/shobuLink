@@ -7,3 +7,6 @@ def new( fullMove ):
         "time": time.getNow(),
         "fullMove": fullMove
     }
+
+def getFullMove( this ):
+    return this["fullMove"]

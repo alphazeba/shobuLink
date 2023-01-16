@@ -14,7 +14,7 @@ import shobu.io.general.GatewayOutput;
 import shobu.util.Log;
 import shobu.util.Parser;
 
-public class daCreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
+public class CreateGame implements RequestHandler<GatewayInput,GatewayOutput> {
     private LoginTokens loginTokens = new LoginTokens();
 
     public GatewayOutput handleRequest(final GatewayInput rawInput, final Context context ){

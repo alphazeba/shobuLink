@@ -5,6 +5,9 @@ from exception_ExceptionToReturn import ExceptionToReturn
 import util_time as time
 from util_guid import newGuid
 import data_move as Move
+import logic_shobu_board as B
+import logic_shobu_moveValidation as mv
+import logic_shobu_moveParser as mp
 
 _id = "id"
 _buId = "buId"
@@ -43,9 +46,18 @@ def playMove( this, playerSide, fullMove ):
     # validate that the player is not already out of time 
     # TODO should update the game table with the fact the other player won.
     # validate the move is legal
-    # TODO should throw error that the move is not legal.
-    # make the move
+    board = _getCurrentBoardState( this )
+    # validate the new move.
+    if not mv.validateFullMove( board, mp.parseMove( fullMove ) ):
+        raise ExceptionToReturn( "MOVE NOT LEGAL", 403 )
     _addMove( this, move )
+
+def _getCurrentBoardState( this ):
+    board = B.initBoard()
+    for move in this[_moves]:
+        shobuMove = mp.parseMove( Move.getFullMove( move ) )
+        board = B.makeValidatedMove( board, shobuMove )
+    return board
 
 def _addMove( this, move ):
     this[_moves].append( move )
