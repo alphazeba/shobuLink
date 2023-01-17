@@ -6,8 +6,10 @@ from handler.GetGame import GetGame
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
 from exception.ExceptionToReturn import ExceptionToReturn
+import json
 
 def lambda_handler( event, context ):
+    event = json.loads( event['body'] )
     try:
         eventType = getValidatedMapKey( 'type', event, routes )
         response = None

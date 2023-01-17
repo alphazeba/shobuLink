@@ -16,6 +16,9 @@ example details
 - https://docs.aws.amazon.com/AmazonS3/latest/userguide/website-hosting-custom-domain-walkthrough.html (how to set url)
 - https://aws.amazon.com/getting-started/projects/build-serverless-web-app-lambda-apigateway-s3-dynamodb-cognito/module-1/ ( tutorial for getting s3 bucket setup ) ( this is also good for getting the rest of the project setup. This would be a good base to use )
 - very helpful document for using the python sdk (https://github.com/awsdocs/aws-doc-sdk-examples/blob/main/python/example_code/dynamodb/GettingStarted/scenario_getting_started_movies.py)
+
+- might be a fix for the Decimal issue https://stackoverflow.com/questions/43678946/python-3-x-cannot-serialize-decimal-to-json
+
 ## API
 ### Commands
 - createGame( loginToken, userId, userName, side, secondsPerSide )

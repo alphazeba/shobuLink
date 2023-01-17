@@ -1,9 +1,11 @@
 
+import json
+
 def buildResponse( responsObj, statusCode ):
     return {
         "statusCode": statusCode,
         "headers": {
             "Content-Type": "application/json"
         },
-        "body": responsObj
+        "body": json.dumps( responsObj )
     }

@@ -5,11 +5,14 @@ const { Construct } = require( "constructs" );
 const apigateway = require("aws-cdk-lib/aws-apigateway");
 const lambda = require("aws-cdk-lib/aws-lambda");
 const ddb = require("aws-cdk-lib/aws-dynamodb");
-const ec2 = require("aws-cdk-lib/aws-ec2");
 
 class ShobuService extends Construct {
     constructor( scope, id, props ){
         super( scope, id );
+
+        const domainName = "shobu.link"
+        // idk how to make the link get a certificate so maybe i won't be handling the 
+        // the certificate process through the cdk.
 
         // ddb tables
         const gameTableName = "GameTable"
@@ -23,14 +26,19 @@ class ShobuService extends Construct {
             AdminPasswordHash: "",
             region: props.env.region,
         }
-        const pythonLambdaFn = new lambda.Function( this, "pyShobuLambda", {
+        const lambdaFn = new lambda.Function( this, "pyShobuLambda", {
             runtime: lambda.Runtime.PYTHON_3_9,
             code: lambda.Code.fromAsset( '../../service/pyShobuService/src'),
             handler: "main.lambda_handler",
             environment: lambdaEnv
         });
         // permissions
-        gameTable.grantReadWriteData( pythonLambdaFn )
+        gameTable.grantReadWriteData( lambdaFn )
+
+        // api gateway
+        const api = new apigateway.LambdaRestApi( this, 'shobuApi', {
+            handler: lambdaFn
+        });
     }
 }
 
