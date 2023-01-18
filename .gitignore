@@ -4,3 +4,4 @@ deployment/cdk/cdk.out
 **/.DS_Store
 service/shobuServiceLambda/.idea
 service/shobuServiceLambda/out
+**/__pycache__/*

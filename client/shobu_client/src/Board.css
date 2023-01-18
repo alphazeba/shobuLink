@@ -1,0 +1,46 @@
+
+:root{
+    --boxInsideSize: 40px;
+    --outlineSize: 5px;
+    --boxSize: calc( var(--boxInsideSize) + var(--outlineSize) * 2);
+    --subboardMargin: 1em;
+    --pieceSize: 50%;
+}
+.gameBox {
+    width: var(--boxInsideSize);
+    height: var(--boxInsideSize);
+    background-color: brown;
+    display: inline-block;
+    outline-color: black;
+    outline-width: var(--outlineSize);
+    outline-style: solid;
+}
+
+.subboard {
+    display: inline-block;
+    margin-right: var(--subboardMargin);
+    margin-bottom: var(--subboardMargin);
+    width: calc( var(--boxSize) * 4 + var(--subboardMargin));
+    height: calc( var(--boxSize) * 4 + var(--subboardMargin));
+}
+
+.coord {
+    background-color: transparent;
+    font-size: 0.5em;
+}
+
+.token{
+    height: var(--pieceSize);
+    width: var(--pieceSize);;
+    border-radius: 50%;
+    margin-top: 25%;
+    margin-left: 25%
+}
+
+.whiteToken{
+    background-color: white;
+}
+
+.blackToken{
+    background-color: black;
+}

@@ -43,31 +43,3 @@ def toMoveKey( move ):
 
 def toFullMoveKey( fullMove ):
     return toMoveKey( fullMove['p'] ) + toMoveKey( fullMove['a'] )
-
-def toString( fullMove ):
-    return partialMoveToString( fullMove['p'] ) + partialMoveToString( fullMove['a'] )
-    
-def partialMoveToString( move ):
-    output = ""
-    if getSide( move ) == 0:
-        output += "B"
-    else:
-        output += "W"
-    a = getSpot( move )
-    b = h.addSpotVec( a, getVector( move ) )
-    output += spotToString( a ) + spotToString( b )
-    return output
-
-def spotToString( spot ):
-    x,y = spot 
-    output = ""
-    if x == 0:
-        output += 'a'
-    elif x == 1:
-        output += 'b'
-    elif x == 2:
-        output += 'c'
-    else:
-        output += 'd'
-    output += str(y+1)
-    return output

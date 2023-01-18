@@ -1,5 +1,5 @@
 
-import json
+import util.jsonHelp as json
 
 def buildResponse( responsObj, statusCode ):
     return {

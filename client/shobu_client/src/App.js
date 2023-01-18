@@ -1,6 +1,8 @@
 import logo from './logo.svg';
 import './App.css';
 
+import { Board } from './Board'
+
 function App() {
   return (
     <div className="App">
@@ -17,6 +19,9 @@ function App() {
         >
           Learn React
         </a>
+        <Board>
+          this is the children
+        </Board>
       </header>
     </div>
   );

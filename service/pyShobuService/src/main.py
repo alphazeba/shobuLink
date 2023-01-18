@@ -6,7 +6,7 @@ from handler.GetGame import GetGame
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
 from exception.ExceptionToReturn import ExceptionToReturn
-import json
+import util.jsonHelp as json
 
 def lambda_handler( event, context ):
     event = json.loads( event['body'] )

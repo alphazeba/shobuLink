@@ -12,9 +12,6 @@ def parseMove( moveString ):
     else:
         error( "Sorry that was not the correct number of characters" )
 
-def moveToString( move ):
-    return M.toString( move )
-
 def parsePartialMove( partialString ):
     side = parseSide( partialString[0] )
     start = parseSpot( partialString[1:3] )
@@ -36,7 +33,7 @@ def parseSpot( locationString ):
         x = 3
     else:
         error( "column character must be a,b,c,d but was " + colChar )
-    y = int( rowChar ) - 1
+    y = 4 - int( rowChar )
     if y < 0 or y >= 4:
         error( "rowChar must 1 through 4 but was " + rowChar )
     return (x,y)
@@ -48,6 +45,35 @@ def parseSide( sideCharacter ):
         return t.SIDE_WHITE
     else:
         error( "character " + sideCharacter + " must be either B or W" )
+
+def moveToString( fullMove ):
+    return partialMoveToString( fullMove['p'] ) + partialMoveToString( fullMove['a'] )
+    
+def partialMoveToString( move ):
+    output = ""
+    if M.getSide( move ) == t.BLACK:
+        output += "B"
+    else:
+        output += "W"
+    a = M.getSpot( move )
+    b = h.addSpotVec( a, M.getVector( move ) )
+    output += spotToString( a ) + spotToString( b )
+    return output
+
+def spotToString( spot ):
+    x,y = spot 
+    output = ""
+    if x == 0:
+        output += 'a'
+    elif x == 1:
+        output += 'b'
+    elif x == 2:
+        output += 'c'
+    else:
+        output += 'd'
+    output += str(4-y)
+    return output
+
 
 def error( message ):
     raise ExceptionToReturn( message, 403 )
