@@ -1,19 +1,26 @@
 
 :root{
-    --boxInsideSize: 40px;
-    --outlineSize: 5px;
-    --boxSize: calc( var(--boxInsideSize) + var(--outlineSize) * 2);
+    --boxSize: 50px;
     --subboardMargin: 1em;
     --pieceSize: 50%;
 }
-.gameBox {
-    width: var(--boxInsideSize);
-    height: var(--boxInsideSize);
-    background-color: brown;
+.cell {
+    width: var(--boxSize);
+    height: var(--boxSize);
+    background-color: lightgoldenrodyellow;
     display: inline-block;
-    outline-color: black;
-    outline-width: var(--outlineSize);
-    outline-style: solid;
+}
+
+.lightBoardDarkCell {
+    background-color: goldenrod;
+}
+
+.darkBoard {
+    background-color: lightskyblue;
+}
+
+.darkBoardDarkCell {
+    background-color: lightslategray;
 }
 
 .subboard {
@@ -34,13 +41,17 @@
     width: var(--pieceSize);;
     border-radius: 50%;
     margin-top: 25%;
-    margin-left: 25%
+    margin-left: 25%;
+    outline-style: solid;
+    outline-width: 2px;
 }
 
 .whiteToken{
     background-color: white;
+    outline-color: black;
 }
 
 .blackToken{
     background-color: black;
+    outline-color: white;
 }

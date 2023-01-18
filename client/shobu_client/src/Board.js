@@ -11,18 +11,18 @@ export const Board = ({ gameId, children }) => {
 
     function drawBoard( board ){
         return <div >
-            <div>{ drawSubboard(board[0][0]) }{ drawSubboard(board[0][1]) }</div>
-            <div>{ drawSubboard(board[1][0]) }{ drawSubboard(board[1][1]) }</div>
+            <div>{ drawSubboard( board[0][0], true ) }{ drawSubboard( board[0][1], false ) }</div>
+            <div>{ drawSubboard( board[1][0], true ) }{ drawSubboard( board[1][1], false ) }</div>
             <div></div>
         </div>
     }
 
-    function drawSubboard( subboard ){
+    function drawSubboard( subboard, dark ){
         var output = []
         for( var iy=0; iy < 4; iy++ ){
             var row = []
             for( var ix =0;ix<4;ix++ ){
-                row.push( drawCell( subboard, ix, iy ));
+                row.push( drawCell( subboard, ix, iy, dark ));
             }
             output.push( <div>{row}</div> );
         }
@@ -31,8 +31,24 @@ export const Board = ({ gameId, children }) => {
         </span>
     }
 
-    function drawCell( subboard, x,y ){
-        return <div className="gameBox" key={ "cell" + String(x) + String(y) }>{tokenLookUp( subboard[y][x] )}</div>
+    function drawCell( subboard, x,y, dark ){
+        var className='cell';
+        var odd = (x+y) % 2 == 0
+        if( dark ){
+            if( odd ){
+                className += " darkBoardDarkCell"
+            }
+            else {
+                className += " darkBoard";
+            }
+        }
+        else{
+            if( odd ){
+                className += " lightBoardDarkCell"
+            }
+        }
+
+        return <div className={className} key={ "cell" + String(x) + String(y) }>{tokenLookUp( subboard[y][x] )}</div>
     }
 
 
@@ -43,7 +59,7 @@ export const Board = ({ gameId, children }) => {
             case -1:
                 return <div className="token blackToken" />
             default:
-                return '.'
+                return <div/>
         }
     }
 
