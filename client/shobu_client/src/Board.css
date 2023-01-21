@@ -2,13 +2,37 @@
 :root{
     --boxSize: 50px;
     --subboardMargin: 1em;
-    --pieceSize: 50%;
+    --pieceSize: 13%;
+    --optionSize: 5%;
 }
 .cell {
+    position: relative;
     width: var(--boxSize);
     height: var(--boxSize);
     background-color: lightgoldenrodyellow;
     display: inline-block;
+}
+
+/*
+.cell.interactable:hover {
+    background-color: red;
+}
+*/
+
+.cell.interactable:hover::after {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 0, 0, 0.6);
+    content: ' '
+}
+
+
+.cell.selected {
+    background-color: gray;
+    background-color: rgba( 0.2,0.2,0.2,0.6)
 }
 
 .lightBoardDarkCell {
@@ -23,12 +47,28 @@
     background-color: lightslategray;
 }
 
+.moveOption {
+    background-color: darkgreen;
+    width: var(--optionSize);
+    height: var(--optionSize);
+    margin-left: calc( 100% / 8 - var(--optionSize)/2 );
+    margin-top: calc( 100% / 8 - var(--optionSize)/2 );
+    border-radius: 50%;
+    pointer-events: none;
+}
+
 .subboard {
+    line-height: 0;
+    position: relative;
     display: inline-block;
-    margin-right: var(--subboardMargin);
-    margin-bottom: var(--subboardMargin);
-    width: calc( var(--boxSize) * 4 + var(--subboardMargin));
-    height: calc( var(--boxSize) * 4 + var(--subboardMargin));
+    margin-right: 0;
+    margin-bottom: 0;
+    width: calc( var(--boxSize) * 4 );
+    height: calc( var(--boxSize) * 4 );
+}
+
+.topBoardRow {
+    line-height: 3em;
 }
 
 .coord {
@@ -37,13 +77,16 @@
 }
 
 .token{
+    pointer-events: none;
+    position: absolute;
     height: var(--pieceSize);
-    width: var(--pieceSize);;
+    width: var(--pieceSize);
     border-radius: 50%;
-    margin-top: 25%;
-    margin-left: 25%;
     outline-style: solid;
     outline-width: 2px;
+    margin-left: calc( 100% / 8 - var(--pieceSize)/2 );
+    margin-top: calc( 100% / 8 - var(--pieceSize)/2 );
+    transition: left 1s, top 1s;
 }
 
 .whiteToken{
@@ -54,4 +97,13 @@
 .blackToken{
     background-color: black;
     outline-color: white;
+}
+
+.betweenSubboard::after{
+    content: 'ml';
+    visibility: hidden;
+}
+
+.abso{
+    position: absolute;
 }

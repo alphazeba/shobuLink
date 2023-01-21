@@ -1,5 +1,6 @@
 
-import { token, buildToken, side } from "./token"
+import { addSpotVec, spotIsInBoard, vectorToUnitAndSteps } from "./spot";
+import { token, buildToken, side, emptyToken } from "./token"
 
 export function initBoard(){
     return {
@@ -21,7 +22,7 @@ function initSubboard(){
 }
 
 function initRow( token ){
-    return [buildToken(token), buildToken(token), buildToken(token), buildToken(token) ]
+    return [ buildToken(token), buildToken(token), buildToken(token), buildToken(token) ]
 }
 
 export function getPassiveMoveSubboard( board, playerSide ){
@@ -89,4 +90,56 @@ export function tokenBelongsToPlayer( board, targetToken ){
 
 export function spotIsEmpty( subboard, spot ){
     return subboardGetToken( subboard, spot ).type == token.EMPTY;
+}
+
+
+function boardCopy( board ){
+    return JSON.parse( JSON.stringify( board ) );
+}
+
+export function makeValidatedMove( board, move ){
+    var mutableBoard = boardCopy( board );
+    makePassiveMove( mutableBoard, move.passive );
+    makeActiveMove( mutableBoard, move.active, move.passive );
+    flipTurn( mutableBoard );
+    return mutableBoard;
+}
+
+function makePassiveMove( board, passiveMove ){
+    var subboard = getPassiveMoveSubboard( board, passiveMove.side );
+    var movingToken = subboardGetToken( subboard, passiveMove.spot );
+    subboardSetToken( subboard, passiveMove.spot, emptyToken() );
+    subboardSetToken( subboard, addSpotVec( passiveMove.spot, passiveMove.vector ), movingToken );
+}
+
+function makeActiveMove( board, activeMove, passiveMove ){
+    var subboard = getActiveMoveSubboard( board, activeMove.side, passiveMove.side );
+    var enemyToken = null;
+    var movingToken = subboardGetToken( subboard, activeMove.spot );
+    subboardSetToken( subboard, activeMove.spot, emptyToken() );
+    var [ unit, steps ] = vectorToUnitAndSteps( activeMove.vector );
+    var spot = activeMove.spot;
+    for( var i=0; i< steps;i++ ){
+        spot = addSpotVec( spot, unit );
+        if( ! spotIsEmpty( subboard, spot ) ){
+            subboardGetToken( subboard, spot );
+            subboardSetToken( subboard, spot, emptyToken() );
+        }
+    }
+    subboardSetToken( subboard, spot, movingToken );
+    if( enemyToken != null ){
+        spot = addSpotVec( spot, unit );
+        if( spotIsInBoard( spot ) ){
+            subboardSetToken( subboard, spot, enemyToken );
+        }
+    }
+}
+
+function flipTurn( board ){
+    if( board.playerTurn == side.BLACK ){
+        board.playerTurn = side.WHITE;
+    }
+    else {
+        board.playerTurn = side.BLACK;
+    }
 }

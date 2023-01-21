@@ -18,6 +18,10 @@ export function buildToken( type ){
     return obj;
 }
 
+export function emptyToken(){
+    return buildToken( token.EMPTY );
+}
+
 export function tokenIsEnemy( toke, playerSide ){
     return toke.type != token.EMPTY && toke.type != playerSide;
 }

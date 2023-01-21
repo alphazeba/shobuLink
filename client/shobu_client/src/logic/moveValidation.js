@@ -10,7 +10,7 @@ export function validateFullMove( board, fullMove ){
             fullMove.passive.side, fullMove.passive.vector );
 }
 
-function validatePassiveMove( board, move ){
+export function validatePassiveMove( board, move ){
     if( ! spotIsInBoard( move.spot ) ){
         return false;
     }

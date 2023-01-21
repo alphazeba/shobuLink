@@ -1,14 +1,21 @@
 
-import React, { useState } from 'react'
-import getGame from './api.js'
-import { initBoard } from './logic/board.js';
+import React, { useState, useEffect } from 'react'
+import { getGame } from './api.js'
+import { initBoard, makeValidatedMove } from './logic/board.js';
+import { validateFullMove } from './logic/moveValidation.js';
+import { parseMove } from './logic/moveParser.js';
 
-export const useGameState = ( gameId ) => {
+export const useGameState = () => {
 
     const [ history, setHistory ] = useState( null );
     const [ loadedGameId, setLoadedGameId ] = useState( null );
+    const [ waitingForResponse, setWaitingForResponse ] = useState( false );
+    const [ gameStateCorrupted, setGameStateCorrupted ] = useState( false );
 
     const loadGame = ( gameId ) => {
+        if( waitingForResponse ){
+            return false;
+        }
         getGame( gameId ).then( ( game ) => {
             var mutableHistory = null;
             var newMoves = null;
@@ -22,26 +29,39 @@ export const useGameState = ( gameId ) => {
                 mutableHistory = initHistory();
             }
             for( var move of newMoves ){
-                addMoveToHistory( mutableHistory, move );
+                addMoveToHistory( mutableHistory, move.m );
             }
             setHistory( mutableHistory );
-            setLoadedGameId( gameId )
+            setLoadedGameId( gameId );
+            setWaitingForResponse( false );
+            setGameStateCorrupted( false );
         });
+        setWaitingForResponse( true );
+        return true;
     }
+
+    function addMoveToHistory( history, incomingMove ){
+        if( gameStateCorrupted ){
+            return;
+        }
+        const fullMove = parseMove( incomingMove );
+        var board = history[ history.length-1 ];
+        if( ! validateFullMove( board, fullMove ) ){
+            setGameStateCorrupted( true );
+            return;
+        }
+        // need to update the board now.
+        var newBoard = makeValidatedMove( board, fullMove );
+        history.push( newBoard );
+    }
+
     
-    return [ 
-        getUsableHistory( history ),
-        loadedGameId,
-    ]
-}
-
-function addMoveToHistory( history, incomingMove ){
-    const move = parseMove( incomingMove );
-    var board = history[ history.length-1 ];
-}
-
-function parseMove( move ){
-
+    return {
+        history: getUsableHistory( history ),
+        gameId: loadedGameId,
+        loadGame: loadGame,
+        gameStateCorrupted: gameStateCorrupted
+    }
 }
 
 function getNewMoves( curHistory, incomingMoves ){

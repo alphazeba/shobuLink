@@ -30,15 +30,22 @@ class ShobuService extends Construct {
             runtime: lambda.Runtime.PYTHON_3_9,
             code: lambda.Code.fromAsset( '../../service/pyShobuService/src'),
             handler: "main.lambda_handler",
-            environment: lambdaEnv
+            environment: lambdaEnv,
         });
         // permissions
         gameTable.grantReadWriteData( lambdaFn )
 
         // api gateway
         const api = new apigateway.LambdaRestApi( this, 'shobuApi', {
-            handler: lambdaFn
+            handler: lambdaFn,
+            proxy: false,
         });
+        const items = api.root.addResource('api');
+        items.addMethod('POST');
+        items.addCorsPreflight({
+            allowOrigins: apigateway.Cors.ALL_ORIGINS,
+            allowMethods: [ 'POST' ]
+        })
     }
 }
 
