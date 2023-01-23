@@ -3,7 +3,7 @@ import { useGameState } from './GameLogic';
 import { Board } from './Board';
 
 
-export const GameLoader = ({ gameId }) => {
+export const GameLoader = ({ gameId, userId }) => {
     const gameState = useGameState();
 
     const [ gameIndex, setGameIndex ] = useState( 0 );
@@ -24,8 +24,14 @@ export const GameLoader = ({ gameId }) => {
         setGameIndex( ( gameIndex + 1 ) % gameState.history.length );
     }
 
+    const handleMoveMade = ( fullMove ) => {
+        gameState.playMove( fullMove );
+    }
+
     return <div>
             <button onClick={getNextIndex}> click here dog </button>
-            <Board boardState={getBoardState()}>loadedGameId: {gameState.gameId}</Board>
+            <button onClick={()=>gameState.loadGame(gameId)}> reload game </button>
+            <Board boardState={getBoardState()} onMove={handleMoveMade} blackId={gameState.blackId} whiteId={gameState.whiteId} userId={userId}>loadedGameId: {gameState.gameId}</Board>
+            <div>{JSON.stringify(gameState.history,null,2)}</div>
         </div>;
 }

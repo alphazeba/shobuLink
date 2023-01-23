@@ -61,6 +61,13 @@ def _getCurrentBoardState( this ):
 
 def _addMove( this, move ):
     this[_moves].append( move )
+    _flipTurn( this )
+
+def _flipTurn( this ):
+    if this[_state] == GameState.blackMove:
+        this[_state] = GameState.whiteMove
+    elif this[_state] == GameState.whiteMove:
+        this[_state] = GameState.blackMove
 
 def get( this, key ):
     if key in this:

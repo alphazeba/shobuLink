@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react'
-import { getGame } from './api.js'
+import { getGame, playMove } from './api.js'
 import { initBoard, makeValidatedMove } from './logic/board.js';
 import { validateFullMove } from './logic/moveValidation.js';
 import { parseMove } from './logic/moveParser.js';
@@ -11,36 +11,48 @@ export const useGameState = () => {
     const [ loadedGameId, setLoadedGameId ] = useState( null );
     const [ waitingForResponse, setWaitingForResponse ] = useState( false );
     const [ gameStateCorrupted, setGameStateCorrupted ] = useState( false );
+    const [ blackId, setBlackId ] = useState( null );
+    const [ whiteId, setWhiteId ] = useState( null );
 
     const loadGame = ( gameId ) => {
         if( waitingForResponse ){
             return false;
         }
-        getGame( gameId ).then( ( game ) => {
-            var mutableHistory = null;
-            var newMoves = null;
-            if( game.id == loadedGameId ){
-                newMoves = getNewMoves( history, game.moves );
-                mutableHistory = deepCloneArray( history );
-            }
-            else{
-                // replace the history since this is a different game than was loaded.
-                newMoves = game.moves;
-                mutableHistory = initHistory();
-            }
-            for( var move of newMoves ){
-                addMoveToHistory( mutableHistory, move.m );
-            }
-            setHistory( mutableHistory );
-            setLoadedGameId( gameId );
-            setWaitingForResponse( false );
-            setGameStateCorrupted( false );
-        });
+        getGame( gameId ).then( handleGameUpdate );
         setWaitingForResponse( true );
         return true;
     }
 
-    function addMoveToHistory( history, incomingMove ){
+    const sendMoveToServer = ( fullMove ) => {
+        playMove( loadedGameId, fullMove ).then( handleGameUpdate );
+        setWaitingForResponse( true );
+    }
+
+    const handleGameUpdate = ( game ) => {
+        console.log( game );
+        var mutableHistory = null;
+        var newMoves = null;
+        if( game.id == loadedGameId ){
+            newMoves = getNewMoves( history, game.moves );
+            mutableHistory = deepCloneArray( history );
+        }
+        else{
+            // replace the history since this is a different game than was loaded.
+            newMoves = game.moves;
+            mutableHistory = initHistory();
+        }
+        for( var move of newMoves ){
+            addMoveToHistory( mutableHistory, move.m );
+        }
+        setHistory( mutableHistory );
+        setLoadedGameId( game.id );
+        setWaitingForResponse( false );
+        setGameStateCorrupted( false );
+        setBlackId( game.buId );
+        setWhiteId( game.wuId );
+    }
+
+    const addMoveToHistory = ( history, incomingMove ) => {
         if( gameStateCorrupted ){
             return;
         }
@@ -60,11 +72,14 @@ export const useGameState = () => {
         history: getUsableHistory( history ),
         gameId: loadedGameId,
         loadGame: loadGame,
-        gameStateCorrupted: gameStateCorrupted
+        playMove: sendMoveToServer,
+        gameStateCorrupted: gameStateCorrupted,
+        blackId: blackId,
+        whiteId: whiteId
     }
 }
 
-function getNewMoves( curHistory, incomingMoves ){
+const getNewMoves = ( curHistory, incomingMoves ) => {
     // subtract 1 because history includes the "init board", while incoming moves would not.
     const lHistory = curHistory.length - 1; 
     const lIncome = incomingMoves.length;
@@ -96,5 +111,5 @@ function getUsableHistory( history ){
 function initHistory(){
     return [
         initBoard()
-    ]
+    ];
 }

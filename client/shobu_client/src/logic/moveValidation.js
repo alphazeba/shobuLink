@@ -30,13 +30,13 @@ export function validatePassiveMove( board, move ){
     return true;
 }
 
-function validateActiveMove( board, move, passiveSide, passiveVector ){
+export function validateActiveMove( board, move, passiveSide, passiveVector ){
     if( ! compareVec( move.vector, passiveVector ) || ! spotIsInBoard( move.spot ) ){
         return false;
     }
     var subboard = getActiveMoveSubboard( board, move.side, passiveSide );
     var targetToken = subboardGetToken( subboard, move.spot );
-    if( ! tokenBelongsToPlayer(board, targetToken ) ){
+    if( ! tokenBelongsToPlayer( board, targetToken ) ){
         return false;
     }
     var [ unit, steps ] = vectorToUnitAndSteps( move.vector );
@@ -53,8 +53,8 @@ function validateActiveMove( board, move, passiveSide, passiveVector ){
                 return false;
             }
         }
-        return true;
     }
+    return true;
 }
 
 function validateBeingPushedMovement( subboard, spot, unit, steps ){

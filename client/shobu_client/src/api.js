@@ -1,5 +1,5 @@
 
-
+import { moveToString } from "./logic/moveParser";
 const baseUrl = "https://x3ljpedzc3.execute-api.us-west-2.amazonaws.com/prod/api";
 
 
@@ -16,11 +16,32 @@ function buildPayload( obj ){
 
 export function getGame( gameId ){
     console.log("querying for game " + gameId );
-    return fetch( baseUrl, buildPayload({ type: "GetGame", gameId: gameId }) )
-        .then( ( response ) => {
-            return response.json();
-        } )
+    return fetchJson({ type: "GetGame", gameId: gameId })
         .then( ( jsonData ) => {
             return jsonData.game;
+        } );
+}
+
+export function playMove( gameId, fullMove ){
+
+    const request = {
+        type: "PlayMove",
+        gameId: gameId,
+        move: moveToString( fullMove ),
+        loginToken: "LOGGEDIN",
+        userId: "qwer"
+    }
+
+    console.log( "sending request to play move: " + JSON.stringify( request ) );
+    return fetchJson( request )
+        .then( ( jsonData ) => {
+            return jsonData.game;
+        } );
+}
+
+function fetchJson( payload ){
+    return fetch( baseUrl, buildPayload( payload ) )
+        .then( (response ) => {
+            return response.json();
         } );
 }

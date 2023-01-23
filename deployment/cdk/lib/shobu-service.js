@@ -11,6 +11,7 @@ class ShobuService extends Construct {
         super( scope, id );
 
         const domainName = "shobu.link"
+        const corsOrigin = "*";
         // idk how to make the link get a certificate so maybe i won't be handling the 
         // the certificate process through the cdk.
 
@@ -25,6 +26,7 @@ class ShobuService extends Construct {
         const lambdaEnv = {
             AdminPasswordHash: "",
             region: props.env.region,
+            corsOrigin: corsOrigin
         }
         const lambdaFn = new lambda.Function( this, "pyShobuLambda", {
             runtime: lambda.Runtime.PYTHON_3_9,
@@ -43,7 +45,7 @@ class ShobuService extends Construct {
         const items = api.root.addResource('api');
         items.addMethod('POST');
         items.addCorsPreflight({
-            allowOrigins: apigateway.Cors.ALL_ORIGINS,
+            allowOrigins: corsOrigin,
             allowMethods: [ 'POST' ]
         })
     }
