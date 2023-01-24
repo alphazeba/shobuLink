@@ -9,11 +9,19 @@ import { addSpotVec, compareVec, getDeltaVector } from './logic/spot';
 import { buildPartialMove } from './logic/move';
 import { buildCellLocationStyle } from './styleHelper';
 
-export const Arrow = ({start,vec}) => {
+export const Arrow = ({start,vec,flipped}) => {
 
 
 
     function getRotation( vec ){
+        var rotation = getBaseRotation( vec );
+        if( flipped ){
+            return rotation + 180;
+        }
+        return rotation;
+    }
+
+    function getBaseRotation( vec ){
         var [x ,y] = vec;
         if( x == 0 && y < 0 ){
             return 0;
@@ -64,8 +72,11 @@ export const Arrow = ({start,vec}) => {
         }
     }
 
-
-    var style = buildCellLocationStyle( x + 0.5, y + 0.5 );
+    var multiplier = 1
+    if( flipped ){
+        multiplier = -1;
+    }
+    var style = buildCellLocationStyle( x + 0.5 * multiplier, y + 0.5 * multiplier, flipped );
     style.transform = 'rotate(' + getRotation( vec ) + 'deg)';
    
     return <div className={className} style={style}>

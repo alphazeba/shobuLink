@@ -153,3 +153,8 @@
     border-right: calc( var(--boxSize) * var(--arrowHeadWidth) ) solid transparent;
     border-bottom: calc( var(--boxSize) * var(--arrowHeadWidth) ) solid rgba( 0, 255, 0, 0.6 );;
 }
+
+.column {
+    float: left;
+    width: 50%;
+}

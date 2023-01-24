@@ -13,6 +13,7 @@ export const useGameState = () => {
     const [ gameStateCorrupted, setGameStateCorrupted ] = useState( false );
     const [ blackId, setBlackId ] = useState( null );
     const [ whiteId, setWhiteId ] = useState( null );
+    const [ moves, setMoves ] = useState( [] );
 
     const loadGame = ( gameId ) => {
         if( waitingForResponse ){
@@ -54,6 +55,7 @@ export const useGameState = () => {
         setGameStateCorrupted( false );
         setBlackId( game.buId );
         setWhiteId( game.wuId );
+        setMoves( game.moves );
     }
 
     const addMoveToHistory = ( history, incomingMove ) => {
@@ -74,6 +76,7 @@ export const useGameState = () => {
     
     return {
         history: getUsableHistory( history ),
+        moves: moves,
         gameId: loadedGameId,
         loadGame: loadGame,
         playMove: sendMoveToServer,

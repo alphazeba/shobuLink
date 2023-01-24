@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useGameState } from './GameLogic';
 import { Board } from './Board';
+import { MoveList } from './MoveList';
 
 
 export const GameLoader = ({ gameId, userId }) => {
@@ -46,6 +47,11 @@ export const GameLoader = ({ gameId, userId }) => {
         setLiveUpdate( false );
     }
 
+    const handleGoToIndex = ( index ) => {
+        setGameIndex( index );
+        setLiveUpdate( false );
+    }
+
     const goToMostRecentIndex = () => {
         setGameIndex( gameState.history.length - 1 );
         setLiveUpdate( true );
@@ -68,7 +74,19 @@ export const GameLoader = ({ gameId, userId }) => {
             </div>
             <button onClick={getNextIndex}> next move </button><button onClick={goToMostRecentIndex} >most recent move</button>
             <button onClick={()=>gameState.loadGame(gameId)}> reload game </button>
-            <Board boardState={getBoardState()} onMove={handleMoveMade} blackId={gameState.blackId} whiteId={gameState.whiteId} userId={userId}>loadedGameId: {gameState.gameId}</Board>
-            <div>{JSON.stringify(gameState.history,null,2)}</div>
+            <div>
+                <div className="column">
+
+                    <Board 
+                        boardState={getBoardState()} 
+                        onMove={handleMoveMade} 
+                        blackId={gameState.blackId} whiteId={gameState.whiteId} 
+                        userId={userId}>loadedGameId: {gameState.gameId}
+                    </Board>
+                </div>
+                <div className="column">
+                    <MoveList moves={gameState.moves} onGoToMove={handleGoToIndex}/>
+                </div>
+            </div>
         </div>;
 }

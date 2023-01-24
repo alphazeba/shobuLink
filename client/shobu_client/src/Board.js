@@ -26,6 +26,10 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
         return side.BLACK;
     }
 
+    const usingFlippedPerspective = () => {
+        return getPerspectiveColor() == side.WHITE;
+    }
+
     const clickCell = ( x, y, n ) => {
         if( spotIsSelectedPassiveSpot( x, y, n ) ){
             clearSelections();
@@ -126,14 +130,23 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
         setActiveMovesWhite( [] );
     }
 
+    const _sbdRot = ( n, flipped ) => {
+        if( flipped ){
+            return 3 - n;
+        }
+        return n;
+    }
+
     const drawBoard = ( board ) => {
+        var flipped = usingFlippedPerspective();
         return <div >
-            <div className="topBoardRow">{ drawSubboard( board, 0, true ) }<span className='betweenSubboard'/>{ drawSubboard( board, 1, false ) }</div>
-            <div>{ drawSubboard( board, 2, true ) }<span className='betweenSubboard'/>{ drawSubboard( board, 3, false ) }</div>
+            <div className="topBoardRow">{ drawSubboard( board, _sbdRot(0,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(1,flipped) ) }</div>
+            <div>{ drawSubboard( board, _sbdRot(2,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(3,flipped) ) }</div>
         </div>
     }
 
-    const drawSubboard = ( board, n, dark ) => {
+    const drawSubboard = ( board, n ) => {
+        var dark = n == 0 || n == 2;
         var subboard = getSubboard( board, n );
 
         var output = []
@@ -142,7 +155,13 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
             for( var ix =0;ix<4;ix++ ){
                 row.push( drawCell( subboard, n, ix, iy, dark ));
             }
+            if( usingFlippedPerspective() ){
+                row = row.reverse();
+            }
             output.push( <div key={iy}>{row}</div> );
+        }
+        if( usingFlippedPerspective() ){
+            output = output.reverse();
         }
         return <span className='subboard'>
             { output }
@@ -193,26 +212,27 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     }
 
     const drawSelectedSpots = ( n ) => {
+        var flipped = usingFlippedPerspective();
         var output = [];
         if( selectedPassiveSpot != null ){
             var [ [x,y], subboardN ] = selectedPassiveSpot;
             if( subboardN == n ){
                 // passive move options
-                output.push(<div className='cell selected abso' style={buildCellLocationStyle(x,y)}></div>)
+                output.push(<div className='cell selected abso' style={buildCellLocationStyle(x,y,flipped)}></div>)
                 for( var move of passiveMoves ){
                     var [mx,my] = addSpotVec( move.spot, move.vector);
-                    output.push(<div className='abso moveOption' style={buildCellLocationStyle(mx,my)}></div>)
+                    output.push(<div className='abso moveOption' style={buildCellLocationStyle(mx,my,flipped)}></div>)
                 }
                 // selected passive move
                 if( selectedPassiveMove != null ){
                     var start = selectedPassiveMove.spot;
                     var vec = selectedPassiveMove.vector;
-                    output.push( <Arrow start={start} vec={vec} /> );
+                    output.push( <Arrow start={start} vec={vec} flipped={flipped} /> );
                 }
             }
         }
         for( var move of getActiveMoves( n ) ){
-            output.push( <Arrow start={move.spot} vec={move.vector} /> );
+            output.push( <Arrow start={move.spot} vec={move.vector} flipped={flipped}/> );
         }
         return output;
     }
@@ -271,12 +291,12 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     const drawToken = ( tokenObj, spot ) => {
         const [x,y] = spot
         var className = "token " + ( (tokenObj.type == token.WHITE) ? "whiteToken" : "blackToken" );
-        return <div className={className} style={buildCellLocationStyle(x,y)} key={tokenObj.key} />
+        return <div className={className} style={buildCellLocationStyle(x,y,usingFlippedPerspective())} key={tokenObj.key} />
     }
 
     return <div>
-        <div>
-            { children }
+        <div >
+            {children}
             <p>buId: {blackId}, wuId: {whiteId}</p>
             <p>userId: {userId} </p>
             <p>playerTurn: {boardState.playerTurn}</p>
