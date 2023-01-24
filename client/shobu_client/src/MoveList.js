@@ -30,7 +30,7 @@ export const MoveList = ({moves, onGoToMove}) => {
         var whiteIndex = blackIndex + 1;
         output.push(
             <div key={"turn" + i}>
-                {i}:{renderMove(blackIndex)},{renderMove(whiteIndex)}
+                {i+1}:{renderMove(blackIndex)},{renderMove(whiteIndex)}
             </div>
         )
     }

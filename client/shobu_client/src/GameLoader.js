@@ -6,7 +6,7 @@ import { MoveList } from './MoveList';
 
 export const GameLoader = ({ gameId, userId }) => {
     const gameState = useGameState();
-
+    var alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
 
@@ -17,8 +17,9 @@ export const GameLoader = ({ gameId, userId }) => {
     }
 
     useEffect( () => {
-        if( gameId != gameState.gameId ){
+        if( gameId != gameState.gameId && !alreadyRequestedGame ){
             var requestedGame = gameState.loadGame( gameId );
+            alreadyRequestedGame = true;
         }
         if( liveUpdate && gameIndex < gameState.history.length - 1 ){
             goToMostRecentIndex();
