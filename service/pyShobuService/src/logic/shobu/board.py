@@ -15,7 +15,7 @@ def initBoard():
     return buildBoard( initSubboard(),initSubboard(),initSubboard(),initSubboard(), t.BLACK )
 
 def buildBoard( s0, s1, s2, s3, player):
-    return { 
+    return {
         "b":[
             [ s0, s2 ],
             [ s1, s3 ]

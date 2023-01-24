@@ -18,13 +18,17 @@ export const useGameState = () => {
         if( waitingForResponse ){
             return false;
         }
-        getGame( gameId ).then( handleGameUpdate );
+        getGame( gameId ).then( ( game ) => {
+            handleGameUpdate( game );
+        } );
         setWaitingForResponse( true );
         return true;
     }
 
-    const sendMoveToServer = ( fullMove ) => {
-        playMove( loadedGameId, fullMove ).then( handleGameUpdate );
+    const sendMoveToServer = ( fullMove, loginInfo ) => {
+        playMove( loadedGameId, fullMove, loginInfo ).then( ( game ) =>{
+            handleGameUpdate( game );
+        } );
         setWaitingForResponse( true );
     }
 
@@ -93,7 +97,7 @@ const getNewMoves = ( curHistory, incomingMoves ) => {
 }
 
 function deepCloneArray( items ){
-    items.map( ( item ) => {
+    return items.map( ( item ) => {
         if( Array.isArray( item ) ){
             return deepCloneArray( item );
         }

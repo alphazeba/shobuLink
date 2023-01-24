@@ -1,8 +1,11 @@
 
 import util.jsonHelp as json
 import os
-
-corsOrigin = os.environ['corsOrigin']
+corsOrigin = "qruosfadoiuasdfjjl"
+try:
+    corsOrigin = os.environ['corsOrigin']
+except Exception as e:
+    print( "failed to load corsOrigin envionrment variable" )
 
 def buildResponse( responsObj, statusCode ):
     return {

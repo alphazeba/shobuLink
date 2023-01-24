@@ -8,6 +8,8 @@ import data.move as Move
 import logic.shobu.board as B
 import logic.shobu.moveValidation as mv
 import logic.shobu.moveParser as mp
+import logic.shobu.gameoverChecker as gameover
+import logic.shobu.token as t
 
 _id = "id"
 _buId = "buId"
@@ -39,18 +41,22 @@ def joinGame( this, playerId, playerName ):
     this[_state] = GameState.blackMove
     return side
 
-def playMove( this, playerSide, fullMove ):
+def playMove( this, playerSide, moveString ):
     if not _isPlayersTurn( this, playerSide ):
         raise ExceptionToReturn( "It is not the player's turn", 403 )
-    move = Move.new( fullMove )
+    fullMove = mp.parseMove( moveString )
     # validate that the player is not already out of time 
     # TODO should update the game table with the fact the other player won.
     # validate the move is legal
     board = _getCurrentBoardState( this )
     # validate the new move.
-    if not mv.validateFullMove( board, mp.parseMove( fullMove ) ):
+    if not mv.validateFullMove( board, fullMove ):
         raise ExceptionToReturn( "MOVE NOT LEGAL", 403 )
-    _addMove( this, move )
+    board = B.makeValidatedMove( board, fullMove )
+    # add move to history sinces its legal.
+    _addMove( this, Move.new( moveString ) )
+    # check for win
+    _handleGameOverCheck( this, board )
 
 def _getCurrentBoardState( this ):
     board = B.initBoard()
@@ -62,6 +68,14 @@ def _getCurrentBoardState( this ):
 def _addMove( this, move ):
     this[_moves].append( move )
     _flipTurn( this )
+
+def _handleGameOverCheck( this, board ):
+    winResult = gameover.checkForWin( board )
+    if winResult != None:
+        if winResult == t.SIDE_BLACK:
+            this[_state] = GameState.blackWon
+        elif winResult == t.SIDE_WHITE:
+            this[_state] = GameState.whiteWon
 
 def _flipTurn( this ):
     if this[_state] == GameState.blackMove:

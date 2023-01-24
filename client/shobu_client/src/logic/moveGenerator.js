@@ -23,10 +23,10 @@ const validVectors = [
     [-2,-2]
 ]
 
-export function generateValidPassiveMoves( board, spot ){
+export function generateValidPassiveMoves( board, spot, homeboardside ){
     var moves = [];
     for( var offset of validVectors ){
-        var passiveMove = buildPartialMove( board.playerTurn, spot, offset );
+        var passiveMove = buildPartialMove( homeboardside, spot, offset );
         if( validatePassiveMove( board, passiveMove ) ){
             moves.push( passiveMove );
         }

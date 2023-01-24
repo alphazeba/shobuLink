@@ -11,7 +11,7 @@ function App() {
       <header className="App-header">
         <input value={userId} onChange={(event)=>setUserId(event.target.value)}/>
         <div>{userId}</div>
-        <GameLoader gameId="f0802b2c-60ec-4bb5-b718-d912ae8e3f54" userId="qwer"/>
+        <GameLoader gameId="f0802b2c-60ec-4bb5-b718-d912ae8e3f54" userId={userId}/>
       </header>
     </div>
   );

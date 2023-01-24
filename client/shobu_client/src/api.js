@@ -22,14 +22,14 @@ export function getGame( gameId ){
         } );
 }
 
-export function playMove( gameId, fullMove ){
+export function playMove( gameId, fullMove, loginInfo ){
 
     const request = {
         type: "PlayMove",
         gameId: gameId,
         move: moveToString( fullMove ),
-        loginToken: "LOGGEDIN",
-        userId: "qwer"
+        loginToken: loginInfo.token,
+        userId: loginInfo.id
     }
 
     console.log( "sending request to play move: " + JSON.stringify( request ) );

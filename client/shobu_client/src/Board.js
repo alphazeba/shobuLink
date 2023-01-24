@@ -15,19 +15,13 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );
     const [ activeMovesBlack, setActiveMovesBlack ] = useState( [] );
     const [ activeMovesWhite, setActiveMovesWhite ] = useState( [] );
-    var playerColor = null;
-    if( userId != null ){
-        if( userId == whiteId ){
-            playerColor = side.WHITE;
-        }
-        else if( userId == blackId ){
-            playerColor = side.BLACK;
-        }
-    }
 
     const getPerspectiveColor = () => {
-        if( playerColor != null ){
-            return playerColor;
+        if( userId == whiteId ){
+            return side.WHITE;
+        }
+        else if( userId == blackId ){
+            return side.BLACK;
         }
         return side.BLACK;
     }
@@ -50,12 +44,20 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     const cellSelect_passiveSpot = ( x, y, n ) => {
         clearSelections();
         setSelectedPassiveSpot( [ [x,y], n ] );
-        setPassiveMoves( generateValidPassiveMoves( boardState, [x,y] ) );
+        var homeboardside = side.BLACK;
+        if( n == 0 || n == 3 ){
+            homeboardside = side.WHITE;
+        }
+        setPassiveMoves( generateValidPassiveMoves( boardState, [x,y], homeboardside ) );
     }
 
     const cellSelect_passiveMove = ( x, y, n ) => {
         var [ passiveSpot, subboardN ] = selectedPassiveSpot;
-        var move = buildPartialMove( boardState.playerTurn, passiveSpot, getDeltaVector( passiveSpot, [x,y] ) );
+        var moveSide = side.BLACK;
+        if( n == 1 || n == 3 ){
+            moveSide = side.WHITE;
+        }
+        var move = buildPartialMove( moveSide, passiveSpot, getDeltaVector( passiveSpot, [x,y] ) );
         setSelectedPassiveMove( move );
         setPassiveMoves( [] );
         setActiveMovesBlack( generateValidActiveMoves( boardState, move, side.BLACK ) );
@@ -150,7 +152,7 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     }
 
     const itIsYourTurn = () => {
-        return playerColor != null && boardState.playerTurn == playerColor;
+        return userId != null && boardState.playerTurn == getPerspectiveColor();
     }
 
     const isYourHomeboard = ( n ) => {
@@ -165,9 +167,8 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     }
 
     const cellHasYourColor = ( x, y, n ) => {
-        const color = getPerspectiveColor();
         var subboard = getSubboard( boardState, n );
-        return subboardGetToken( subboard, [ x, y ] ).type == color;
+        return subboardGetToken( subboard, [ x, y ] ).type == getPerspectiveColor();
     }
 
     const getTokens = ( subboard ) => {
@@ -185,6 +186,9 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
                 }
             }
         }
+        tokens.sort( (a,b)=> {
+            return a.t.key.localeCompare( b.t.key ) 
+        } );
         return tokens
     }
 
@@ -232,7 +236,7 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     const subboardIsInActiveColumnForPassiveMove = ( n_curSubboard, n_passiveSubboard ) => {
         var passiveWasBlack = n_passiveSubboard == 0 || n_passiveSubboard == 2;
         var onWhiteBoard = n_curSubboard == 1 || n_curSubboard == 3;
-        return passiveWasBlack && onWhiteBoard || !passiveWasBlack && !onWhiteBoard;
+        return (passiveWasBlack && onWhiteBoard) || (!passiveWasBlack && !onWhiteBoard);
     }
 
     const clickDoNothing = ( x, y ) => {
@@ -273,6 +277,9 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
     return <div>
         <div>
             { children }
+            <p>buId: {blackId}, wuId: {whiteId}</p>
+            <p>userId: {userId} </p>
+            <p>playerTurn: {boardState.playerTurn}</p>
             { drawBoard( boardState ) }
         </div>
     </div>

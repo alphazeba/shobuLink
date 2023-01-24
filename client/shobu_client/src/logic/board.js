@@ -122,7 +122,7 @@ function makeActiveMove( board, activeMove, passiveMove ){
     for( var i=0; i< steps;i++ ){
         spot = addSpotVec( spot, unit );
         if( ! spotIsEmpty( subboard, spot ) ){
-            subboardGetToken( subboard, spot );
+            enemyToken = subboardGetToken( subboard, spot );
             subboardSetToken( subboard, spot, emptyToken() );
         }
     }

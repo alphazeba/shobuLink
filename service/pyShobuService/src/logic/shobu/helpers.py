@@ -4,7 +4,7 @@ import logic.shobu.token as t
 def vectorToUnitAndSteps( vector ):
     x,y = vector
     if max( abs( x ), abs( y ) ) == 2:
-        return (x/2,y/2),2
+        return (int(x/2),int(y/2)),2
     return (x,y),1
 
 def tokenIsEnemy( token, player ):

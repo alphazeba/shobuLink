@@ -6,6 +6,7 @@
     --optionSize: 5%;
     --arrowBodyWidth: 0.25;
     --arrowHeadWidth: 0.35;
+    --movet: 0.3s;
 }
 .cell {
     position: relative;
@@ -89,7 +90,7 @@
     outline-width: 2px;
     margin-left: calc( 100% / 8 - var(--pieceSize)/2 );
     margin-top: calc( 100% / 8 - var(--pieceSize)/2 );
-    transition: left 1s, top 1s;
+    transition: left var(--movet), top var(--movet);
 }
 
 .whiteToken{
