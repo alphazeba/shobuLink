@@ -1,29 +1,18 @@
 
 import { moveToString } from "./logic/moveParser";
-const baseUrl = "https://x3ljpedzc3.execute-api.us-west-2.amazonaws.com/prod/api";
-
-
-
-function buildPayload( obj ){
-    return {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-        },
-        body: JSON.stringify( obj )
-    }
-}
+import { nameToSide, sideToName } from "./logic/token";
+import { getLoginInfo } from "./LoginPage";
+import { fetchJson } from "./util/apiHelper";
 
 export function getGame( gameId ){
-    console.log("querying for game " + gameId );
     return fetchJson({ type: "GetGame", gameId: gameId })
         .then( ( jsonData ) => {
             return jsonData.game;
         } );
 }
 
-export function playMove( gameId, fullMove, loginInfo ){
-
+export function playMove( gameId, fullMove ){
+    const loginInfo = getLoginInfo();
     const request = {
         type: "PlayMove",
         gameId: gameId,
@@ -31,17 +20,41 @@ export function playMove( gameId, fullMove, loginInfo ){
         loginToken: loginInfo.token,
         userId: loginInfo.id
     }
-
-    console.log( "sending request to play move: " + JSON.stringify( request ) );
     return fetchJson( request )
         .then( ( jsonData ) => {
             return jsonData.game;
         } );
 }
 
-function fetchJson( payload ){
-    return fetch( baseUrl, buildPayload( payload ) )
-        .then( (response ) => {
-            return response.json();
+
+export function createGame( side, secondsPerSide ){
+    const loginInfo = getLoginInfo();
+    const request = {
+        type: "CreateGame",
+        side: sideToName( side ),
+        secondsPerSide: secondsPerSide,
+        loginToken: loginInfo.token,
+        userId: loginInfo.id,
+        userName: loginInfo.name
+    }
+    return fetchJson( request )
+        .then( ( jsonData ) => {
+            return jsonData.gameId;
+        } );
+}
+
+
+export function joinGame( gameId ){
+    const loginInfo = getLoginInfo();
+    const request = {
+        type: "JoinGame",
+        gameId: gameId,
+        userName: loginInfo.name,
+        userId: loginInfo.id,
+        loginToken: loginInfo.token,
+    }
+    return fetchJson( request )
+        .then( (jsonData) => {
+            return nameToSide( jsonData.side );
         } );
 }

@@ -3,9 +3,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { GameLoader } from './GameLoader';
+import { ForceUserToLogin } from './LoginPage';
 
-
-export const GamePage = ({userId}) => {
+export const GamePage = () => {
     const { gameId } = useParams();
-    return <GameLoader gameId={gameId} userId={userId} />
+    return <div>
+            <ForceUserToLogin/>
+            <GameLoader gameId={gameId} />
+        </div>
 }

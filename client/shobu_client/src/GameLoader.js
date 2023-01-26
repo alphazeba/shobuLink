@@ -2,13 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useGameState } from './GameLogic';
 import { Board } from './Board';
 import { MoveList } from './MoveList';
+import { getLoginInfo } from './LoginPage';
+import { JoinGameButton } from './JoinGameButton';
+import { isBlackMove, isWhiteMove, stateIsActive } from './util/stateHelper';
 
-
-export const GameLoader = ({ gameId, userId }) => {
+export const GameLoader = ({ gameId }) => {
     const gameState = useGameState();
     var alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
+    const loginInfo = getLoginInfo();
+    const userId = loginInfo.id;
 
     const onGameUpdated = () => {
         if( liveUpdate ){
@@ -17,14 +21,42 @@ export const GameLoader = ({ gameId, userId }) => {
     }
 
     useEffect( () => {
-        if( gameId != gameState.gameId && !alreadyRequestedGame ){
-            var requestedGame = gameState.loadGame( gameId );
+        if( gameIsNotLoaded() && !alreadyRequestedGame ){
+            gameState.loadGame( gameId );
             alreadyRequestedGame = true;
         }
+        console.log( "live update " );
+        console.log( liveUpdate );
         if( liveUpdate && gameIndex < gameState.history.length - 1 ){
             goToMostRecentIndex();
         }
+        const interval = setInterval( ()=>{
+            console.log( "do a thing occasionally")
+            onPeriodicUpdate();
+        }, 3 * 1000 );
+
+        return () => clearInterval( interval );
     } );
+
+    const gameIsNotLoaded = () => {
+        return gameId != gameState.gameId;
+    }
+
+    const itIsNotYourTurn = () => {
+        if( userId == gameState.blackId ){
+            return ! isBlackMove( gameState.state );
+        }
+        else if( userId == gameState.whiteId ){
+            return ! isWhiteMove( gameState.state );
+        }
+        return true;
+    }
+
+    const onPeriodicUpdate = () => {
+        if( stateIsActive( gameState.state ) && itIsNotYourTurn() ){
+            gameState.loadGame( gameId );
+        }
+    }
 
     const getBoardState = () => {
         const index = Math.min( gameState.history.length-1, gameIndex );
@@ -37,7 +69,12 @@ export const GameLoader = ({ gameId, userId }) => {
         if( nextIndex < gameState.history.length ){
             setGameIndex( nextIndex );
         }
-        setLiveUpdate( false );
+        if( nextIndex >= gameState.history.length - 1){
+            setLiveUpdate( true );
+        }
+        else {
+            setLiveUpdate( false );
+        }
     }
 
     const getPrevIndex = () => {
@@ -59,34 +96,36 @@ export const GameLoader = ({ gameId, userId }) => {
     }
 
     const handleMoveMade = ( fullMove ) => {
-        gameState.playMove( fullMove, getLoginInfo() );
+        gameState.playMove( fullMove );
     }
 
-    const getLoginInfo = () => {
-        return {
-            id: userId,
-            token: "LOGGEDIN"
-        }
+    const isGamePlayable = () => {
+        var gameIsActive = gameState.state == "blackMove" || gameState.state == "whiteMove";
+        return gameIndex == gameState.history.length-1 && gameIsActive;
     }
 
-    return <div>
-            <div>
-                <button onClick={getPrevIndex}>{"<--"}</button><button onClick={getNextIndex}>{"-->"}</button><button onClick={goToMostRecentIndex} >most recent move</button>
-            </div>
-            <button onClick={getNextIndex}> next move </button><button onClick={goToMostRecentIndex} >most recent move</button>
-            <button onClick={()=>gameState.loadGame(gameId)}> reload game </button>
-            <div>
-                <div className="column">
 
+
+    return <div className='container'>
+            <div className='row'>
+                <div className="col col-md-7">
                     <Board 
                         boardState={getBoardState()} 
                         onMove={handleMoveMade} 
-                        blackId={gameState.blackId} whiteId={gameState.whiteId} 
-                        userId={userId}>loadedGameId: {gameState.gameId}
-                    </Board>
+                        blackId={gameState.blackId} whiteId={gameState.whiteId}
+                        blackName={gameState.blackName} whiteName={gameState.whiteName}
+                        userId={userId}
+                        playable={isGamePlayable()}
+                        gameState={gameState.state}
+                    />
+                    <JoinGameButton gameState={gameState} />
                 </div>
-                <div className="column">
-                    <MoveList moves={gameState.moves} onGoToMove={handleGoToIndex}/>
+                <div className="col col-md-5">
+                    <MoveList curIndex={gameIndex} moves={gameState.moves} onGoToMove={handleGoToIndex}>
+                        <button onClick={getPrevIndex}>{"<--"}</button>
+                        <button onClick={getNextIndex}>{"-->"}</button>
+                        <button onClick={goToMostRecentIndex} >most recent move</button>
+                    </MoveList>
                 </div>
             </div>
         </div>;

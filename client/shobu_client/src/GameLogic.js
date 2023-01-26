@@ -4,16 +4,20 @@ import { getGame, playMove } from './api.js'
 import { initBoard, makeValidatedMove } from './logic/board.js';
 import { validateFullMove } from './logic/moveValidation.js';
 import { parseMove } from './logic/moveParser.js';
+import { side } from './logic/token.js';
 
 export const useGameState = () => {
 
     const [ history, setHistory ] = useState( null );
     const [ loadedGameId, setLoadedGameId ] = useState( null );
     const [ waitingForResponse, setWaitingForResponse ] = useState( false );
-    const [ gameStateCorrupted, setGameStateCorrupted ] = useState( false );
+    const [ gameIsCorrupted, setGameIsCorrupted ] = useState( false );
     const [ blackId, setBlackId ] = useState( null );
     const [ whiteId, setWhiteId ] = useState( null );
+    const [ blackName, setBlackName ] = useState( null );
+    const [ whiteName, setWhiteName ] = useState( null );
     const [ moves, setMoves ] = useState( [] );
+    const [ gameState, setGameState ] = useState( null );
 
     const loadGame = ( gameId ) => {
         if( waitingForResponse ){
@@ -31,6 +35,17 @@ export const useGameState = () => {
             handleGameUpdate( game );
         } );
         setWaitingForResponse( true );
+    }
+
+    const localJoinSideUpdate = ( sideValue, name, id ) =>{
+        if( sideValue == side.BLACK ){
+            setBlackId( id );
+            setBlackName( name );
+        }
+        else {
+            setWhiteId( id );
+            setWhiteName( name );
+        }
     }
 
     const handleGameUpdate = ( game ) => {
@@ -52,20 +67,23 @@ export const useGameState = () => {
         setHistory( mutableHistory );
         setLoadedGameId( game.id );
         setWaitingForResponse( false );
-        setGameStateCorrupted( false );
+        setGameIsCorrupted( false );
         setBlackId( game.buId );
         setWhiteId( game.wuId );
+        setBlackName( game.buName );
+        setWhiteName( game.wuName );
         setMoves( game.moves );
+        setGameState( game.state );
     }
 
     const addMoveToHistory = ( history, incomingMove ) => {
-        if( gameStateCorrupted ){
+        if( gameIsCorrupted ){
             return;
         }
         const fullMove = parseMove( incomingMove );
         var board = history[ history.length-1 ];
         if( ! validateFullMove( board, fullMove ) ){
-            setGameStateCorrupted( true );
+            setGameIsCorrupted( true );
             return;
         }
         // need to update the board now.
@@ -80,9 +98,13 @@ export const useGameState = () => {
         gameId: loadedGameId,
         loadGame: loadGame,
         playMove: sendMoveToServer,
-        gameStateCorrupted: gameStateCorrupted,
+        gameStateCorrupted: gameIsCorrupted,
         blackId: blackId,
-        whiteId: whiteId
+        whiteId: whiteId,
+        blackName: blackName,
+        whiteName: whiteName,
+        state: gameState,
+        localJoinSide: localJoinSideUpdate,
     }
 }
 

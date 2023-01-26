@@ -66,7 +66,7 @@ Will be using DynamoDB (DDB)
         - b/w'sMove
     - complete
         - b/wResign
-        - b/wWin
+        - b/wWon
         - draw
         - b/wTimeout
 

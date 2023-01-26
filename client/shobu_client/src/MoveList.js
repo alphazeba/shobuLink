@@ -1,16 +1,9 @@
-import React, { useState } from 'react'
-import { useGameState  } from './GameLogic';
+import React from 'react'
 import './Board.css'
-import { side, token } from './logic/token'
-import { getSubboard, subboardGetToken } from './logic/board';
-import { generateValidPassiveMoves, generateValidActiveMoves } from './logic/moveGenerator';
-import { addSpotVec, compareVec, getDeltaVector } from './logic/spot';
-import { buildFullMove, buildPartialMove } from './logic/move';
-import { buildCellLocationStyle } from './styleHelper';
-import { Arrow } from './Arrow';
+import './MoveList.css';
 
 
-export const MoveList = ({moves, onGoToMove}) => {
+export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
 
     if( moves == [] ){
         return <div>no moves</div>
@@ -20,19 +13,34 @@ export const MoveList = ({moves, onGoToMove}) => {
         if( index >= moves.length ){
             return <div/>;
         }
+        var className = 'rowItem moveDisplay btn';
+        if( index == curIndex-1 ){
+            className += " selected";
+        }
         var moveString = moves[index].m;
-        return <button onClick={()=>onGoToMove(index+1)}>{moveString}</button>
+        return <button className={className} onClick={()=>onGoToMove(index+1)}>{moveString}</button>
     }
 
     var output = []
     for( var i=0;i<Math.ceil( moves.length/2);i++){
         var blackIndex = i * 2;
         var whiteIndex = blackIndex + 1;
+        var className='moveRow';
+        if( i % 2 == 0 ){
+            className += ' even';
+        }
         output.push(
-            <div key={"turn" + i}>
-                {i+1}:{renderMove(blackIndex)},{renderMove(whiteIndex)}
+            <div className={className} key={"turn" + i}>
+                <div className='numberHolder rowItem' >{i+1}</div>{renderMove(blackIndex)}{renderMove(whiteIndex)}
             </div>
         )
     }
-    return output;
+    return <div className='moveListSuperContainer'>
+        <div>
+            {children}
+        </div>
+        <div className='moveListContainer'>
+            {output}
+        </div>
+    </div>;
 }

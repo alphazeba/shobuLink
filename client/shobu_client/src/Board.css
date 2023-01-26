@@ -1,17 +1,24 @@
 
 :root{
     --boxSize: 50px;
+    --maxBoxSize: 9vw;
     --subboardMargin: 1em;
     --pieceSize: 13%;
     --optionSize: 5%;
     --arrowBodyWidth: 0.25;
     --arrowHeadWidth: 0.35;
     --movet: 0.3s;
+    --crownWidth: 1.2em;
+    --crownHeight: 0.75em;
+    --crownOutlineScale: 0.90;
 }
+
 .cell {
     position: relative;
     width: var(--boxSize);
     height: var(--boxSize);
+    max-width: var(--maxBoxSize);
+    max-height: var(--maxBoxSize);
     background-color: lightgoldenrodyellow;
     display: inline-block;
 }
@@ -21,6 +28,10 @@
     background-color: red;
 }
 */
+
+.fullBoardContainer {
+    width: 500px;
+}
 
 .cell.interactable:hover::after {
     position: absolute;
@@ -69,6 +80,8 @@
     margin-bottom: 0;
     width: calc( var(--boxSize) * 4 );
     height: calc( var(--boxSize) * 4 );
+    max-width: calc( var(--maxBoxSize) * 4 );
+    max-height: calc( var(--maxBoxSize) * 4 );
 }
 
 .topBoardRow {
@@ -80,12 +93,61 @@
     font-size: 0.5em;
 }
 
-.token{
-    pointer-events: none;
-    position: absolute;
+.nameBar {
+    overflow: visible;
+    position: relative;
+}
+
+
+
+.token {
     height: var(--pieceSize);
     width: var(--pieceSize);
     border-radius: 50%;
+    outline-style: solid;
+    outline-width: 2px;
+}
+
+.fake {
+    margin-left: 20%;
+    position: absolute;
+    height: 1em;
+    width: 1em;
+    overflow: visible;
+}
+
+.fake::after {
+    content: '.';
+    color: transparent;
+}
+
+.crown {
+    position:absolute;
+    overflow: visible;
+    width: var(--crownWidth);
+    height: var(--crownHeight);
+    top: -0.5em;
+    left: -0.25em;
+    background-color: black;
+    transform: rotate(-15deg);
+    clip-path: polygon(0% 100%, 100% 100%, 100% 15%, 75% 75%, 50% 0%, 25% 75%, 0% 15% );
+}
+
+.crown::after {
+    left: calc( (1 - var(--crownOutlineScale))/2 * 1em );
+    top: calc( (1 - var(--crownOutlineScale))/2 * 1em );
+    position: absolute;
+    width: calc( var(--crownWidth) * var(--crownOutlineScale) );
+    height: calc( var(--crownHeight) * var(--crownOutlineScale) );
+    background-color: gold;
+    clip-path: polygon(0% 100%, 100% 100%, 100% 15%, 75% 75%, 50% 0%, 25% 75%, 0% 15% );
+    content: '.';
+    color: transparent;
+}
+
+.token.real{
+    pointer-events: none;
+    position: absolute;
     outline-style: solid;
     outline-width: 2px;
     margin-left: calc( 100% / 8 - var(--pieceSize)/2 );
@@ -93,12 +155,12 @@
     transition: left var(--movet), top var(--movet);
 }
 
-.whiteToken{
+.token.white{
     background-color: white;
     outline-color: black;
 }
 
-.blackToken{
+.token.black{
     background-color: black;
     outline-color: white;
 }
@@ -158,3 +220,4 @@
     float: left;
     width: 50%;
 }
+

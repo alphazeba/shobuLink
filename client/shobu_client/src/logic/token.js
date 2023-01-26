@@ -30,3 +30,21 @@ export const side = {
     BLACK: token.BLACK,
     WHITE: token.WHITE
 }
+
+export const sideToName = ( sideValue ) => {
+    switch( sideValue ){
+        case side.BLACK:
+            return "BLACK";
+        case side.WHITE:
+            return "WHITE";
+    }
+}
+
+export const nameToSide = ( name ) => {
+    switch( name ){
+        case "BLACK":
+            return side.BLACK;
+        case "WHITE":
+            return side.WHITE;
+    }
+}

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useId, useState } from 'react'
 import { useGameState  } from './GameLogic';
 import './Board.css'
 import { side, token } from './logic/token'
@@ -8,8 +8,9 @@ import { addSpotVec, compareVec, getDeltaVector } from './logic/spot';
 import { buildFullMove, buildPartialMove } from './logic/move';
 import { buildCellLocationStyle } from './styleHelper';
 import { Arrow } from './Arrow';
+import { stateIsRelatedToSide, stateIsRelatedToVictory } from './util/stateHelper';
 
-export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }) => {
+export const Board = ({ boardState, playable, blackId, blackName, whiteId, whiteName, gameState, onMove, userId }) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );
@@ -49,7 +50,7 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
         clearSelections();
         setSelectedPassiveSpot( [ [x,y], n ] );
         var homeboardside = side.BLACK;
-        if( n == 0 || n == 3 ){
+        if( n == 1 || n == 3 ){
             homeboardside = side.WHITE;
         }
         setPassiveMoves( generateValidPassiveMoves( boardState, [x,y], homeboardside ) );
@@ -170,8 +171,15 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
         </span>
     }
 
+    const userIsInGame = () => {
+        return userId == blackId || userId == whiteId;
+    }
+
     const itIsYourTurn = () => {
-        return userId != null && boardState.playerTurn == getPerspectiveColor();
+        return userId != null
+            && userIsInGame()
+            && boardState.playerTurn == getPerspectiveColor()
+            && playable;
     }
 
     const isYourHomeboard = ( n ) => {
@@ -290,17 +298,53 @@ export const Board = ({ boardState, blackId, whiteId, children, onMove, userId }
 
     const drawToken = ( tokenObj, spot ) => {
         const [x,y] = spot
-        var className = "token " + ( (tokenObj.type == token.WHITE) ? "whiteToken" : "blackToken" );
+        var className = "real token " + ( (tokenObj.type == token.WHITE) ? "white" : "black" );
         return <div className={className} style={buildCellLocationStyle(x,y,usingFlippedPerspective())} key={tokenObj.key} />
     }
 
+    const renderBoardState = ( sideValue ) => {
+        if( !stateIsRelatedToSide( sideValue, gameState ) ){
+            return <div/>;
+        }
+        var colorName = "black";
+        if( sideValue == side.WHITE ){
+            colorName = "white";
+        }
+        return <div className={"fake token " + colorName}>
+            {renderCrown()}
+        </div>
+    }
+
+    const renderCrown = () => {
+        if( stateIsRelatedToVictory( gameState ) ){
+            return <div className='crown' />
+        }
+        return <div/>
+    }
+
+    const drawTopName = () => {
+        if( usingFlippedPerspective() ){
+            return drawName( blackName, blackId, side.BLACK );
+        }
+        return drawName( whiteName, whiteId, side.WHITE );
+    }
+
+    const drawBottomName = () => {
+        if( usingFlippedPerspective() ){
+            return drawName( whiteName, whiteId, side.WHITE );
+        }
+        return drawName( blackName, blackId, side.BLACK );
+    }
+
+    const drawName = ( name, id, sideValue ) => {
+        return <div className='nameBar'>{ renderBoardState( sideValue ) }{name} : {id}</div>
+    }
+
     return <div>
-        <div >
-            {children}
-            <p>buId: {blackId}, wuId: {whiteId}</p>
-            <p>userId: {userId} </p>
-            <p>playerTurn: {boardState.playerTurn}</p>
+        <div className='fullBoardContainer'>
+            { drawTopName() }
             { drawBoard( boardState ) }
+            { drawBottomName() }
         </div>
     </div>
 }

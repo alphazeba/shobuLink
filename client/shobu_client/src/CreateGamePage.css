@@ -1,0 +1,17 @@
+
+
+
+.sideSelector {
+    background-color: white;
+    border-radius: 0;
+    border-width: 0.5em;
+}
+
+.sideSelector:hover {
+    background-color: lightblue;
+    color: black;
+}
+
+.sideSelector.selected {
+    border-color: black;
+}
