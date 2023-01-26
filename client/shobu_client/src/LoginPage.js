@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { GameLoader } from './GameLoader';
 import { MyInput } from './MyInput';
+import './LoginPage.css';
 
 
 export const LoginPage = () => {
@@ -26,7 +27,6 @@ export const LoginPage = () => {
         navigate( decodeURIComponent( redirect ) );
     }
 
-    // <MyInput value={password} onChange={(e)=>handleChangeEvent(e,setPassword)} title="password"/>
     return <div>
         <h1>Please log in</h1>
         <form >
@@ -51,7 +51,7 @@ export const ForceUserToLogin = () => {
         logout();
         setForceLogin( true );
     }
-    return <div>
+    return <div className='loginBox'>
         <p>logged in as: {loginInfo.name}</p>
         <button onClick={onLogout}>logout</button>
         </div>

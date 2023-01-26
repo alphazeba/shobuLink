@@ -1,9 +1,9 @@
 
 :root{
     --boxSize: 50px;
-    --maxBoxSize: 9vw;
+    --maxBoxSize: 11vw;
     --subboardMargin: 1em;
-    --pieceSize: 13%;
+    --pieceSize: 15%;
     --optionSize: 5%;
     --arrowBodyWidth: 0.25;
     --arrowHeadWidth: 0.35;
@@ -98,21 +98,19 @@
     position: relative;
 }
 
-
-
 .token {
     height: var(--pieceSize);
     width: var(--pieceSize);
     border-radius: 50%;
-    outline-style: solid;
-    outline-width: 2px;
+    border-style: solid;
+    border-width: 2px;
 }
 
 .fake {
     margin-left: 20%;
     position: absolute;
-    height: 1em;
-    width: 1em;
+    height: 1.2em;
+    width: 1.2em;
     overflow: visible;
 }
 
@@ -148,8 +146,6 @@
 .token.real{
     pointer-events: none;
     position: absolute;
-    outline-style: solid;
-    outline-width: 2px;
     margin-left: calc( 100% / 8 - var(--pieceSize)/2 );
     margin-top: calc( 100% / 8 - var(--pieceSize)/2 );
     transition: left var(--movet), top var(--movet);
@@ -157,12 +153,12 @@
 
 .token.white{
     background-color: white;
-    outline-color: black;
+    border-color: black;
 }
 
 .token.black{
     background-color: black;
-    outline-color: white;
+    border-color: white;
 }
 
 .betweenSubboard::after{
@@ -221,3 +217,7 @@
     width: 50%;
 }
 
+.topSpace {
+    height: 4em;
+    color: transparent;
+}

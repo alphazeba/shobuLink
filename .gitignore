@@ -5,3 +5,4 @@ deployment/cdk/cdk.out
 service/shobuServiceLambda/.idea
 service/shobuServiceLambda/out
 **/__pycache__/*
+client/shobu_client/build

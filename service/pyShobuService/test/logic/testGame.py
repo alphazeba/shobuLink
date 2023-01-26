@@ -24,5 +24,3 @@ if True: # found an issue where floats were sneaking in and causing havoc.
         print( "playing move: " + move )
         G.playMove( game, side, move )
         side = flipSide( side )
-
-
