@@ -1,5 +1,3 @@
-
-const { CfnModuleDefaultVersion } = require("aws-cdk-lib");
 const cdk = require( "aws-cdk-lib" );
 const { Construct } = require( "constructs" );
 const apigateway = require("aws-cdk-lib/aws-apigateway");
@@ -49,15 +47,6 @@ class ShobuService extends Construct {
             allowMethods: [ 'POST' ]
         })
     }
-}
-
-function buildShobuLambda( scope, functionName, env ){
-    return new lambda.Function( scope, functionName + "Lambda", {
-        runtime: lambda.Runtime.JAVA_11,
-        code: lambda.Code.fromAsset( "../../service/shobuServiceLambda/out/artifacts/" + functionName + "_jar/shobuServiceLambda.jar" ),
-        handler: "shobu." + functionName + "::handleRequest",
-        environment: env,
-    } );
 }
 
 module.exports = { ShobuService }

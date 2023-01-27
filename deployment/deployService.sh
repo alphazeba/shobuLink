@@ -16,7 +16,8 @@ fi
 # run deployment script
 cd ${baseDirectory}
 cd ./cdk
-cdk synth && cdk deploy --profile cliAdmin
+serviceStack=ShobuStack
+cdk synth ${serviceStack} && cdk deploy ${serviceStack} --profile cliAdmin
 
 
 # 

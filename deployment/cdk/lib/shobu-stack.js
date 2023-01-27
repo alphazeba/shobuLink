@@ -1,8 +1,8 @@
-const { Stack, Duration } = require('aws-cdk-lib');
+const { Stack } = require('aws-cdk-lib');
 const ShobuService = require('./shobu-service');
 // const sqs = require('aws-cdk-lib/aws-sqs');
 
-class CdkStack extends Stack {
+class ShobuStack extends Stack {
   /**
    *
    * @param {Construct} scope
@@ -13,13 +13,7 @@ class CdkStack extends Stack {
     super(scope, id, props);
   
     new ShobuService.ShobuService( this, "ShobuService", props )
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'CdkQueue', {
-    //   visibilityTimeout: Duration.seconds(300)
-    // });
   }
 }
 
-module.exports = { CdkStack }
+module.exports = { ShobuStack: ShobuStack }
