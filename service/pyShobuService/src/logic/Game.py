@@ -20,6 +20,8 @@ _moves = "moves"
 _startTime = "startTime"
 _state = "state"
 _secs = "secs"
+_preview = "board"
+_phaseTime = "phsT"
 
 def new( playerId, playerName, playerSide, secondPerSide ):
     this = {
@@ -29,16 +31,30 @@ def new( playerId, playerName, playerSide, secondPerSide ):
         _startTime: time.getNow(),
         _moves: [],
     }
+    _updatePhaseTime( this )
     _setPlayer( this, playerId, playerName, playerSide )
     return this
+
+def setGameState( this, gameState ):
+    this[_state] = gameState
+    _updatePhaseTime( this )
+
+
+def setStartTime( this, startTime ):
+    this[_startTime] = startTime
+    _updatePhaseTime( this )
+
+def _updatePhaseTime( this ):
+    this[_phaseTime] = GameState.getPhase( getState( this ) ) + str( this[_startTime] )
+
 
 def joinGame( this, playerId, playerName ):
     if not _isJoinable( this ):
         raise ExceptionToReturn( "Game is already full", 400 )
     side = _getMissingPlayerSide( this )
     _setPlayer( this, playerId, playerName, side )
-    this[_startTime] = time.getNow()
-    this[_state] = GameState.blackMove
+    setStartTime( this, time.getNow() )
+    setGameState( this, GameState.blackMove )
     return side
 
 def playMove( this, playerSide, moveString ):
@@ -73,15 +89,15 @@ def _handleGameOverCheck( this, board ):
     winResult = gameover.checkForWin( board )
     if winResult != None:
         if winResult == t.SIDE_BLACK:
-            this[_state] = GameState.blackWon
+            setGameState( this, GameState.blackWon )
         elif winResult == t.SIDE_WHITE:
-            this[_state] = GameState.whiteWon
+            setGameState( this, GameState.whiteWon )
 
 def _flipTurn( this ):
     if this[_state] == GameState.blackMove:
-        this[_state] = GameState.whiteMove
+        setGameState( this, GameState.whiteMove )
     elif this[_state] == GameState.whiteMove:
-        this[_state] = GameState.blackMove
+        setGameState( this, GameState.blackMove )
 
 def get( this, key ):
     if key in this:

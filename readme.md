@@ -54,14 +54,31 @@ Will be using DynamoDB (DDB)
 
 - GameTable
     - id
-    - black
-    - white
+    - blackId
+    - whiteId
+    - blackName
+    - whiteName
     - moves[]
     - startTime
     - state
+    # need to add
+    - preview
+    - phase+time
 
 ### special types
-- State
+- Game
+    - id
+    - blackId
+    - whiteId
+    - blackName
+    - whiteName
+    - startTime
+    - moves
+    - state
+
+- State (enum)
+    - pending
+        waitingForPlayer
     - active
         - b/w'sMove
     - complete
@@ -71,8 +88,8 @@ Will be using DynamoDB (DDB)
         - b/wTimeout
 
 - Move
-    - fullMove: string
-    - time
+    - m: string (move)
+    - t (time)
 
 ## System design
 
@@ -102,3 +119,46 @@ running the cold start is taking around 30seconds.  I read some articles on how 
 So at this point in time running the functions ( createGame, joinGame, getGame ) take about 100ms, but the cold start is still a giant 30seconds.  This all seems to have to do with the interaction between the lamdba function and the dynamodb specific portions of the application.  Building the ddbClient in the first place i measured to be takign around 14seconds.  And then making the first call to the db is takign ~10seconds.  These are both incredibly inappropriate timelines.  I do not really understand why these are so giant.  From what i've looked around on the internet, people complain about cold starts, but do not seem to be experiencing the giant waits that i am seeing. Further i am having difficulty trying to figure out how to get better readings out of the dynamodb sdk.  Idk what's taking so long.
 
 I will now attempt to write the service in python.
+
+
+
+TODO fill in thoughts about writing in python.  it was major speed up.
+
+
+
+THoughts on how to setup ddb.
+The goal is to fulfill the api demands of getRecentGames and getPlayerGames.
+The problem is that in both of these cases what i really want to do is just access the games sorted by lastTouch time.  But this isn't really possible given the structure of the noSQL database that i am using behind the scenes. 
+
+However, i think that the quest for getPlayerGames is actually something that can be solved.  I think that i could create a GSI on the GameTable 
+key: userId
+sortKey: lastTouch
+projection: preview,gameId,blackId,whiteId
+
+This way the user can click on the "view my games" to see there own games. It would not matter it doesn't have full data.  The problem with this idea is that it would require adding each item in the gameTable to this gsi twice, so its no go.
+
+Instead, what i could is create 2 GSI.
+black gsi and white gsi
+
+black gsi
+key: blackId
+sortKey: lastTouch
+projection: preview, gameId, whiteId, whiteName // the name is for pleasant visualization
+
+white gsi
+key: whiteId
+sortKey: lastTouch
+projection: preview, gameId, blackId, blackName 
+
+So when users request to see their games, it would actually make 2 queries behind the scenes and then combine the results.
+actual results could then be returned in the original format
+
+userId, lastTouch, preview, gameId, blackId, whiteId, opponentName
+
+To achieve this i would need to accomplish 2 tasks.  I would need to add a "preview" and a lastTouch item to the gameTable. ( actually i've got startTime, i don't see any reason not to use that one. )
+
+If the sort key were gamePhase+lastTouch then it would be extra useful.
+
+players could query their own active games by querying key=userId, sortKey=BeginsWith(active)
+
+you cannot simply combine attributes, so i think i will need to make a parameter in the table that is the gamePhase+startTime. also need to add the preview.

@@ -16,6 +16,10 @@ whiteTimeout = "whiteTimeout"
 
 draw = "draw"
 
+phase_pending = "p"
+phase_active = "a"
+phase_complete = "c"
+
 options = [
     waitingForPlayer,
     blackMove,
@@ -28,6 +32,9 @@ options = [
     whiteTimeout,
     draw
 ]
+
+def isPending( gameState ):
+    return gameState == waitingForPlayer
 
 def isActive( gameState ):
     return gameState == blackMove or gameState == whiteMove
@@ -43,3 +50,9 @@ def isComplete( gameState ):
             draw
         ]
 
+def getPhase( state ):
+    if isPending( state ):
+        return phase_pending
+    if isActive( state ):
+        return phase_active
+    return phase_complete
