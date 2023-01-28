@@ -1,8 +1,7 @@
 
-import src.logic.shobu.board as B
 import src.logic.Game as G
 import src.data.playerSide as ps
-import src.logic.shobu.token as t
+import src.util.jsonHelp as json
 
 def buildTestShobuBoard( moveStringArray ):
     game = buildTestGame( moveStringArray )
@@ -22,3 +21,6 @@ def flipSide( side ):
         return ps.white
     else:
         return ps.black
+
+def deepCompare( a, b ):
+    return json.dumps( a ) == json.dumps( b )

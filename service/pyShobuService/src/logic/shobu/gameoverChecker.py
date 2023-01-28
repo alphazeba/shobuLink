@@ -22,11 +22,10 @@ def checkForWin( board ):
 
 def _countTokenTypeOnSubboard( subboard ):
     blackCount, whiteCount = 0, 0
-    for iy in range( 4 ):
-        for ix in range( 4 ):
-            foundToken = B.subboardGetToken( subboard, [ix,iy] )
-            if foundToken == t.BLACK:
-                blackCount += 1
-            elif foundToken == t.WHITE:
-                whiteCount += 1
+    for spot in h.everySpot():
+        foundToken = B.subboardGetToken( subboard, spot )
+        if foundToken == t.BLACK:
+            blackCount += 1
+        elif foundToken == t.WHITE:
+            whiteCount += 1
     return blackCount, whiteCount

@@ -20,7 +20,7 @@ _moves = "moves"
 _startTime = "startTime"
 _state = "state"
 _secs = "secs"
-_preview = "board"
+_preview = "prv"
 _phaseTime = "phsT"
 
 # main interactions
@@ -128,6 +128,12 @@ def getPlayerSide( this, playerId ):
 def setStartTime( this, startTime ):
     this[_startTime] = startTime
     _updatePhaseTime( this )
+
+def _getPreview( this ):
+    return get( this, _preview )
+
+def _setPreview( this, preview ):
+    this[_preview] = preview
 
 def _getMissingPlayerSide( this ):
     if( _blackIsMissing( this ) ):
