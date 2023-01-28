@@ -2,6 +2,7 @@
 import src.logic.Game as G
 import src.data.playerSide as ps
 import src.util.jsonHelp as json
+import src.util.time as t
 
 def buildTestShobuBoard( moveStringArray ):
     game = buildTestGame( moveStringArray )
@@ -24,3 +25,11 @@ def flipSide( side ):
 
 def deepCompare( a, b ):
     return json.dumps( a ) == json.dumps( b )
+
+
+def timeMethod( fn, repetitions ):
+    start = t.getNow()
+    for i in range( repetitions ):
+        fn()
+    end = t.getNow()
+    print( "took " + str(end-start) + " ms " )

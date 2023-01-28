@@ -10,6 +10,7 @@ import logic.shobu.moveValidation as mv
 import logic.shobu.moveParser as mp
 import logic.shobu.gameoverChecker as gameover
 import logic.shobu.token as t
+import data.preview as prv
 
 _id = "id"
 _buId = "buId"
@@ -77,7 +78,7 @@ def playMove( this, playerSide, moveString ):
     if not mv.validateFullMove( board, fullMove ):
         raise ExceptionToReturn( "MOVE NOT LEGAL", 403 )
     board = B.makeValidatedMove( board, fullMove )
-    _addMove( this, Move.new( moveString ) )
+    _addMove( this, Move.new( moveString ), board )
     _handleGameOverCheck( this, board )
 
 # private
@@ -129,11 +130,14 @@ def setStartTime( this, startTime ):
     this[_startTime] = startTime
     _updatePhaseTime( this )
 
-def _getPreview( this ):
-    return get( this, _preview )
+def _getPreviewBoard( this ):
+    preview = get( this, _preview )
+    if preview != None:
+        return prv.previewToBoard( preview )
+    return None
 
-def _setPreview( this, preview ):
-    this[_preview] = preview
+def _setPreviewBoard( this, board ):
+    this[_preview] = prv.boardToPreview( board )
 
 def _getMissingPlayerSide( this ):
     if( _blackIsMissing( this ) ):
@@ -155,15 +159,24 @@ def _flipTurn( this ):
         setGameState( this, GameState.blackMove )
 
 def _getCurrentBoardState( this ):
+    board = _getPreviewBoard( this )
+    if board != None:
+        return board
+    board = _buildBoardFromMoves( this )
+    _setPreviewBoard( this, board )
+    return board
+
+def _buildBoardFromMoves( this ):
     board = B.initBoard()
     for move in this[_moves]:
         shobuMove = mp.parseMove( Move.getFullMove( move ) )
         board = B.makeValidatedMove( board, shobuMove )
     return board
 
-def _addMove( this, move ):
+def _addMove( this, move, newBoard ):
     this[_moves].append( move )
     _flipTurn( this )
+    _setPreviewBoard( this, newBoard )
 
 def _updatePhaseTime( this ):
     this[_phaseTime] = GameState.getPhase( getGameState( this ) ) + str( this[_startTime] )
