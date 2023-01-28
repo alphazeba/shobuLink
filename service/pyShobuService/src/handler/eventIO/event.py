@@ -5,7 +5,7 @@ corsOrigin = "qruosfadoiuasdfjjl"
 try:
     corsOrigin = os.environ['corsOrigin']
 except Exception as e:
-    print( "failed to load corsOrigin envionrment variable" )
+    print( "failed to load corsOrigin envionrment variable, if you are testing this is fine." )
 
 def buildResponse( responsObj, statusCode ):
     return {

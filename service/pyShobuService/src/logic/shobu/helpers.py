@@ -28,3 +28,15 @@ def getDeltaVector( a, b ):
 def spotIsInBoard( spot ):
     x,y = spot 
     return x >= 0 and y >= 0 and x < 4 and y < 4
+
+def _buildEverySpot():
+    output = []
+    for iy in range( 4 ):
+        for ix in range( 4 ):
+            output.append( [ix,iy] )
+    return output
+
+_everySpot = _buildEverySpot()
+
+def everySpot():
+    return _everySpot
