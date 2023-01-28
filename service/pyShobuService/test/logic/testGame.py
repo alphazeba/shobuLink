@@ -12,8 +12,6 @@ if True: # found an issue where floats were sneaking in and causing havoc.
         "Wb4b3Wc4c3",
         "Bb1b3Wb1b3"])
 
-
-
 if False: # proves that reading from the preview is faster than building boardState
     testGame = testUtility.buildTestGame([
         "Wb1b3Wb1b3",

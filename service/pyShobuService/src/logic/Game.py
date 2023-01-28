@@ -57,6 +57,7 @@ def new( playerId, playerName, playerSide, secondPerSide ):
         _moves: [],
     }
     _updatePhaseTime( this )
+    _setPreviewBoard( this, B.initBoard() )
     _setPlayer( this, playerId, playerName, playerSide )
     return this
 
@@ -84,11 +85,10 @@ def playMove( this, playerSide, moveString ):
 # private
 def _handleGameOverCheck( this, board ):
     winResult = gameover.checkForWin( board )
-    if winResult != None:
-        if winResult == t.SIDE_BLACK:
-            setGameState( this, GameState.blackWon )
-        elif winResult == t.SIDE_WHITE:
-            setGameState( this, GameState.whiteWon )
+    if winResult == t.SIDE_BLACK:
+        setGameState( this, GameState.blackWon )
+    elif winResult == t.SIDE_WHITE:
+        setGameState( this, GameState.whiteWon )
 
 # checks
 def _isPlayersTurn( this, playerSide ):
@@ -121,10 +121,9 @@ def setGameState( this, gameState ):
 def getPlayerSide( this, playerId ):
     if playerId == get( this, _buId ):
         return PlayerSide.black
-    elif playerId == get( this, _wuId ):
+    if playerId == get( this, _wuId ):
         return PlayerSide.white
-    else:
-        raise ExceptionToReturn( "Player is not in the game", 403 )
+    raise ExceptionToReturn( "Player is not in the game", 403 )
 
 def setStartTime( this, startTime ):
     this[_startTime] = startTime
