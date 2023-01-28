@@ -11,6 +11,14 @@ def initSubboard():
         [t.BLACK,t.BLACK,t.BLACK,t.BLACK]
     ]
 
+def initEmptySubboard():
+    return [
+        [t.EMPTY,t.EMPTY,t.EMPTY,t.EMPTY],
+        [t.EMPTY,t.EMPTY,t.EMPTY,t.EMPTY],
+        [t.EMPTY,t.EMPTY,t.EMPTY,t.EMPTY],
+        [t.EMPTY,t.EMPTY,t.EMPTY,t.EMPTY]
+    ]
+
 def initBoard():
     return buildBoard( initSubboard(),initSubboard(),initSubboard(),initSubboard(), t.BLACK )
 
