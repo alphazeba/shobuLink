@@ -1,12 +1,17 @@
 
 import util.time as time
 
+_fullMove = "m"
+_time = "t"
 
 def new( fullMove ):
     return {
-        "t": time.getNow(),
-        "m": fullMove
+        _time: time.getNow(),
+        _fullMove: fullMove
     }
 
 def getFullMove( this ):
-    return this["m"]
+    return this[_fullMove]
+
+def getTime( this ):
+    return this[_time]

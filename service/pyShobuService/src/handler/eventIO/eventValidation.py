@@ -1,6 +1,11 @@
 
 from exception.ExceptionToReturn import ExceptionToReturn
 
+def getOptionalValue( key, event, default ):
+    if key in event:
+        return event[key]
+    return default
+
 def getValidatedMapKey( key, event, map ):
     fn = lambda value: _validateOptions( key, value, map.keys() )
     return _getValidatedValue( key, event, fn )

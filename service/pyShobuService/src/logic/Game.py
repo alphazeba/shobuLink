@@ -23,6 +23,30 @@ _secs = "secs"
 _preview = "board"
 _phaseTime = "phsT"
 
+# main interactions
+def toGetGameOutputForm( this, latestTimeStamp ):
+    keysToOutputIfPresent = [
+        _id,
+        _buId,
+        _wuId,
+        _buName,
+        _wuName,
+        _startTime,
+        _state,
+        _secs,
+    ]
+    output = {}
+    for key in keysToOutputIfPresent:
+        if key in this:
+            output[key] = this[key]
+    
+    outputMoves = []
+    for move in this[_moves]:
+        if Move.getTime(move) > latestTimeStamp:
+            outputMoves.append( move )
+    output[_moves] = outputMoves
+    return output
+
 def new( playerId, playerName, playerSide, secondPerSide ):
     this = {
         _id: newGuid(),
@@ -34,19 +58,6 @@ def new( playerId, playerName, playerSide, secondPerSide ):
     _updatePhaseTime( this )
     _setPlayer( this, playerId, playerName, playerSide )
     return this
-
-def setGameState( this, gameState ):
-    this[_state] = gameState
-    _updatePhaseTime( this )
-
-
-def setStartTime( this, startTime ):
-    this[_startTime] = startTime
-    _updatePhaseTime( this )
-
-def _updatePhaseTime( this ):
-    this[_phaseTime] = GameState.getPhase( getState( this ) ) + str( this[_startTime] )
-
 
 def joinGame( this, playerId, playerName ):
     if not _isJoinable( this ):
@@ -61,30 +72,15 @@ def playMove( this, playerSide, moveString ):
     if not _isPlayersTurn( this, playerSide ):
         raise ExceptionToReturn( "It is not the player's turn", 403 )
     fullMove = mp.parseMove( moveString )
-    # validate that the player is not already out of time 
-    # TODO should update the game table with the fact the other player won.
-    # validate the move is legal
+    # TODO validate that the player is not already out of time 
     board = _getCurrentBoardState( this )
-    # validate the new move.
     if not mv.validateFullMove( board, fullMove ):
         raise ExceptionToReturn( "MOVE NOT LEGAL", 403 )
     board = B.makeValidatedMove( board, fullMove )
-    # add move to history sinces its legal.
     _addMove( this, Move.new( moveString ) )
-    # check for win
     _handleGameOverCheck( this, board )
 
-def _getCurrentBoardState( this ):
-    board = B.initBoard()
-    for move in this[_moves]:
-        shobuMove = mp.parseMove( Move.getFullMove( move ) )
-        board = B.makeValidatedMove( board, shobuMove )
-    return board
-
-def _addMove( this, move ):
-    this[_moves].append( move )
-    _flipTurn( this )
-
+# private
 def _handleGameOverCheck( this, board ):
     winResult = gameover.checkForWin( board )
     if winResult != None:
@@ -93,12 +89,19 @@ def _handleGameOverCheck( this, board ):
         elif winResult == t.SIDE_WHITE:
             setGameState( this, GameState.whiteWon )
 
-def _flipTurn( this ):
-    if this[_state] == GameState.blackMove:
-        setGameState( this, GameState.whiteMove )
-    elif this[_state] == GameState.whiteMove:
-        setGameState( this, GameState.blackMove )
+# checks
+def _isPlayersTurn( this, playerSide ):
+    state = getGameState( this )
+    return playerSide == PlayerSide.black and state == GameState.blackMove \
+        or playerSide == PlayerSide.white and state == GameState.whiteMove
 
+def _isJoinable( this ):
+    return get(this,_buId) == None or get(this,_wuId) == None
+
+def _blackIsMissing( this ):
+    return get(this,_buId) == None
+
+# getter setter
 def get( this, key ):
     if key in this:
         return this[key]
@@ -107,8 +110,12 @@ def get( this, key ):
 def getId( this ):
     return get(this,_id)
 
-def getState( this ):
+def getGameState( this ):
     return get(this,_state)
+
+def setGameState( this, gameState ):
+    this[_state] = gameState
+    _updatePhaseTime( this )
 
 def getPlayerSide( this, playerId ):
     if playerId == get( this, _buId ):
@@ -118,16 +125,9 @@ def getPlayerSide( this, playerId ):
     else:
         raise ExceptionToReturn( "Player is not in the game", 403 )
 
-def _isPlayersTurn( this, playerSide ):
-    state = getState( this )
-    return playerSide == PlayerSide.black and state == GameState.blackMove \
-        or playerSide == PlayerSide.white and state == GameState.whiteMove
-
-def _isJoinable( this ):
-    return get(this,_buId) == None or get(this,_wuId) == None
-
-def _blackIsMissing( this ):
-    return get(this,_buId) == None
+def setStartTime( this, startTime ):
+    this[_startTime] = startTime
+    _updatePhaseTime( this )
 
 def _getMissingPlayerSide( this ):
     if( _blackIsMissing( this ) ):
@@ -141,3 +141,23 @@ def _setPlayer( this, playerId, playerName, side ):
     else:
         this[_wuId] = playerId
         this[_wuName] = playerName
+
+def _flipTurn( this ):
+    if this[_state] == GameState.blackMove:
+        setGameState( this, GameState.whiteMove )
+    elif this[_state] == GameState.whiteMove:
+        setGameState( this, GameState.blackMove )
+
+def _getCurrentBoardState( this ):
+    board = B.initBoard()
+    for move in this[_moves]:
+        shobuMove = mp.parseMove( Move.getFullMove( move ) )
+        board = B.makeValidatedMove( board, shobuMove )
+    return board
+
+def _addMove( this, move ):
+    this[_moves].append( move )
+    _flipTurn( this )
+
+def _updatePhaseTime( this ):
+    this[_phaseTime] = GameState.getPhase( getGameState( this ) ) + str( this[_startTime] )
