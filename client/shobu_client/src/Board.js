@@ -9,8 +9,10 @@ import { buildFullMove, buildPartialMove } from './logic/move';
 import { buildCellLocationStyle } from './styleHelper';
 import { Arrow } from './Arrow';
 import { stateIsRelatedToSide, stateIsRelatedToVictory } from './util/stateHelper';
+import { Clock } from './Clock';
+import { isWhiteMove, isBlackMove } from './util/stateHelper';
 
-export const Board = ({ boardState, playable, blackId, blackName, whiteId, whiteName, gameState, onMove, userId }) => {
+export const Board = ({ boardState, playable, blackId, blackName, whiteId, whiteName, gameState, onMove, userId, timeData }) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );
@@ -336,8 +338,31 @@ export const Board = ({ boardState, playable, blackId, blackName, whiteId, white
         return drawName( blackName, blackId, side.BLACK );
     }
 
+    const renderBlackClock = () => {
+        return <Clock 
+            time={timeData.blackTime}
+            lastTimestamp={timeData.lastTimestamp}
+            ticking={ isBlackMove( gameState ) }
+        />
+    }
+
+    const renderWhiteClock = () => {
+        return <Clock
+            time={timeData.whiteTime}
+            lastTimestamp={timeData.lastTimestamp}
+            ticking={ isWhiteMove( gameState ) }
+        />
+    }
+
+    const renderClock = ( sideValue ) => {
+        if( sideValue == side.BLACK ){
+            return renderBlackClock();
+        }
+        return renderWhiteClock();
+    }
+
     const drawName = ( name, id, sideValue ) => {
-        return <div className='nameBar'>{ renderBoardState( sideValue ) }{name} : {id}</div>
+        return <div className='nameBar'>{ renderBoardState( sideValue ) }{name} : {id}. {renderClock(sideValue)}</div>
     }
 
     return <div>

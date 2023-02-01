@@ -112,6 +112,22 @@ export const GameLoader = ( { gameId } ) => {
 
 
 
+    const renderBlackClock = () => {
+        return <Clock 
+            time={timeData.blackTime}
+            lastTimestamp={timeData.lastTimestamp}
+            ticking={ isBlackMove( gameState.state ) }
+        />
+    }
+
+    const renderWhiteClock = () => {
+        return <Clock
+            time={timeData.whiteTime}
+            lastTimestamp={timeData.lastTimestamp}
+            ticking={ isWhiteMove( gameState ) }
+        />
+    }
+
     return <div className='container'>
             <div className='row'>
                 <div className="col col-md-7">
@@ -123,25 +139,16 @@ export const GameLoader = ( { gameId } ) => {
                         userId={userId}
                         playable={isGamePlayable()}
                         gameState={gameState.state}
+                        timeData={timeData}
                     />
                     <JoinGameButton gameState={gameState} />
                 </div>
                 <div className="col col-md-5">
-                    <Clock 
-                        time={timeData.blackTime} 
-                        lastTimestamp={timeData.lastTimestamp} 
-                        ticking={true} 
-                    />
                     <MoveList curIndex={gameIndex} moves={gameState.moves} onGoToMove={handleGoToIndex}>
                         <button onClick={getPrevIndex}>{"<--"}</button>
                         <button onClick={getNextIndex}>{"-->"}</button>
                         <button onClick={goToMostRecentIndex} >most recent move</button>
                     </MoveList>
-                    <Clock 
-                        time={timeData.whiteTime} 
-                        lastTimestamp={timeData.lastTimestamp} 
-                        ticking={false} 
-                    />
                 </div>
             </div>
         </div>;
