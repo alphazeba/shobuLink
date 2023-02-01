@@ -2,7 +2,7 @@
 
 
 // original definitions can be found in service/.../Game.py
-export const gameTableKey = {
+const gameTableKey = {
     blackId: 'buId',
     blackName: 'buName',
     whiteId: 'wuId',
@@ -11,3 +11,6 @@ export const gameTableKey = {
     preview: 'prv',
     gameId: 'id',
 }
+
+
+module.exports = { gameTableKey }

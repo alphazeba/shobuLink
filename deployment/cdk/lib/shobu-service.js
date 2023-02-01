@@ -21,6 +21,9 @@ class ShobuService extends Construct {
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
         });
 
+
+        // due to bug with cdk, must add gsi one at a time https://github.com/aws/aws-cdk/issues/12246
+        // comment gsi out and deploy cdk multiple times when first setting up.
         gameTable.addGlobalSecondaryIndex( {
             indexName: 'blackGameIndex',
             partitionKey: { name: gameTableKey.blackId, type: ddb.AttributeType.STRING },
@@ -33,7 +36,7 @@ class ShobuService extends Construct {
                 gameTableKey.whiteName
             ]
         } );
-
+        
         gameTable.addGlobalSecondaryIndex( {
             indexName: 'whiteGameIndex',
             partitionKey: { name: gameTableKey.whiteId, type: ddb.AttributeType.STRING },
