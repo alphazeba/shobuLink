@@ -1,10 +1,5 @@
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { GameLoader } from './GameLoader';
-import { ForceUserToLogin } from './LoginPage';
-import { side } from './logic/token';
-import { createGame } from './api';
 
 import './CreateGamePage.css';
 

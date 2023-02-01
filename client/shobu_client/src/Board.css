@@ -23,12 +23,6 @@
     display: inline-block;
 }
 
-/*
-.cell.interactable:hover {
-    background-color: red;
-}
-*/
-
 .fullBoardContainer {
     width: 500px;
 }

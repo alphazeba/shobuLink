@@ -153,7 +153,3 @@ export const GameLoader = ( { gameId } ) => {
             </div>
         </div>;
 }
-
-
-
-// http://localhost:3000/game/c29879f9-b521-474a-add0-84badfc3edc6

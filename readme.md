@@ -142,18 +142,18 @@ black gsi and white gsi
 
 black gsi
 key: blackId
-sortKey: lastTouch
+sortKey: phaseTime
 projection: preview, gameId, whiteId, whiteName // the name is for pleasant visualization
 
 white gsi
 key: whiteId
-sortKey: lastTouch
+sortKey: phaseTime
 projection: preview, gameId, blackId, blackName 
 
 So when users request to see their games, it would actually make 2 queries behind the scenes and then combine the results.
 actual results could then be returned in the original format
 
-userId, lastTouch, preview, gameId, blackId, whiteId, opponentName
+userId, startTime, preview, gameId, blackId, whiteId, opponentName
 
 To achieve this i would need to accomplish 2 tasks.  I would need to add a "preview" and a lastTouch item to the gameTable. ( actually i've got startTime, i don't see any reason not to use that one. )
 

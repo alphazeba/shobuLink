@@ -3,6 +3,7 @@ const { Construct } = require( "constructs" );
 const apigateway = require("aws-cdk-lib/aws-apigateway");
 const lambda = require("aws-cdk-lib/aws-lambda");
 const ddb = require("aws-cdk-lib/aws-dynamodb");
+const { gameTableKey } = require("./tableAttributes");
 
 class ShobuService extends Construct {
     constructor( scope, id, props ){
@@ -19,6 +20,32 @@ class ShobuService extends Construct {
             tableName: gameTableName,
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
         });
+
+        gameTable.addGlobalSecondaryIndex( {
+            indexName: 'blackGameIndex',
+            partitionKey: { name: gameTableKey.blackId, type: ddb.AttributeType.STRING },
+            sortKey: { name: gameTableKey.phaseTime, type: ddb.AttributeType.STRING },
+            projectionType: ddb.ProjectionType.INCLUDE,
+            nonKeyAttributes: [
+                gameTableKey.gameId,
+                gameTableKey.preview,
+                gameTableKey.whiteId,
+                gameTableKey.whiteName
+            ]
+        } );
+
+        gameTable.addGlobalSecondaryIndex( {
+            indexName: 'whiteGameIndex',
+            partitionKey: { name: gameTableKey.whiteId, type: ddb.AttributeType.STRING },
+            sortKey: { name: gameTableKey.phaseTime, type: ddb.AttributeType.STRING },
+            projectionType: ddb.ProjectionType.INCLUDE,
+            nonKeyAttributes: [
+                gameTableKey.gameId,
+                gameTableKey.preview,
+                gameTableKey.blackId,
+                gameTableKey.blackName
+            ]
+        } );
 
         // lambda functions
         const lambdaEnv = {
