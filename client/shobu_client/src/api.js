@@ -5,7 +5,14 @@ import { getLoginInfo } from "./LoginPage";
 import { fetchJson } from "./util/apiHelper";
 
 export function getGame( gameId ){
-    return fetchJson({ type: "GetGame", gameId: gameId })
+    return fetchJson( { type: "GetGame", gameId: gameId } )
+        .then( ( jsonData ) => {
+            return jsonData.game;
+        } );
+}
+
+export function getGameUpdate( gameId, latestTimestamp ){
+    return fetchJson( { type: "GetGame", gameId: gameId, latestTimestamp: latestTimestamp } )
         .then( ( jsonData ) => {
             return jsonData.game;
         } );

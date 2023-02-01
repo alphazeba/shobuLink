@@ -5,38 +5,40 @@ import { MoveList } from './MoveList';
 import { getLoginInfo } from './LoginPage';
 import { JoinGameButton } from './JoinGameButton';
 import { isBlackMove, isWhiteMove, stateIsActive } from './util/stateHelper';
+import { Clock, getPlayerTimeUsed } from './Clock';
 
-export const GameLoader = ({ gameId }) => {
+export const GameLoader = ( { gameId } ) => {
     const gameState = useGameState();
     var alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const loginInfo = getLoginInfo();
     const userId = loginInfo.id;
-
-    const onGameUpdated = () => {
-        if( liveUpdate ){
-            goToMostRecentIndex();
-        }
-    }
+    const timeData = getPlayerTimeUsed( gameState.moves, gameState.startTime );
 
     useEffect( () => {
         if( gameIsNotLoaded() && !alreadyRequestedGame ){
             gameState.loadGame( gameId );
             alreadyRequestedGame = true;
         }
-        console.log( "live update " );
-        console.log( liveUpdate );
-        if( liveUpdate && gameIndex < gameState.history.length - 1 ){
+
+        if( isViewingMostRecentMove() && ! liveUpdate ){
+            setLiveUpdate( true );
+        }
+
+        if( liveUpdate && ! isViewingMostRecentMove() ){
             goToMostRecentIndex();
         }
-        const interval = setInterval( ()=>{
-            console.log( "do a thing occasionally")
-            onPeriodicUpdate();
-        }, 3 * 1000 );
 
+        const interval = setInterval( ()=>{
+            onPeriodicUpdate();
+        }, 10 * 1000 );
         return () => clearInterval( interval );
     } );
+
+    const isViewingMostRecentMove = () => {
+        return gameIndex >= gameState.history.length - 1;
+    }
 
     const gameIsNotLoaded = () => {
         return gameId != gameState.gameId;
@@ -64,35 +66,39 @@ export const GameLoader = ({ gameId }) => {
         return boardState;
     }
 
+    const debugIndex = ( index ) => {
+        console.log( "index: " + index.toString() + " history length: " + gameState.history.length );
+    }
+
     const getNextIndex = () => {
         var nextIndex = gameIndex + 1;
+        debugIndex( nextIndex );
         if( nextIndex < gameState.history.length ){
             setGameIndex( nextIndex );
-        }
-        if( nextIndex >= gameState.history.length - 1){
-            setLiveUpdate( true );
-        }
-        else {
-            setLiveUpdate( false );
         }
     }
 
     const getPrevIndex = () => {
+        setLiveUpdate( false );
         var nextIndex = gameIndex - 1;
+        debugIndex( nextIndex );
         if( nextIndex >= 0 ){
             setGameIndex( nextIndex );
         }
-        setLiveUpdate( false );
     }
 
     const handleGoToIndex = ( index ) => {
+        if( index < gameState.history.length - 1 ){
+            setLiveUpdate( false );
+        }
+        debugIndex( index );
         setGameIndex( index );
-        setLiveUpdate( false );
     }
 
     const goToMostRecentIndex = () => {
-        setGameIndex( gameState.history.length - 1 );
-        setLiveUpdate( true );
+        var nextIndex = gameState.history.length - 1;
+        debugIndex( nextIndex );
+        setGameIndex( nextIndex );
     }
 
     const handleMoveMade = ( fullMove ) => {
@@ -121,12 +127,26 @@ export const GameLoader = ({ gameId }) => {
                     <JoinGameButton gameState={gameState} />
                 </div>
                 <div className="col col-md-5">
+                    <Clock 
+                        time={timeData.blackTime} 
+                        lastTimestamp={timeData.lastTimestamp} 
+                        ticking={true} 
+                    />
                     <MoveList curIndex={gameIndex} moves={gameState.moves} onGoToMove={handleGoToIndex}>
                         <button onClick={getPrevIndex}>{"<--"}</button>
                         <button onClick={getNextIndex}>{"-->"}</button>
                         <button onClick={goToMostRecentIndex} >most recent move</button>
                     </MoveList>
+                    <Clock 
+                        time={timeData.whiteTime} 
+                        lastTimestamp={timeData.lastTimestamp} 
+                        ticking={false} 
+                    />
                 </div>
             </div>
         </div>;
 }
+
+
+
+// http://localhost:3000/game/c29879f9-b521-474a-add0-84badfc3edc6
