@@ -162,3 +162,19 @@ If the sort key were gamePhase+lastTouch then it would be extra useful.
 players could query their own active games by querying key=userId, sortKey=BeginsWith(active)
 
 you cannot simply combine attributes, so i think i will need to make a parameter in the table that is the gamePhase+startTime. also need to add the preview.
+
+
+The getPlayerGames response type would be an array of playerGamePreviews
+
+playerGamePreview 
+----
+XX userId // we would already know the userId
+startTime // taken from phsT with the phase stripped off.
+prv
+gameId
+oId // opponentId
+oName // opponentName
+userSide // "BLACK" or "WHITE"
+
+the server to ddb portion works now.
+need to make the client to server call work now.

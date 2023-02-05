@@ -19,7 +19,7 @@ class ShobuService extends Construct {
         const gameTable = new ddb.Table( this, "GameTable", {
             tableName: gameTableName,
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
-        });
+        } );
 
         gameTable.addGlobalSecondaryIndex( {
             indexName: 'blackGameIndex',
