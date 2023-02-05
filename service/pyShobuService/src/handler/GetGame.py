@@ -3,11 +3,12 @@ import dataAccess.GameTable as GameTable
 import logic.Game as Game
 from handler.eventIO.eventValidation import getValidatedStringValue, getOptionalValue
 
-def GetGame( event, context ):
+def GetGame( event, context, props ):
     gameId = getValidatedStringValue( 'gameId', event )
     latestTimestamp = getOptionalValue( "latestTimestamp", event, 0 )
     # get game
-    game = GameTable.getGame( gameId )
+    gameTable = props['gameTable']
+    game = GameTable.getGame( gameTable, gameId )
     # return game
     print( game )
     return {

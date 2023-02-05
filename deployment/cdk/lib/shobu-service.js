@@ -19,7 +19,7 @@ class ShobuService extends Construct {
         const gameTable = new ddb.Table( this, "GameTable", {
             tableName: gameTableName,
             partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
-        });
+        } );
 
 
         // due to bug with cdk, must add gsi one at a time https://github.com/aws/aws-cdk/issues/12246
