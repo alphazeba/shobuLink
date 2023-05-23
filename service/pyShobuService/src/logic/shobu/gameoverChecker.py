@@ -7,17 +7,13 @@ import logic.shobu.board as B
 from exception.ExceptionToReturn import ExceptionToReturn
 
 def checkForWin( board ):
-    minBlackToken = 100
-    minWhiteToken = 100
     for n in range( 4 ):
         subboard = B.getSubboard( board, n )
         curBlack, curWhite = _countTokenTypeOnSubboard( subboard )
-        minBlackToken = min( minBlackToken, curBlack )
-        minWhiteToken = min( minWhiteToken, curWhite )
-    if minBlackToken == 0:
-        return t.SIDE_WHITE
-    if minWhiteToken == 0:
-        return t.SIDE_BLACK
+        if curBlack == 0:
+            return t.SIDE_WHITE
+        if curWhite == 0:
+            return t.SIDE_BLACK
     return None
 
 def _countTokenTypeOnSubboard( subboard ):

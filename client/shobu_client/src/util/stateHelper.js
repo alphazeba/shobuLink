@@ -31,6 +31,15 @@ const activeStates = [
     waitingForPlayer, blackMove, whiteMove
 ]
 
+export const winCheckToWinState = ( winCheckResult ) => {
+    if( winCheckResult == token.BLACK ){
+        return blackWon;
+    }
+    if( winCheckResult == token.WHITE ){
+        return whiteWon;
+    }
+}
+
 export const stateIsRelatedToSide = ( sideValue, state ) => {
     return ( sideValue == side.BLACK && blackStates.includes( state ) ) ||
         ( sideValue == side.WHITE && whiteStates.includes( state ) );

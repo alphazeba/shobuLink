@@ -8,9 +8,12 @@
     --arrowBodyWidth: 0.25;
     --arrowHeadWidth: 0.35;
     --movet: 0.3s;
-    --crownWidth: 1.2em;
-    --crownHeight: 0.75em;
+    --fakeSize: 1.2em;
     --crownOutlineScale: 0.90;
+}
+
+.preview {
+    --boxSize: 20px;
 }
 
 .cell {
@@ -105,9 +108,9 @@
 .fake {
     display: inline-block;
     position: absolute;
-    margin-left: -1.3em;
-    height: 1.2em;
-    width: 1.2em;
+    margin-left: calc( var(--fakeSize) * -1.08 );
+    height: var(--fakeSize);
+    width: var(--fakeSize);
     overflow: visible;
 }
 
@@ -117,23 +120,23 @@
 }
 
 .crown {
-    position:absolute;
+    position: absolute;
     overflow: visible;
-    width: var(--crownWidth);
-    height: var(--crownHeight);
-    top: -0.5em;
-    left: -0.25em;
+    width: var(--fakeSize);
+    height: calc( var(--fakeSize) * 0.625 );
+    top: calc( var(--fakeSize) * -0.41 );
+    left: calc( var(--fakeSize) * -0.2 );
     background-color: black;
     transform: rotate(-15deg);
     clip-path: polygon(0% 100%, 100% 100%, 100% 15%, 75% 75%, 50% 0%, 25% 75%, 0% 15% );
 }
 
 .crown::after {
-    left: calc( (1 - var(--crownOutlineScale))/2 * 1em );
-    top: calc( (1 - var(--crownOutlineScale))/2 * 1em );
+    left: calc( (1 - var(--crownOutlineScale))/2 * var(--fakeSize) );
+    top: calc( (1 - var(--crownOutlineScale))/2 * var(--fakeSize) );
     position: absolute;
-    width: calc( var(--crownWidth) * var(--crownOutlineScale) );
-    height: calc( var(--crownHeight) * var(--crownOutlineScale) );
+    width: calc( var(--fakeSize) * var(--crownOutlineScale) );
+    height: calc( var(--fakeSize) * 0.625 * var(--crownOutlineScale) );
     background-color: gold;
     clip-path: polygon(0% 100%, 100% 100%, 100% 15%, 75% 75%, 50% 0%, 25% 75%, 0% 15% );
     content: '.';
