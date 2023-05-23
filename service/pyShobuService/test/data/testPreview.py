@@ -12,7 +12,7 @@ if True:
 if True:
     testBoard = testUtility.buildTestShobuBoard([
         "Wb1c2Wb1c2",
-        "Wb4b3Wc4c3",
+        "Wb4b3Wc4c3", 
         "Bb1b3Wb1b3"] )
     binaryBoard = p._boardToInt( testBoard )
     reformedBoard = p._intToBoard( binaryBoard )
@@ -24,9 +24,8 @@ if True:
     rn = int.from_bytes( bytes, "big" )
     assert( rn == tn )
 
-
 if True:
-    testBoard = testUtility.buildTestShobuBoard([
+    testBoard = testUtility.buildTestShobuBoard( [
         "Wb1c2Wb1c2",
         "Wb4b3Wc4c3",
         "Bb1b3Wb1b3"] )
@@ -34,3 +33,11 @@ if True:
     reformedBoard = p.previewToBoard( previewBoard )
     assert( testUtility.deepCompare( testBoard, reformedBoard ) )
     assert( previewBoard == "AaQAAFfgAAgX4AAIF+AAAFY=" )
+
+if True:
+    testContent = "ABMgABARBgARRACwgAAA4QA="
+    bytes = p.testFromBase64ToBytes( testContent )
+    for b in bytes:
+        print( b )
+    print( p.testFromBase64ToBytes( testContent ) )
+    B.printBoard( p.previewToBoard( testContent ) )

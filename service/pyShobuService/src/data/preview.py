@@ -14,6 +14,9 @@ _1bitMask = 0b1
 def boardToPreview( board ):
     return str( base64.b64encode( _boardToInt( board ).to_bytes( 17, 'big' ) ), 'utf-8' )
 
+def testFromBase64ToBytes( preview ):
+    return base64.b64decode( bytes( preview, 'utf-8') )
+
 def previewToBoard( preview ):
     return _intToBoard( int.from_bytes( base64.b64decode( bytes( preview, 'utf-8') ), 'big' ) )
 

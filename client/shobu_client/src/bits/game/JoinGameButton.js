@@ -1,8 +1,8 @@
 
 import React, { useEffect, useState } from 'react';
-import { getLoginInfo } from './LoginPage';
+import { getLoginInfo } from '../../pages/LoginPage';
 import './JoinGameButton.css';
-import { joinGame } from './api';
+import { joinGame } from '../../webAppLogic/api';
 
 export const JoinGameButton = ({gameState}) => {
     const loginInfo = getLoginInfo();

@@ -1,14 +1,14 @@
-import logo from './logo.svg';
 import './App.css';
 import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom';
-import { GamePage } from './GamePage';
-import { LoginPage } from './LoginPage';
-import { CreateGamePage } from './CreateGamePage';
-import { Board } from './Board'
-import { GameLoader } from './GameLoader';
+import { GamePage } from './pages/GamePage';
+import { LoginPage } from './pages/LoginPage';
+import { CreateGamePage } from './pages/CreateGamePage';
+import { PlayerPage } from './pages/PlayerPage';
+import { Board } from './bits/game/Board'
+import { GameLoader } from './bits/game/GameLoader';
 import React, { useState } from 'react'
 
 function App() {
@@ -28,6 +28,10 @@ function App() {
     {
       path: "createGame",
       element: <CreateGamePage />
+    },
+    {
+      path: "user/:userId",
+      element: <PlayerPage />
     }
   ]);
 

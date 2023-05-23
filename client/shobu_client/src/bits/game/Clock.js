@@ -1,7 +1,4 @@
-
 import React, { useEffect, useState } from 'react';
-
-import './CreateGamePage.css';
 
 export const Clock = ( { time, lastTimestamp, ticking } ) => {
 

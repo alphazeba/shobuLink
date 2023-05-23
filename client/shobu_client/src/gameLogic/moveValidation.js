@@ -5,7 +5,7 @@ import { tokenIsEnemy } from "./token";
 
 
 export function validateFullMove( board, fullMove ){
-    return validatePassiveMove( board, fullMove.passive) && 
+    return validatePassiveMove( board, fullMove.passive ) && 
         validateActiveMove( board, fullMove.active, 
             fullMove.passive.side, fullMove.passive.vector );
 }

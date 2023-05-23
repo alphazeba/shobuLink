@@ -3,13 +3,7 @@ import { addSpotVec, spotIsInBoard, vectorToUnitAndSteps } from "./spot";
 import { token, buildToken, side, emptyToken } from "./token"
 
 export function initBoard(){
-    return {
-        board: [
-            [ initSubboard(), initSubboard() ],
-            [ initSubboard(), initSubboard() ]
-        ],
-        playerTurn: side.BLACK
-    }
+    return buildBoard( [initSubboard(),initSubboard(),initSubboard(),initSubboard()], side.BLACK );
 }
 
 function initSubboard(){
@@ -18,6 +12,44 @@ function initSubboard(){
         initRow(token.EMPTY),
         initRow(token.EMPTY),
         initRow(token.BLACK)
+    ]
+}
+
+export function compareBoards( a, b ){
+    if( a.playerTurn != b.playerTurn ){
+        return false;
+    }
+    for( let isubboard; isubboard<4; isubboard++ ){
+        for( let iy=0; iy<4; iy++ ){
+            for( let ix=0; ix<4; ix++ ){
+                let spot = [ ix, iy ];
+                let acolor = subboardGetToken( getSubboard( a, isubboard ), spot ).type;
+                let bcolor = subboardGetToken( getSubboard( b, isubboard ), spot ).type;
+                if( acolor != bcolor ){
+                    return false;
+                }
+            }
+        }
+    }
+    return true;
+}
+
+export function buildBoard( suboards, playerSide ){
+    return {
+        board: [
+            [ suboards[0], suboards[2] ],
+            [ suboards[1], suboards[3] ]
+        ],
+        playerTurn: playerSide
+    }
+}
+
+export function initEmptySubboard(){
+    return [
+        initRow(token.EMPTY),
+        initRow(token.EMPTY),
+        initRow(token.EMPTY),
+        initRow(token.EMPTY)
     ]
 }
 

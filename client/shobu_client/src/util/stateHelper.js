@@ -1,5 +1,7 @@
-
-import { side } from "../logic/token";
+import { side } from "../gameLogic/token";
+import { buildBoard, initEmptySubboard, subboardSetToken } from "../gameLogic/board";
+import { token, buildToken } from "../gameLogic/token";
+import { BitFeeder } from "./BitFeeder";
 
 const waitingForPlayer = "waitingForPlayer";
 const blackMove = "blackMove"; const whiteMove = "whiteMove";
@@ -48,4 +50,46 @@ export const isBlackMove = ( state ) => {
 
 export const isWhiteMove = ( state ) => {
     return state == whiteMove;
+}
+
+export const parsePreview = ( preview ) => {
+    // var bytes = utf8Decode( preview );
+    let bytes = atob( preview );
+    if( bytes.length != 17 ){
+        throw Error("preview bytes should be 17 long but is:" + bytes.length );
+    }
+    let bitFeeder = new BitFeeder( bytes );
+    let player = token.WHITE;
+    if( bitFeeder.getNextBit() ){
+        player = token.BLACK;
+    }
+    let subboards = [];
+    for( let i=0; i<4; i++ ){
+        subboards.push( bitFeederToSubboard( bitFeeder.getBitFeederJumped( 4*8*(3-i) ) ) );
+    }
+    let board = buildBoard( subboards, player );
+    console.log( board );
+    return board;
+}
+
+function bitFeederToSubboard( bitFeeder ){
+    let subboard = initEmptySubboard();
+    let white = bitFeeder.getBitFeederJumped( 16 );
+    let black = bitFeeder;
+    for( let iy=0; iy<4; iy++ ){
+        for( let ix=0; ix<4; ix++ ){
+            if( white.getNextBit() ){
+                invertedSetToken( subboard, [ix,iy], token.WHITE );
+            }
+            if( black.getNextBit() ){
+                invertedSetToken( subboard, [ix,iy], token.BLACK );
+            }
+        }
+    }
+    return subboard;
+}
+
+function invertedSetToken( subboard, spot, t ){
+    let [x,y] = spot;
+    subboardSetToken( subboard, [3-x,3-y], buildToken( t ) )
 }

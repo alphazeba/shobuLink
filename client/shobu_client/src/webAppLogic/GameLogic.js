@@ -1,10 +1,9 @@
-
 import React, { useState, useEffect } from 'react'
 import { getGame, getGameUpdate, playMove } from './api.js'
-import { initBoard, makeValidatedMove } from './logic/board.js';
-import { validateFullMove } from './logic/moveValidation.js';
-import { parseMove } from './logic/moveParser.js';
-import { side } from './logic/token.js';
+import { initBoard, makeValidatedMove } from '../gameLogic/board.js';
+import { validateFullMove } from '../gameLogic/moveValidation.js';
+import { parseMove } from '../gameLogic/moveParser.js';
+import { side } from '../gameLogic/token.js';
 
 export const useGameState = () => {
 
@@ -143,8 +142,6 @@ export const useGameState = () => {
         localJoinSide: localJoinSideUpdate,
     }
 }
-
-
 
 function deepCloneArray( items ){
     return items.map( ( item ) => {

@@ -1,16 +1,16 @@
 import React, { useId, useState } from 'react'
-import { useGameState  } from './GameLogic';
+import { useGameState  } from '../../webAppLogic/GameLogic';
 import './Board.css'
-import { side, token } from './logic/token'
-import { getSubboard, subboardGetToken } from './logic/board';
-import { generateValidPassiveMoves, generateValidActiveMoves } from './logic/moveGenerator';
-import { addSpotVec, compareVec, getDeltaVector } from './logic/spot';
-import { buildFullMove, buildPartialMove } from './logic/move';
-import { buildCellLocationStyle } from './styleHelper';
+import { side, token } from '../../gameLogic/token'
+import { getSubboard, subboardGetToken } from '../../gameLogic/board';
+import { generateValidPassiveMoves, generateValidActiveMoves } from '../../gameLogic/moveGenerator';
+import { addSpotVec, compareVec, getDeltaVector } from '../../gameLogic/spot';
+import { buildFullMove, buildPartialMove } from '../../gameLogic/move';
+import { buildCellLocationStyle } from '../../util/styleHelper';
 import { Arrow } from './Arrow';
-import { stateIsRelatedToSide, stateIsRelatedToVictory } from './util/stateHelper';
+import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
 import { Clock } from './Clock';
-import { isWhiteMove, isBlackMove } from './util/stateHelper';
+import { isWhiteMove, isBlackMove } from '../../util/stateHelper';
 
 export const Board = ({ boardState, playable, blackId, blackName, whiteId, whiteName, gameState, onMove, userId, timeData }) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
@@ -355,6 +355,9 @@ export const Board = ({ boardState, playable, blackId, blackName, whiteId, white
     }
 
     const renderClock = ( sideValue ) => {
+        if( ! timeData ){
+            return <div/>
+        }
         if( sideValue == side.BLACK ){
             return renderBlackClock();
         }

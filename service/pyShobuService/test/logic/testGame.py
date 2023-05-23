@@ -10,7 +10,7 @@ if True: # found an issue where floats were sneaking in and causing havoc.
         "Bb1b3Wb1b3"])
 
 if False: # proves that reading from the preview is faster than building boardState
-    testGame = testUtility.buildTestGame([
+    testGame = testUtility.buildTestGame( [
         "Wb1b3Wb1b3",
         "Bd4b2Bc4a2",
         "Wa1b2Wb3c4",
@@ -23,7 +23,7 @@ if False: # proves that reading from the preview is faster than building boardSt
         "Wd3c3Wb3a3",
         "Wd1d3Wa1a3",
         "Ba4c4Bb3d3",
-    ])
+    ] )
     rep = 5000
     t1 = testUtility.timeMethod( 
         lambda: G._buildBoardFromMoves( testGame ), 

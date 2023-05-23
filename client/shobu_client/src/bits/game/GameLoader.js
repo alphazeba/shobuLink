@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import { useGameState } from './GameLogic';
+import { useGameState } from '../../webAppLogic/GameLogic';
 import { Board } from './Board';
 import { MoveList } from './MoveList';
-import { getLoginInfo } from './LoginPage';
+import { getLoginInfo } from '../../pages/LoginPage';
 import { JoinGameButton } from './JoinGameButton';
-import { isBlackMove, isWhiteMove, stateIsActive } from './util/stateHelper';
+import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
 import { Clock, getPlayerTimeUsed } from './Clock';
 
 export const GameLoader = ( { gameId } ) => {
@@ -70,35 +70,34 @@ export const GameLoader = ( { gameId } ) => {
         console.log( "index: " + index.toString() + " history length: " + gameState.history.length );
     }
 
-    const getNextIndex = () => {
-        var nextIndex = gameIndex + 1;
-        debugIndex( nextIndex );
-        if( nextIndex < gameState.history.length ){
-            setGameIndex( nextIndex );
-        }
+    const goToNextIndex = () => {
+        handleGoToIndex( gameIndex + 1 );
     }
 
-    const getPrevIndex = () => {
-        setLiveUpdate( false );
-        var nextIndex = gameIndex - 1;
-        debugIndex( nextIndex );
-        if( nextIndex >= 0 ){
-            setGameIndex( nextIndex );
-        }
+    const goToPrevIndex = () => {
+        handleGoToIndex( gameIndex - 1 );
+    }
+    
+    const goToBeginningIndex = () => {
+        handleGoToIndex( 0 );
+    }
+
+    const goToMostRecentIndex = () => {
+        var nextIndex = gameState.history.length - 1;
+        handleGoToIndex( nextIndex );
     }
 
     const handleGoToIndex = ( index ) => {
+        if( index >= gameState.history.length || index < 0 ){
+            console.log( "cannot go to index" );
+            debugIndex( index );
+            return;
+        }
         if( index < gameState.history.length - 1 ){
             setLiveUpdate( false );
         }
         debugIndex( index );
         setGameIndex( index );
-    }
-
-    const goToMostRecentIndex = () => {
-        var nextIndex = gameState.history.length - 1;
-        debugIndex( nextIndex );
-        setGameIndex( nextIndex );
     }
 
     const handleMoveMade = ( fullMove ) => {
@@ -145,9 +144,10 @@ export const GameLoader = ( { gameId } ) => {
                 </div>
                 <div className="col col-md-5">
                     <MoveList curIndex={gameIndex} moves={gameState.moves} onGoToMove={handleGoToIndex}>
-                        <button onClick={getPrevIndex}>{"<--"}</button>
-                        <button onClick={getNextIndex}>{"-->"}</button>
-                        <button onClick={goToMostRecentIndex} >most recent move</button>
+                        <button className={"btn myBtn"} onClick={goToBeginningIndex} >{"|<"}</button>
+                        <button className={"btn myBtn"} onClick={goToPrevIndex}>{"<"}</button>
+                        <button className={"btn myBtn"} onClick={goToNextIndex}>{">"}</button>
+                        <button className={"btn myBtn"} onClick={goToMostRecentIndex} >{">|"}</button>
                     </MoveList>
                 </div>
             </div>

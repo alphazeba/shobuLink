@@ -14,7 +14,7 @@ test("valid move tests black", ()=>{
         var board = initBoard();
         expect( validateFullMove( board, move ) ).toBe( true );
     }
-})
+} );
 
 test("invalid moves", () => {
     var moveStrings = [
@@ -26,4 +26,4 @@ test("invalid moves", () => {
         var board = initBoard();
         expect( validateFullMove( board,move ) ).toBe( false );
     }
-})
+} );

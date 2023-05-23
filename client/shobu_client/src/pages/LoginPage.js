@@ -1,15 +1,13 @@
-
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { GameLoader } from './GameLoader';
-import { MyInput } from './MyInput';
+import { GameLoader } from '../bits/game/GameLoader';
+import { MyInput } from '../bits/login/MyInput';
 import './LoginPage.css';
-
 
 export const LoginPage = () => {
     const navigate = useNavigate();
     const { redirect } = useParams();
-    const loginInfo = getLoginInfo()
+    const loginInfo = getLoginInfo();
     var defaultName = "";
     if( loginInfo.name != null ){
         defaultName = loginInfo.name;
@@ -20,10 +18,9 @@ export const LoginPage = () => {
     const handleChangeEvent = ( e, setStateFn ) => {
         setStateFn( e.target.value );
     }
-
+    
     const submit = () => {
         setLoginInfo( name, name, password );
-
         navigate( decodeURIComponent( redirect ) );
     }
 
@@ -52,9 +49,9 @@ export const ForceUserToLogin = () => {
         setForceLogin( true );
     }
     return <div className='loginBox'>
-        <p>logged in as: {loginInfo.name}</p>
-        <button onClick={onLogout}>logout</button>
-        </div>
+        <p>logged in as: <button className='btn myBtn' onClick={()=>navigate( "/user/" + loginInfo.id )}>{loginInfo.name}</button></p>
+        <button className={"btn myBtn"} onClick={onLogout}>logout</button>
+    </div>
 }
 
 export const getLoginInfo = () => {

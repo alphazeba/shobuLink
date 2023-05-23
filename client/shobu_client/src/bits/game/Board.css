@@ -25,6 +25,7 @@
 
 .fullBoardContainer {
     width: 500px;
+    pointer-events: none;
 }
 
 .cell.interactable:hover::after {
@@ -67,6 +68,7 @@
 }
 
 .subboard {
+    pointer-events: all;
     line-height: 0;
     position: relative;
     display: inline-block;
@@ -101,7 +103,9 @@
 }
 
 .fake {
-    margin-left: 20%;
+    display: inline-block;
+    position: absolute;
+    margin-left: -1.3em;
     height: 1.2em;
     width: 1.2em;
     overflow: visible;

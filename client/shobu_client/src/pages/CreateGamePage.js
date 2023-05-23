@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { GameLoader } from './GameLoader';
+import { GameLoader } from '../bits/game/GameLoader';
 import { ForceUserToLogin } from './LoginPage';
-import { side } from './logic/token';
-import { createGame } from './api';
+import { side } from '../gameLogic/token';
+import { createGame } from '../webAppLogic/api';
 import './CreateGamePage.css';
 
 export const CreateGamePage = () => {
@@ -15,10 +15,6 @@ export const CreateGamePage = () => {
     const maxTimeControl = 10 * 60;
     const navigate = useNavigate();
 
-    {
-
-    }
-
     const getLabel = ( sideValue ) => {
         switch( sideValue ){
             case side.BLACK:
@@ -29,6 +25,7 @@ export const CreateGamePage = () => {
                 return "Random";
         }
     }
+
     const renderSideSelectable = ( sideValue ) => {
         return <Selectable selected={sideSelect==sideValue} onClick={()=>setSide(sideValue)}>
             {getLabel( sideValue )}
@@ -52,7 +49,7 @@ export const CreateGamePage = () => {
         var chosenSide = sideSelect;
         if( !(sideSelect == side.BLACK || sideSelect == side.WHITE) ){
             var options = [ side.BLACK, side.WHITE ];
-            chosenSide = options[ Math.floor( options.length * Math.random() )];
+            chosenSide = options[ Math.floor( options.length * Math.random() ) ];
         }
         var chosenTimeControl = timeControl;
         if( ! timeControlIsValid( chosenTimeControl ) ){
@@ -61,7 +58,7 @@ export const CreateGamePage = () => {
         createGame( chosenSide, chosenTimeControl )
             .then( (gameId) => {
                 navigate( "/game/" + gameId );
-            });
+            } );
     }
 
     const renderTimeControlError = () => {
@@ -91,7 +88,6 @@ export const CreateGamePage = () => {
 
 
 const Selectable = ({children,selected,onClick}) => {
-
     var className = "sideSelector btn ";
     if( selected ){
         className += " selected";

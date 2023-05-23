@@ -57,7 +57,7 @@ def subboardToString( subboard ):
     output = ""
     for iy in range( 4 ):
         for ix in range( 4 ):
-            output += getCharForValue( subboard[iy,ix] ) + ' '
+            output += getCharForValue( subboardGetToken( subboard, [ix,iy] ) ) + ' '
         output += '\n'
     return output[:-1]
 

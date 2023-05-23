@@ -63,7 +63,7 @@ function parseSide( sideChar ){
         return side.WHITE;
     }
     else {
-        throw new Error("Side must be B or W");
+        throw new Error( "Side must be B or W" );
     }
 }
 
@@ -97,7 +97,7 @@ function colToChar( col ){
         case 3:
             return 'd'
         default:
-            throw new Error("colToChar failed because col was not a valid number");
+            throw new Error( "colToChar failed because col was not a valid number" );
     }
 }
 

@@ -1,18 +1,15 @@
 
 import React, { useState } from 'react'
-import { useGameState  } from './GameLogic';
+import { useGameState  } from '../../webAppLogic/GameLogic';
 import './Board.css'
-import { side, token } from './logic/token'
-import { getSubboard, subboardGetToken } from './logic/board';
-import { generateValidPassiveMoves, generateValidActiveMoves } from './logic/moveGenerator';
-import { addSpotVec, compareVec, getDeltaVector } from './logic/spot';
-import { buildPartialMove } from './logic/move';
-import { buildCellLocationStyle } from './styleHelper';
+import { side, token } from '../../gameLogic/token'
+import { getSubboard, subboardGetToken } from '../../gameLogic/board';
+import { generateValidPassiveMoves, generateValidActiveMoves } from '../../gameLogic/moveGenerator';
+import { addSpotVec, compareVec, getDeltaVector } from '../../gameLogic/spot';
+import { buildPartialMove } from '../../gameLogic/move';
+import { buildCellLocationStyle } from '../../util/styleHelper';
 
 export const Arrow = ({start,vec,flipped}) => {
-
-
-
     function getRotation( vec ){
         var rotation = getBaseRotation( vec );
         if( flipped ){

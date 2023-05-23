@@ -1,8 +1,8 @@
 
-import { moveToString } from "./logic/moveParser";
-import { nameToSide, sideToName } from "./logic/token";
-import { getLoginInfo } from "./LoginPage";
-import { fetchJson } from "./util/apiHelper";
+import { moveToString } from "../gameLogic/moveParser";
+import { nameToSide, sideToName } from "../gameLogic/token";
+import { getLoginInfo } from "../pages/LoginPage";
+import { fetchJson } from "../util/apiHelper";
 
 export function getGame( gameId ){
     return fetchJson( { type: "GetGame", gameId: gameId } )
@@ -15,6 +15,13 @@ export function getGameUpdate( gameId, latestTimestamp ){
     return fetchJson( { type: "GetGame", gameId: gameId, latestTimestamp: latestTimestamp } )
         .then( ( jsonData ) => {
             return jsonData.game;
+        } );
+}
+
+export function getPlayerGames( userId ){
+    return fetchJson( { type: "GetPlayerGames", userId: userId } )
+        .then( ( jsonData ) => {
+            return jsonData.games;
         } );
 }
 

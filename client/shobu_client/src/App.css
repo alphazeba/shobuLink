@@ -40,3 +40,14 @@ div{
     transform: rotate(360deg);
   }
 }
+
+.myBtn {
+  color: white;
+  border-radius: 0;
+  border-width: 1px;
+  border-color: gray;
+}
+
+.myBtn:hover {
+  background-color: gray;
+}

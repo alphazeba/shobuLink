@@ -178,3 +178,8 @@ userSide // "BLACK" or "WHITE"
 
 the server to ddb portion works now.
 need to make the client to server call work now.
+
+
+
+TODO 
+need to implement parsing the preview on the client side.
