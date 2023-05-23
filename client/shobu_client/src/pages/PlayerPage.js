@@ -5,50 +5,54 @@ import { GamePreviewLogic } from '../webAppLogic/GamePreviewLogic';
 import { Board } from '../bits/game/Board';
 import { parsePreview } from '../util/stateHelper';
 import { buildTestBoard } from '../util/testUtil';
+import { side } from '../gameLogic/token';
 
 export const PlayerPage = () => {
     const loginInfo = getLoginInfo();
     const { userId } = useParams();
     const gamePreviewState = GamePreviewLogic();
+    const navigate = useNavigate();
+    var alreadyRequestedGame = false;
 
     useEffect( () => {
-        gamePreviewState.loadGamePreviews( userId );
+        if( ! alreadyRequestedGame ){
+            gamePreviewState.loadGamePreviews( userId );
+            alreadyRequestedGame = true;
+        }
     } );
 
+    const handleClickGame = ( gameId ) => {
+        navigate( "/game/" + gameId );
+    }
+
     const renderGamePreview = ( gamePreview ) => {
+        let userName = "User"
+        let bId = gamePreview.oId;
+        let bName = gamePreview.oName;
+        let wId = userId;
+        let wName = userName;
+        if( gamePreview.userSide == side.BLACK ){
+            wId = gamePreview.oId;
+            wName = gamePreview.oName;
+            bId = userId;
+            bName = userName
+        }
+
         return <div key={gamePreview.gameId}>
-            <Board ></Board>
-            {JSON.stringify( gamePreview )}
+            <button className='btn myBtn' onClick={()=>handleClickGame( gamePreview.gameId )}>
+                <Board boardState={ parsePreview( gamePreview.prv ) }
+                    blackId={bId} blackName={bName} whiteId={wId} whiteName={wName} />
+            </button>
         </div>
     }
-    /*
-        <div>
-            { gamePreviewState.gamePreviews.map((gp)=>renderGamePreview(gp)) }
-        </div>
-    */
 
     return <div>
         <div>
         userId: {userId}
         </div>
-        <Board
-            boardState={parsePreview( "AQCiABBAxAAb4AAElAABIBI=" )}
-        />
-        <Board 
-            boardState={ buildTestBoard([
-                "Wc1c3Wc1c3",
-                "Wa4c2Wb4d2",
-                "Wb1c2Wb1c2",
-                "Bc4c3Wc2c1",
-                "Bc1b2Bc3b4",
-                "Wc4c2Wc3c1",
-                "Bd1c1Bb4a4",
-                "Wb4c4Wc1d1",
-                "Bc1c3Bc2c4",
-                "Wd4b2Wd4b2",
-                "Bb1c1Bc4d4",
-            ]) }
-        />
+        <div>
+            { gamePreviewState.gamePreviews.map((gp)=>renderGamePreview(gp)) }
+        </div>
     </div>;
 }
 

@@ -56,7 +56,7 @@ export const parsePreview = ( preview ) => {
     // var bytes = utf8Decode( preview );
     let bytes = atob( preview );
     if( bytes.length != 17 ){
-        throw Error("preview bytes should be 17 long but is:" + bytes.length );
+        throw Error( "preview bytes should be 17 long but is:" + bytes.length );
     }
     let bitFeeder = new BitFeeder( bytes );
     let player = token.WHITE;
@@ -68,7 +68,6 @@ export const parsePreview = ( preview ) => {
         subboards.push( bitFeederToSubboard( bitFeeder.getBitFeederJumped( 4*8*(3-i) ) ) );
     }
     let board = buildBoard( subboards, player );
-    console.log( board );
     return board;
 }
 

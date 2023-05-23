@@ -104,25 +104,19 @@ export const useGameState = () => {
             return;
         }
         // need to update the board now.
-        console.log( "move being added to board ") ;
-        console.log( incomingMove );
         var newBoard = makeValidatedMove( board, fullMove );
         history.push( newBoard );
         setLastMoveTimestamp( incomingMove.t );
     }
 
     const getNewMoves = ( incomingMoves ) => {
-        console.log( incomingMoves );
         const latestTimestamp = getLastMoveTimestamp();
         var newMoves = [];
         for( var incomingMove of incomingMoves ){
-            console.log( incomingMove );
-            console.log( latestTimestamp ); // this is undefined.
             if( incomingMove.t > latestTimestamp ){
                 newMoves.push( incomingMove );
             }
         }
-        console.log( newMoves );
         return newMoves;
     }
 

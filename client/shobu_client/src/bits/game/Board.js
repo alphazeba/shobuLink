@@ -12,7 +12,9 @@ import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateH
 import { Clock } from './Clock';
 import { isWhiteMove, isBlackMove } from '../../util/stateHelper';
 
-export const Board = ({ boardState, playable, blackId, blackName, whiteId, whiteName, gameState, onMove, userId, timeData }) => {
+export const Board = ({ boardState, playable, 
+        blackId, blackName, whiteId, whiteName, 
+        gameState, onMove, userId, timeData }) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );

@@ -21,6 +21,7 @@ export const GamePreviewLogic = () => {
         setLoadedUserId( userId );
         setWaitingForResponse( false );
         setGamePreviews( gamePreviews );
+        console.log( gamePreviews );
     }
 
     return {

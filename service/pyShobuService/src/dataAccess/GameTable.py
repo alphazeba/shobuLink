@@ -49,5 +49,3 @@ def phaseTimeToStartTime( phaseTime ):
 
 def queryGamesByPlayerId( gameTable, playerId ):
     return queryGamesByPlayerSide( gameTable, playerId, t.SIDE_BLACK ) + queryGamesByPlayerSide( gameTable, playerId, t.SIDE_WHITE )
-
-         # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html#DynamoDB.Table.query
