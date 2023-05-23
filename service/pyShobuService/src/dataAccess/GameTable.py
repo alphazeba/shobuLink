@@ -1,4 +1,3 @@
-
 import handler.eventIO.ddb as DDB
 from boto3.dynamodb.conditions import Key, Attr
 import logic.shobu.token as t
@@ -14,7 +13,7 @@ def getGame( gameTable, gameId ):
 def saveGame( gameTable, game ):
     gameTable.put_item( Item=game )
 
-def querySideGames( gameTable, playerId, side ):
+def queryGamesByPlayerSide( gameTable, playerId, side ):
     indexName = 'blackGameIndex'
     keyName = 'buId'
     enemyIdName = 'wuId'
@@ -29,7 +28,7 @@ def querySideGames( gameTable, playerId, side ):
     result = gameTable.query(
         IndexName=indexName,
         Select='ALL_PROJECTED_ATTRIBUTES',
-        KeyConditionExpression= Key( keyName ).eq( playerId ) & Key( 'phsT' ).begins_with( 'c' )
+        KeyConditionExpression=Key( keyName ).eq( playerId ) & Key( 'phsT' ).begins_with( 'c' )
     )
     output = []
     for item in result['Items']:
@@ -48,7 +47,7 @@ def phaseTimeToStartTime( phaseTime ):
     strippedPhaseTime = phaseTime[1:]
     return int( strippedPhaseTime )
 
-def queryGames( gameTable, playerId ):
-    return querySideGames( gameTable, playerId, t.SIDE_BLACK ) + querySideGames( gameTable, playerId, t.SIDE_WHITE )
+def queryGamesByPlayerId( gameTable, playerId ):
+    return queryGamesByPlayerSide( gameTable, playerId, t.SIDE_BLACK ) + queryGamesByPlayerSide( gameTable, playerId, t.SIDE_WHITE )
 
          # https://boto3.amazonaws.com/v1/documentation/api/latest/reference/services/dynamodb.html#DynamoDB.Table.query

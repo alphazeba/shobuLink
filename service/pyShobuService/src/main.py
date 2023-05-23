@@ -1,8 +1,8 @@
-
 from handler.eventIO.event import buildResponse
 from handler.eventIO.eventValidation import getValidatedMapKey
 from handler.CreateGame import CreateGame
 from handler.GetGame import GetGame
+from handler.GetPlayerGames import GetPlayerGames
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
 from exception.ExceptionToReturn import ExceptionToReturn
@@ -27,11 +27,13 @@ def lambda_handler( event, context ):
 routes = {
     "CreateGame": CreateGame,
     "GetGame": GetGame,
+    "GetPlayerGames": GetPlayerGames,
     "JoinGame": JoinGame,
     "PlayMove": PlayMove
 }
 
 def initProps():
+    print( "initializing props, this should only happen once." )
     ddb = DDB.initProd()
     gameTable = GameTable.newGameTable( ddb )
     return {

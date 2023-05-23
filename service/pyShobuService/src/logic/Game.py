@@ -23,10 +23,15 @@ _state = "state"
 _secs = "secs"
 _preview = "prv"
 _phaseTime = "phsT"
+_userId = "userId"
+_gameId = "gameId"
+_opponentId = "oId"
+_opponentName = "oName"
+_userSide = "userSide"
 
 # main interactions
-def toGetGameOutputForm( this, latestTimeStamp ):
-    keysToOutputIfPresent = [
+def toGetGameOutputForm( gameTableGame, latestTimeStamp ):
+    output = filterObjByKeys( gameTableGame, [
         _id,
         _buId,
         _wuId,
@@ -35,17 +40,31 @@ def toGetGameOutputForm( this, latestTimeStamp ):
         _startTime,
         _state,
         _secs,
-    ]
-    output = {}
-    for key in keysToOutputIfPresent:
-        if key in this:
-            output[key] = this[key]
-    
+    ] )
     outputMoves = []
-    for move in this[_moves]:
+    for move in gameTableGame[_moves]:
         if Move.getTime(move) > latestTimeStamp:
             outputMoves.append( move )
     output[_moves] = outputMoves
+    return output
+
+def toGetPlayerGamesOutputForm( gameTablePreview ):
+    output = filterObjByKeys( gameTablePreview, [
+        _userId,
+        _startTime,
+        _preview,
+        _gameId,
+        _opponentId,
+        _opponentName,
+        _userSide
+    ] )
+    return output
+
+def filterObjByKeys( obj, keys ):
+    output = {}
+    for key in keys:
+        if key in obj:
+            output[key] = obj[key]
     return output
 
 def new( playerId, playerName, playerSide, secondPerSide ):

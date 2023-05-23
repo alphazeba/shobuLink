@@ -1,7 +1,5 @@
 import boto3
 
-print( "ddb is initializng" )
-
 def initProd():
     print( "initializing prod ddb connection")
     return boto3.resource( 'dynamodb' ) # could be sped up using the the environmetn credentials and feeding in the region, but its already fast.

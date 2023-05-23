@@ -116,7 +116,7 @@ export const GameLoader = ( { gameId } ) => {
         return <Clock 
             time={timeData.blackTime}
             lastTimestamp={timeData.lastTimestamp}
-            ticking={ isBlackMove( gameState.state ) }
+            ticking={isBlackMove( gameState.state )}
         />
     }
 

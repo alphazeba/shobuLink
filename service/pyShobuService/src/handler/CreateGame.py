@@ -1,4 +1,3 @@
-
 import logic.Game as Game
 import dataAccess.GameTable as GameTable
 from handler.eventIO.eventValidation import getValidatedOptionValue, getValidatedRangeValue, getValidatedStringValue

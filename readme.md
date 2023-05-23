@@ -27,8 +27,8 @@ example details
     - return side
 - getGame( gameId )
     - return: game
-- getPlayerGames( player )
-    - return: [ game, ... ]
+- getPlayerGames( userId )
+    - return: games[ gamePreview, ... ]
 - getRecentGames( )
     - return: [ game, ... ]
 - playMove( gameId, move, loginToken, userId )
@@ -170,7 +170,7 @@ playerGamePreview
 ----
 XX userId // we would already know the userId
 startTime // taken from phsT with the phase stripped off.
-prv
+prv // preview
 gameId
 oId // opponentId
 oName // opponentName
