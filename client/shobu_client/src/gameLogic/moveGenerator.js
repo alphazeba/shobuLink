@@ -1,7 +1,6 @@
 
 import { validatePassiveMove, validateActiveMove } from "./moveValidation"
 import { buildPartialMove, buildFullMove } from "./move"
-import { addSpotVec } from "./spot"
 import { getActiveMoveSubboard, getPassiveMoveSubboards, subboardGetToken } from "./board";
 import { side } from "./token";
 
@@ -25,9 +24,9 @@ const validVectors = [
 ]
 
 export function generateValidPassiveMoves( board, spot, homeboardside ){
-    var moves = [];
-    for( var offset of validVectors ){
-        var passiveMove = buildPartialMove( homeboardside, spot, offset );
+    let moves = [];
+    for( let offset of validVectors ){
+        let passiveMove = buildPartialMove( homeboardside, spot, offset );
         if( validatePassiveMove( board, passiveMove ) ){
             moves.push( passiveMove );
         }
@@ -36,11 +35,11 @@ export function generateValidPassiveMoves( board, spot, homeboardside ){
 }
 
 export function generateValidActiveMoves( board, passiveMove, activeSide ){
-    var moves = [];
-    var subboard = getActiveMoveSubboard( board, activeSide, passiveMove.side );
-    var playerPieces = getPlayerPieceSpots( subboard, board.playerTurn );
-    for( var spot of playerPieces ){
-        var move = buildPartialMove( activeSide, spot, passiveMove.vector );
+    let moves = [];
+    let subboard = getActiveMoveSubboard( board, activeSide, passiveMove.side );
+    let playerPieces = getPlayerPieceSpots( subboard, board.playerTurn );
+    for( let spot of playerPieces ){
+        let move = buildPartialMove( activeSide, spot, passiveMove.vector );
         if( validateActiveMove( board, move, passiveMove.side, passiveMove.vector ) ){
             moves.push( move );
         }
@@ -83,11 +82,11 @@ function getPassiveSpots( passiveSubboards, playerTurn ){
 }
 
 function getPlayerPieceSpots( subboard, playerColor ){
-    var spots = []
-    for( var iy=0;iy<4;iy++){
-        for( var ix=0;ix<4;ix++){
-            var spot = [ix,iy];
-            if( subboardGetToken( subboard, spot ).type == playerColor ){
+    let spots = []
+    for( let iy=0;iy<4;iy++){
+        for( let ix=0;ix<4;ix++){
+            let spot = [ix,iy];
+            if( subboardGetToken( subboard, spot ).type === playerColor ){
                 spots.push( spot );
             }
         }

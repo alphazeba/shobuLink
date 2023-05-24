@@ -25,17 +25,19 @@ export const CreateGamePage = () => {
                 return "White";
             case SIDE_RANDOM:
                 return "Random";
+            default:
+                throw new Error( "an invalid sideValue was provided" );
         }
     }
 
     const renderSideSelectable = ( sideValue ) => {
-        return <Selectable selected={sideSelect==sideValue} onClick={()=>setSide(sideValue)}>
+        return <Selectable selected={sideSelect===sideValue} onClick={()=>setSide(sideValue)}>
             {getLabel( sideValue )}
         </Selectable>
     }
 
     const handleTimeChange = (e) => {
-        var value = parseInt( e.target.value );
+        let value = parseInt( e.target.value );
         if( isNaN(value) ){
             value = 0;
         }
@@ -48,12 +50,12 @@ export const CreateGamePage = () => {
     }
 
     const handleCreateGame = () => {
-        var chosenSide = sideSelect;
-        if( !(sideSelect == side.BLACK || sideSelect == side.WHITE) ){
-            var options = [ side.BLACK, side.WHITE ];
+        let chosenSide = sideSelect;
+        if( !(sideSelect === side.BLACK || sideSelect === side.WHITE) ){
+            let options = [ side.BLACK, side.WHITE ];
             chosenSide = options[ Math.floor( options.length * Math.random() ) ];
         }
-        var chosenTimeControl = timeControl;
+        let chosenTimeControl = timeControl;
         if( ! timeControlIsValid( chosenTimeControl ) ){
             return;
         }
@@ -92,7 +94,7 @@ export const CreateGamePage = () => {
 
 
 const Selectable = ({children,selected,onClick}) => {
-    var className = "btn myBtn sideSelector btn ";
+    let className = "btn myBtn sideSelector btn ";
     if( selected ){
         className += " selected";
     }

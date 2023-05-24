@@ -1,4 +1,3 @@
-import { type } from "@testing-library/user-event/dist/type"
 import { newUnsecureGuid } from "../util/guid"
 
 export const token = {
@@ -8,11 +7,11 @@ export const token = {
 }
 
 export function buildToken( type ){
-    var obj = {
+    let obj = {
         type: type,
         key: null
     }
-    if( type != token.EMPTY ){
+    if( type !== token.EMPTY ){
         obj.key = newUnsecureGuid();
     }
     return obj;
@@ -23,7 +22,7 @@ export function emptyToken(){
 }
 
 export function tokenIsEnemy( toke, playerSide ){
-    return toke.type != token.EMPTY && toke.type != playerSide;
+    return toke.type !== token.EMPTY && toke.type !== playerSide;
 }
 
 export const side = {
@@ -37,6 +36,8 @@ export const sideToName = ( sideValue ) => {
             return "BLACK";
         case side.WHITE:
             return "WHITE";
+        default:
+            throw new Error( "an invalid sideValue was provided" );
     }
 }
 
@@ -46,5 +47,7 @@ export const nameToSide = ( name ) => {
             return side.BLACK;
         case "WHITE":
             return side.WHITE;
+        default:
+            throw new Error( "an invalid name was provided" );
     }
 }

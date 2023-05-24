@@ -3,7 +3,7 @@ import { HomeButton } from './game/HomeButton';
 import { LoginOptional, LoginRequired } from '../pages/LoginPage';
 
 export const Header = ({loginOptional}) => {
-    var loginRequired =  true;
+    let loginRequired =  true;
     if( loginOptional ){
         loginRequired = false;
     }

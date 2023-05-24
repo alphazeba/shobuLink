@@ -9,6 +9,9 @@
 
 .myLink {
     color: gray;
+    border: none;
+    background: none;
+    text-decoration: underline;
 }
 
 .myLink:hover {

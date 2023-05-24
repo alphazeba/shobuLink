@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { getGame, getGameUpdate, playMove } from './api.js'
 import { initBoard, makeValidatedMove } from '../gameLogic/board.js';
 import { validateFullMove } from '../gameLogic/moveValidation.js';
@@ -26,8 +26,8 @@ export const useGameState = () => {
         if( waitingForResponse ){
             return false;
         }
-        var promise = null;
-        if( gameId == loadedGameId ){
+        let promise = null;
+        if( gameId === loadedGameId ){
             promise = getGameUpdate( gameId, getLastMoveTimestamp() );
         }
         else {
@@ -52,7 +52,7 @@ export const useGameState = () => {
     }
 
     const localJoinSideUpdate = ( sideValue, name, id ) =>{
-        if( sideValue == side.BLACK ){
+        if( sideValue === side.BLACK ){
             setBlackId( id );
             setBlackName( name );
         }
@@ -64,10 +64,10 @@ export const useGameState = () => {
 
     const handleGameUpdate = ( game ) => {
         console.log( game );
-        var mutableHistory = null;
-        var mutableMoves = null;
-        var newMoves = null;
-        if( game.id == loadedGameId ){
+        let mutableHistory = null;
+        let mutableMoves = null;
+        let newMoves = null;
+        if( game.id === loadedGameId ){
             newMoves = getNewMoves( game.moves );
             mutableHistory = deepCloneArray( history );
             mutableMoves = deepCloneArray( moves );
@@ -78,7 +78,7 @@ export const useGameState = () => {
             mutableHistory = initHistory();
             mutableMoves = [];
         }
-        for( var move of newMoves ){
+        for( let move of newMoves ){
             addMoveToHistory( mutableHistory, move );
             mutableMoves.push( move );
         }
@@ -100,21 +100,21 @@ export const useGameState = () => {
             return;
         }
         const fullMove = parseMove( incomingMove.m );
-        var board = history[ history.length-1 ];
+        let board = history[ history.length-1 ];
         if( ! validateFullMove( board, fullMove ) ){
             setGameIsCorrupted( true );
             return;
         }
         // need to update the board now.
-        var newBoard = makeValidatedMove( board, fullMove );
+        let newBoard = makeValidatedMove( board, fullMove );
         history.push( newBoard );
         setLastMoveTimestamp( incomingMove.t );
     }
 
     const getNewMoves = ( incomingMoves ) => {
         const latestTimestamp = getLastMoveTimestamp();
-        var newMoves = [];
-        for( var incomingMove of incomingMoves ){
+        let newMoves = [];
+        for( let incomingMove of incomingMoves ){
             if( incomingMove.t > latestTimestamp ){
                 newMoves.push( incomingMove );
             }
@@ -149,7 +149,7 @@ function deepCloneArray( items ){
 }
 
 function getUsableHistory( history ){
-    if( history == null ){
+    if( history === null ){
         return initHistory();
     }
     return history

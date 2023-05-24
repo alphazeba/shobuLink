@@ -51,13 +51,13 @@ export const Clock = ( { time, lastTimestamp, ticking } ) => {
 }
 
 export const getPlayerTimeUsed = ( moves, startTime ) => {
-    var blackTime = 0;
-    var whiteTime = 0;
-    var lastTimestamp = startTime;
-    var isBlackSide = true;
-    for( var move of moves ){
-        var curTimestamp = move.t;
-        var delta = curTimestamp - lastTimestamp;
+    let blackTime = 0;
+    let whiteTime = 0;
+    let lastTimestamp = startTime;
+    let isBlackSide = true;
+    for( let move of moves ){
+        let curTimestamp = move.t;
+        let delta = curTimestamp - lastTimestamp;
         lastTimestamp = curTimestamp;
         if( isBlackSide ){
             blackTime += delta;
@@ -67,7 +67,7 @@ export const getPlayerTimeUsed = ( moves, startTime ) => {
         }
         isBlackSide = ! isBlackSide;
     }
-    var output = {
+    let output = {
         blackTime: blackTime,
         whiteTime: whiteTime,
         lastTimestamp: lastTimestamp,

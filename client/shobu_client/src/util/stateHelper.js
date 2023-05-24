@@ -32,17 +32,17 @@ const activeStates = [
 ]
 
 export const winCheckToWinState = ( winCheckResult ) => {
-    if( winCheckResult == token.BLACK ){
+    if( winCheckResult === token.BLACK ){
         return blackWon;
     }
-    if( winCheckResult == token.WHITE ){
+    if( winCheckResult === token.WHITE ){
         return whiteWon;
     }
 }
 
 export const stateIsRelatedToSide = ( sideValue, state ) => {
-    return ( sideValue == side.BLACK && blackStates.includes( state ) ) ||
-        ( sideValue == side.WHITE && whiteStates.includes( state ) );
+    return ( sideValue === side.BLACK && blackStates.includes( state ) ) ||
+        ( sideValue === side.WHITE && whiteStates.includes( state ) );
 }
 
 export const stateIsRelatedToVictory = ( state ) => {
@@ -54,17 +54,16 @@ export const stateIsActive = ( state ) => {
 }
 
 export const isBlackMove = ( state ) => {
-    return state == blackMove;
+    return state === blackMove;
 }
 
 export const isWhiteMove = ( state ) => {
-    return state == whiteMove;
+    return state === whiteMove;
 }
 
 export const parsePreview = ( preview ) => {
-    // var bytes = utf8Decode( preview );
     let bytes = atob( preview );
-    if( bytes.length != 17 ){
+    if( bytes.length !== 17 ){
         throw Error( "preview bytes should be 17 long but is:" + bytes.length );
     }
     let bitFeeder = new BitFeeder( bytes );

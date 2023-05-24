@@ -2,8 +2,8 @@
 
 const options = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890-=";
 export function newUnsecureGuid(){
-    var output = ""
-    for(var i=0;i<10;i++){
+    let output = ""
+    for(let i=0;i<10;i++){
         output += getRandomOptionChar();
     }
     return output;

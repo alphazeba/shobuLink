@@ -28,7 +28,7 @@ export const Screensaver = () => {
             return;
         }
         let moves = generateAllValidFullMoves( board );
-        if( moves.length == 0 ){
+        if( moves.length === 0 ){
             onGameOver();
             return;
         }
@@ -39,11 +39,6 @@ export const Screensaver = () => {
 
     const onGameOver = () => {
         setGameOver( true );
-    }
-
-    const reset = () => {
-        setBoard( initBoard() );
-        setGameOver( false );
     }
 
     return <Board boardState={board} />

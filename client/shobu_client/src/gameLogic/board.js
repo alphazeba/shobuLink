@@ -16,7 +16,7 @@ function initSubboard(){
 }
 
 export function compareBoards( a, b ){
-    if( a.playerTurn != b.playerTurn ){
+    if( a.playerTurn !== b.playerTurn ){
         return false;
     }
     for( let isubboard; isubboard<4; isubboard++ ){
@@ -25,7 +25,7 @@ export function compareBoards( a, b ){
                 let spot = [ ix, iy ];
                 let acolor = subboardGetToken( getSubboard( a, isubboard ), spot ).type;
                 let bcolor = subboardGetToken( getSubboard( b, isubboard ), spot ).type;
-                if( acolor != bcolor ){
+                if( acolor !== bcolor ){
                     return false;
                 }
             }
@@ -35,7 +35,7 @@ export function compareBoards( a, b ){
 }
 
 export function isBlacksTurn( board ){
-    return board.playerTurn == side.BLACK;
+    return board.playerTurn === side.BLACK;
 }
 
 export function buildBoard( suboards, playerSide ){
@@ -74,14 +74,14 @@ export function getPassiveMoveSubboards( board ){
 }
 
 export function getPassiveMoveSubboard( board, playerSide ){
-    if( board.playerTurn == side.BLACK ){
-        if( playerSide == side.BLACK ){
+    if( board.playerTurn === side.BLACK ){
+        if( playerSide === side.BLACK ){
             return getSubboard( board, 2 );
         }
         return getSubboard( board, 3 );
     }
     else {
-        if( playerSide == side.BLACK ){
+        if( playerSide === side.BLACK ){
             return getSubboard( board, 0 );
         }
         return getSubboard( board, 1 );
@@ -89,14 +89,14 @@ export function getPassiveMoveSubboard( board, playerSide ){
 }
 
 export function getActiveMoveSubboard( board, playerSide, passiveSide ){
-    if( passiveSide == side.BLACK ){
-        if( playerSide == side.BLACK ){
+    if( passiveSide === side.BLACK ){
+        if( playerSide === side.BLACK ){
             return getSubboard( board, 3 );
         }
         return getSubboard( board, 1 );
     }
     else {
-        if( playerSide == side.BLACK ){
+        if( playerSide === side.BLACK ){
             return getSubboard( board, 2 );
         }
         return getSubboard( board, 0 );
@@ -109,7 +109,7 @@ export function getSubboard( board, n ){
     0 1
     2 3
     */
-    var b = board.board;
+    let b = board.board;
     switch( n ){
         case 0:
             return b[0][0]
@@ -119,25 +119,27 @@ export function getSubboard( board, n ){
             return b[0][1]
         case 3:
             return b[1][1]
+        default:
+            throw new Error( "an invalid n value was provided." );
     }
 }
 
 export function subboardGetToken( subboard, spot ){
-    var [x,y] = spot;
+    let [x,y] = spot;
     return subboard[y][x];
 }
 
 export function subboardSetToken( subboard, spot, token ){
-    var [x,y] = spot;
+    let [x,y] = spot;
     subboard[y][x] = token;
 }
 
 export function tokenBelongsToPlayer( board, targetToken ){
-    return targetToken.type == board.playerTurn;
+    return targetToken.type === board.playerTurn;
 }
 
 export function spotIsEmpty( subboard, spot ){
-    return subboardGetToken( subboard, spot ).type == token.EMPTY;
+    return subboardGetToken( subboard, spot ).type === token.EMPTY;
 }
 
 function boardCopy( board ){
@@ -145,7 +147,7 @@ function boardCopy( board ){
 }
 
 export function makeValidatedMove( board, move ){
-    var mutableBoard = boardCopy( board );
+    let mutableBoard = boardCopy( board );
     makePassiveMove( mutableBoard, move.passive );
     makeActiveMove( mutableBoard, move.active, move.passive );
     flipTurn( mutableBoard );
@@ -153,20 +155,20 @@ export function makeValidatedMove( board, move ){
 }
 
 function makePassiveMove( board, passiveMove ){
-    var subboard = getPassiveMoveSubboard( board, passiveMove.side );
-    var movingToken = subboardGetToken( subboard, passiveMove.spot );
+    let subboard = getPassiveMoveSubboard( board, passiveMove.side );
+    let movingToken = subboardGetToken( subboard, passiveMove.spot );
     subboardSetToken( subboard, passiveMove.spot, emptyToken() );
     subboardSetToken( subboard, addSpotVec( passiveMove.spot, passiveMove.vector ), movingToken );
 }
 
 function makeActiveMove( board, activeMove, passiveMove ){
-    var subboard = getActiveMoveSubboard( board, activeMove.side, passiveMove.side );
-    var enemyToken = null;
-    var movingToken = subboardGetToken( subboard, activeMove.spot );
+    let subboard = getActiveMoveSubboard( board, activeMove.side, passiveMove.side );
+    let enemyToken = null;
+    let movingToken = subboardGetToken( subboard, activeMove.spot );
     subboardSetToken( subboard, activeMove.spot, emptyToken() );
-    var [ unit, steps ] = vectorToUnitAndSteps( activeMove.vector );
-    var spot = activeMove.spot;
-    for( var i=0; i< steps;i++ ){
+    let [ unit, steps ] = vectorToUnitAndSteps( activeMove.vector );
+    let spot = activeMove.spot;
+    for( let i=0; i< steps;i++ ){
         spot = addSpotVec( spot, unit );
         if( ! spotIsEmpty( subboard, spot ) ){
             enemyToken = subboardGetToken( subboard, spot );
@@ -174,7 +176,7 @@ function makeActiveMove( board, activeMove, passiveMove ){
         }
     }
     subboardSetToken( subboard, spot, movingToken );
-    if( enemyToken != null ){
+    if( enemyToken !== null ){
         spot = addSpotVec( spot, unit );
         if( spotIsInBoard( spot ) ){
             subboardSetToken( subboard, spot, enemyToken );
@@ -183,7 +185,7 @@ function makeActiveMove( board, activeMove, passiveMove ){
 }
 
 function flipTurn( board ){
-    if( board.playerTurn == side.BLACK ){
+    if( board.playerTurn === side.BLACK ){
         board.playerTurn = side.WHITE;
     }
     else {

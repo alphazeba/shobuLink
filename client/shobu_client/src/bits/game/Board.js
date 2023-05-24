@@ -24,17 +24,17 @@ export const Board = ({ boardState, playable,
         if( whiteId == null && blackId == null ){
             return side.BLACK;
         }
-        if( userId == whiteId ){
+        if( userId === whiteId ){
             return side.WHITE;
         }
-        else if( userId == blackId ){
+        else if( userId === blackId ){
             return side.BLACK;
         }
         return side.BLACK;
     }
 
     const usingFlippedPerspective = () => {
-        return getPerspectiveColor() == side.WHITE;
+        return getPerspectiveColor() === side.WHITE;
     }
 
     const clickCell = ( x, y, n ) => {
@@ -55,20 +55,21 @@ export const Board = ({ boardState, playable,
     const cellSelect_passiveSpot = ( x, y, n ) => {
         clearSelections();
         setSelectedPassiveSpot( [ [x,y], n ] );
-        var homeboardside = side.BLACK;
-        if( n == 1 || n == 3 ){
+        let homeboardside = side.BLACK;
+        if( n === 1 || n === 3 ){
             homeboardside = side.WHITE;
         }
         setPassiveMoves( generateValidPassiveMoves( boardState, [x,y], homeboardside ) );
     }
 
     const cellSelect_passiveMove = ( x, y, n ) => {
-        var [ passiveSpot, subboardN ] = selectedPassiveSpot;
-        var moveSide = side.BLACK;
-        if( n == 1 || n == 3 ){
+        // eslint-disable-next-line
+        let [ passiveSpot, _ ] = selectedPassiveSpot;
+        let moveSide = side.BLACK;
+        if( n === 1 || n === 3 ){
             moveSide = side.WHITE;
         }
-        var move = buildPartialMove( moveSide, passiveSpot, getDeltaVector( passiveSpot, [x,y] ) );
+        let move = buildPartialMove( moveSide, passiveSpot, getDeltaVector( passiveSpot, [x,y] ) );
         setSelectedPassiveMove( move );
         setPassiveMoves( [] );
         setActiveMovesBlack( generateValidActiveMoves( boardState, move, side.BLACK ) );
@@ -76,9 +77,9 @@ export const Board = ({ boardState, playable,
     }
 
     const cellSelect_activeMove = ( x, y, n ) => {
-        var activeMove = getTargetMove( x,y,n );
-        var passiveMove = selectedPassiveMove;
-        var fullMove = buildFullMove( passiveMove, activeMove );
+        let activeMove = getTargetMove( x,y,n );
+        let passiveMove = selectedPassiveMove;
+        let fullMove = buildFullMove( passiveMove, activeMove );
         makeMove( fullMove );
         clearSelections();
     }
@@ -88,8 +89,8 @@ export const Board = ({ boardState, playable,
     }
 
     const getTargetMove = ( x, y, n ) => {
-        var targetSpot = [x,y];
-        for( var move of getActiveMoves( n ) ){
+        let targetSpot = [x,y];
+        for( let move of getActiveMoves( n ) ){
             if( compareVec( targetSpot, move.spot ) ){
                 return move;
             }
@@ -107,19 +108,20 @@ export const Board = ({ boardState, playable,
 
     const spotIsSelectedPassiveSpot = ( x, y, n ) => {
         if( selectedPassiveSpot != null ){
-            var [ passiveSpot, subboardN ] = selectedPassiveSpot;
-            return n == subboardN && compareVec( passiveSpot, [x,y] );
+            let [ passiveSpot, subboardN ] = selectedPassiveSpot;
+            return n === subboardN && compareVec( passiveSpot, [x,y] );
         }
         return false;
     }
 
     const spotIsValidPassiveMoveSelection = ( x, y, n ) => {
-        var targetSpot = [ x,y]
+        let targetSpot = [ x,y]
         if( selectedPassiveSpot != null ){
-            var [ _, subboardN ] = selectedPassiveSpot;
-            if( n == subboardN ){
-                for( var move of passiveMoves ){
-                    var moveEnd = addSpotVec( move.spot, move.vector );
+            // eslint-disable-next-line
+            let [ _, subboardN ] = selectedPassiveSpot;
+            if( n === subboardN ){
+                for( let move of passiveMoves ){
+                    let moveEnd = addSpotVec( move.spot, move.vector );
                     if( compareVec( moveEnd, targetSpot ) ){
                         return true;
                     }
@@ -145,7 +147,7 @@ export const Board = ({ boardState, playable,
     }
 
     const drawBoard = ( board ) => {
-        var flipped = usingFlippedPerspective();
+        let flipped = usingFlippedPerspective();
         return <div >
             <div className="topBoardRow">{ drawSubboard( board, _sbdRot(0,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(1,flipped) ) }</div>
             <div>{ drawSubboard( board, _sbdRot(2,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(3,flipped) ) }</div>
@@ -153,13 +155,13 @@ export const Board = ({ boardState, playable,
     }
 
     const drawSubboard = ( board, n ) => {
-        var dark = n == 0 || n == 2;
-        var subboard = getSubboard( board, n );
+        let dark = n === 0 || n === 2;
+        let subboard = getSubboard( board, n );
 
-        var output = []
-        for( var iy=0; iy < 4; iy++ ){
-            var row = []
-            for( var ix =0;ix<4;ix++ ){
+        let output = []
+        for( let iy=0; iy < 4; iy++ ){
+            let row = []
+            for( let ix =0;ix<4;ix++ ){
                 row.push( drawCell( subboard, n, ix, iy, dark ));
             }
             if( usingFlippedPerspective() ){
@@ -178,40 +180,40 @@ export const Board = ({ boardState, playable,
     }
 
     const userIsInGame = () => {
-        return userId == blackId || userId == whiteId;
+        return userId === blackId || userId === whiteId;
     }
 
     const itIsYourTurn = () => {
         return userId != null
             && userIsInGame()
-            && boardState.playerTurn == getPerspectiveColor()
+            && boardState.playerTurn === getPerspectiveColor()
             && playable;
     }
 
     const isYourHomeboard = ( n ) => {
         const color = getPerspectiveColor();
-        if( color == side.BLACK && ( n == 2 || n == 3 ) ){
+        if( color === side.BLACK && ( n === 2 || n === 3 ) ){
             return true;
         }
-        if( color == side.WHITE && ( n == 0 || n == 1 ) ){
+        if( color === side.WHITE && ( n === 0 || n === 1 ) ){
             return true;
         }
         return false;
     }
 
     const cellHasYourColor = ( x, y, n ) => {
-        var subboard = getSubboard( boardState, n );
-        return subboardGetToken( subboard, [ x, y ] ).type == getPerspectiveColor();
+        let subboard = getSubboard( boardState, n );
+        return subboardGetToken( subboard, [ x, y ] ).type === getPerspectiveColor();
     }
 
     const getTokens = ( subboard ) => {
-        var tokens = [];
-        var t = null;
-        for( var iy=0;iy<4;iy++){
-            for( var ix=0;ix<4;ix++){
+        let tokens = [];
+        let t = null;
+        for( let iy=0;iy<4;iy++){
+            for( let ix=0;ix<4;ix++){
                 const spot = [ix,iy]
                 t = subboardGetToken( subboard, spot );
-                if( t.type != token.EMPTY ){
+                if( t.type !== token.EMPTY ){
                     tokens.push({
                         t: t,
                         spot: spot
@@ -226,26 +228,26 @@ export const Board = ({ boardState, playable,
     }
 
     const drawSelectedSpots = ( n ) => {
-        var flipped = usingFlippedPerspective();
-        var output = [];
+        let flipped = usingFlippedPerspective();
+        let output = [];
         if( selectedPassiveSpot != null ){
-            var [ [x,y], subboardN ] = selectedPassiveSpot;
-            if( subboardN == n ){
+            let [ [x,y], subboardN ] = selectedPassiveSpot;
+            if( subboardN === n ){
                 // passive move options
                 output.push(<div className='cell selected abso' style={buildCellLocationStyle(x,y,flipped)}></div>)
-                for( var move of passiveMoves ){
-                    var [mx,my] = addSpotVec( move.spot, move.vector);
+                for( let move of passiveMoves ){
+                    let [mx,my] = addSpotVec( move.spot, move.vector);
                     output.push(<div className='abso moveOption' style={buildCellLocationStyle(mx,my,flipped)}></div>)
                 }
                 // selected passive move
                 if( selectedPassiveMove != null ){
-                    var start = selectedPassiveMove.spot;
-                    var vec = selectedPassiveMove.vector;
+                    let start = selectedPassiveMove.spot;
+                    let vec = selectedPassiveMove.vector;
                     output.push( <Arrow start={start} vec={vec} flipped={flipped} /> );
                 }
             }
         }
-        for( var move of getActiveMoves( n ) ){
+        for( let move of getActiveMoves( n ) ){
             output.push( <Arrow start={move.spot} vec={move.vector} flipped={flipped}/> );
         }
         return output;
@@ -255,9 +257,10 @@ export const Board = ({ boardState, playable,
         if( selectedPassiveSpot == null ){
             return [];
         }
-        var [ _, n_passive ] = selectedPassiveSpot;
+        // eslint-disable-next-line
+        let [ _, n_passive ] = selectedPassiveSpot;
         if( subboardIsInActiveColumnForPassiveMove( n_subboard, n_passive ) ){
-            if( n_subboard == 0 || n_subboard == 1 ){
+            if( n_subboard === 0 || n_subboard === 1 ){
                 return activeMovesWhite;
             }
             else{
@@ -268,8 +271,8 @@ export const Board = ({ boardState, playable,
     }
 
     const subboardIsInActiveColumnForPassiveMove = ( n_curSubboard, n_passiveSubboard ) => {
-        var passiveWasBlack = n_passiveSubboard == 0 || n_passiveSubboard == 2;
-        var onWhiteBoard = n_curSubboard == 1 || n_curSubboard == 3;
+        let passiveWasBlack = n_passiveSubboard === 0 || n_passiveSubboard === 2;
+        let onWhiteBoard = n_curSubboard === 1 || n_curSubboard === 3;
         return (passiveWasBlack && onWhiteBoard) || (!passiveWasBlack && !onWhiteBoard);
     }
 
@@ -278,13 +281,13 @@ export const Board = ({ boardState, playable,
     }
 
     const drawCell = ( subboard, n, x, y, dark ) => {
-        var className='cell';
-        var fn = clickDoNothing;
+        let className='cell';
+        let fn = clickDoNothing;
         if( itIsYourTurn() ){
             className += ' interactable'
             fn = clickCell;
         }
-        var odd = (x+y) % 2 == 0
+        let odd = (x+y) % 2 === 0
         if( dark ){
             if( odd ){
                 className += " darkBoardDarkCell"
@@ -304,7 +307,7 @@ export const Board = ({ boardState, playable,
 
     const drawToken = ( tokenObj, spot ) => {
         const [x,y] = spot
-        var className = "real token " + ( (tokenObj.type == token.WHITE) ? "white" : "black" );
+        let className = "real token " + ( (tokenObj.type === token.WHITE) ? "white" : "black" );
         return <div className={className} style={buildCellLocationStyle(x,y,usingFlippedPerspective())} key={tokenObj.key} />
     }
 
@@ -312,8 +315,8 @@ export const Board = ({ boardState, playable,
         if( !stateIsRelatedToSide( sideValue, gameState ) ){
             return <div/>;
         }
-        var colorName = "black";
-        if( sideValue == side.WHITE ){
+        let colorName = "black";
+        if( sideValue === side.WHITE ){
             colorName = "white";
         }
         return <div className={"fake token " + colorName}>
@@ -362,7 +365,7 @@ export const Board = ({ boardState, playable,
         if( ! timeData ){
             return <div/>
         }
-        if( sideValue == side.BLACK ){
+        if( sideValue === side.BLACK ){
             return renderBlackClock();
         }
         return renderWhiteClock();

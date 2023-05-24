@@ -9,11 +9,12 @@ export const PlayerPage = () => {
     const { userId } = useParams();
     const gamePreviewState = GamePreviewLogic();
     const navigate = useNavigate();
-    var alreadyRequestedGame = false;
+    let alreadyRequestedGame = false;
 
     useEffect( () => {
         if( ! alreadyRequestedGame ){
             gamePreviewState.loadGamePreviews( userId );
+            // eslint-disable-next-line
             alreadyRequestedGame = true;
         }
     } );
@@ -28,7 +29,7 @@ export const PlayerPage = () => {
         let bName = gamePreview.oName;
         let wId = userId;
         let wName = userName;
-        if( nameToSide( gamePreview.userSide ) == side.BLACK ){
+        if( nameToSide( gamePreview.userSide ) === side.BLACK ){
             wId = gamePreview.oId;
             wName = gamePreview.oName;
             bId = userId;

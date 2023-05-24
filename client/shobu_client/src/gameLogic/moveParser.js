@@ -1,13 +1,13 @@
 
 import { addSpotVec, getDeltaVector } from "./spot";
-import { token, side } from "./token";
+import { side } from "./token";
 import { buildFullMove, buildPartialMove } from "./move";
 
 
 export function parseMove( moveString ){
-    if( moveString.length == 10 ){
-        var passive = parsePartialMove( moveString.slice(0,5) );
-        var active = parsePartialMove( moveString.slice(-5) );
+    if( moveString.length === 10 ){
+        let passive = parsePartialMove( moveString.slice(0,5) );
+        let active = parsePartialMove( moveString.slice(-5) );
         return buildFullMove( passive, active );
     }
     else {
@@ -20,18 +20,18 @@ export function moveToString( fullMove ){
 }
 
 function parsePartialMove( partialString ){
-    var side = parseSide( partialString.charAt(0) );
-    var start = parseSpot( partialString.slice( 1, 3 ) );
-    var end = parseSpot( partialString.slice( 3 ) );
-    var delta = getDeltaVector( start, end );
+    let side = parseSide( partialString.charAt(0) );
+    let start = parseSpot( partialString.slice( 1, 3 ) );
+    let end = parseSpot( partialString.slice( 3 ) );
+    let delta = getDeltaVector( start, end );
     return buildPartialMove( side, start, delta );
 }
 
 function parseSpot( spotCharacters ){
-    var colChar = spotCharacters.charAt(0)
-    var rowChar = spotCharacters.charAt(1);
-    var x = 0;
-    var y = 0;
+    let colChar = spotCharacters.charAt(0)
+    let rowChar = spotCharacters.charAt(1);
+    let x = 0;
+    let y = 0;
     switch( colChar ){
         case 'a':
             x = 0;
@@ -56,10 +56,10 @@ function parseSpot( spotCharacters ){
 }
 
 function parseSide( sideChar ){
-    if( sideChar == "B" ){
+    if( sideChar === "B" ){
         return side.BLACK;
     }
-    else if( sideChar == "W" ){
+    else if( sideChar === "W" ){
         return side.WHITE;
     }
     else {
@@ -68,21 +68,21 @@ function parseSide( sideChar ){
 }
 
 function partialMoveToString( partialMove ){
-    var output = "";
-    if( partialMove.side == side.BLACK ){
+    let output = "";
+    if( partialMove.side === side.BLACK ){
         output += "B";
     }
     else {
         output += "W";
     }
-    var a = partialMove.spot;
-    var b = addSpotVec( partialMove.spot, partialMove.vector );
+    let a = partialMove.spot;
+    let b = addSpotVec( partialMove.spot, partialMove.vector );
     output += spotToString( a ) + spotToString( b );
     return output;
 }
 
 function spotToString( spot ){
-    var [x,y] = spot
+    let [x,y] = spot
     return colToChar( x ) + rowToChar( y );
 }
 

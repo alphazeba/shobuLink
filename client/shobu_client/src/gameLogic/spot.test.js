@@ -3,8 +3,8 @@
 import { addSpotVec, getDeltaVector } from "./spot";
 
 test("spots should add together", ()=>{
-    var a = [ 1, 2 ];
-    var b = [ 2, 1 ];
-    var result = addSpotVec( a, b );
+    let a = [ 1, 2 ];
+    let b = [ 2, 1 ];
+    let result = addSpotVec( a, b );
     expect( result ).toStrictEqual( [3, 3] );
 });

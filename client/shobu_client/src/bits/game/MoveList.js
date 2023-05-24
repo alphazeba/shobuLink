@@ -4,7 +4,7 @@ import './MoveList.css';
 
 export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
 
-    if( moves == [] ){
+    if( moves === [] ){
         return <div>no moves</div>
     }
 
@@ -12,20 +12,20 @@ export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
         if( index >= moves.length ){
             return <div/>;
         }
-        var className = 'rowItem moveDisplay btn';
-        if( index == curIndex-1 ){
+        let className = 'rowItem moveDisplay btn';
+        if( index === curIndex-1 ){
             className += " selected";
         }
-        var moveString = moves[index].m;
+        let moveString = moves[index].m;
         return <button className={className} onClick={()=>onGoToMove(index+1)}>{moveString}</button>
     }
 
-    var output = []
-    for( var i=0;i<Math.ceil( moves.length/2);i++){
-        var blackIndex = i * 2;
-        var whiteIndex = blackIndex + 1;
-        var className='moveRow';
-        if( i % 2 == 0 ){
+    let output = []
+    for( let i=0;i<Math.ceil( moves.length/2);i++){
+        let blackIndex = i * 2;
+        let whiteIndex = blackIndex + 1;
+        let className='moveRow';
+        if( i % 2 === 0 ){
             className += ' even';
         }
         output.push(

@@ -5,11 +5,11 @@ import { MoveList } from './MoveList';
 import { useLoginState } from '../../pages/LoginPage';
 import { JoinGameButton } from './JoinGameButton';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
-import { Clock, getPlayerTimeUsed } from './Clock';
+import { getPlayerTimeUsed } from './Clock';
 
 export const GameLoader = ( { gameId } ) => {
     const gameState = useGameState();
-    var alreadyRequestedGame = false;
+    let alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const loginState = useLoginState();
@@ -19,6 +19,7 @@ export const GameLoader = ( { gameId } ) => {
     useEffect( () => {
         if( gameIsNotLoaded() && !alreadyRequestedGame ){
             gameState.loadGame( gameId );
+            // eslint-disable-next-line
             alreadyRequestedGame = true;
         }
 
@@ -44,16 +45,16 @@ export const GameLoader = ( { gameId } ) => {
     } );
 
     const handleKeyDownEvent = ( event ) => {
-        if( event.key == "ArrowRight" ){
+        if( event.key === "ArrowRight" ){
             goToNextIndex();
         }
-        if( event.key == "ArrowLeft" ){
+        if( event.key === "ArrowLeft" ){
             goToPrevIndex();
         }
-        if( event.key == "ArrowUp" ){
+        if( event.key === "ArrowUp" ){
             goToBeginningIndex();
         }
-        if( event.key == "ArrowDown" ){
+        if( event.key === "ArrowDown" ){
             goToMostRecentIndex();
         }
     }
@@ -63,14 +64,14 @@ export const GameLoader = ( { gameId } ) => {
     }
 
     const gameIsNotLoaded = () => {
-        return gameId != gameState.gameId;
+        return gameId !== gameState.gameId;
     }
 
     const itIsNotYourTurn = () => {
-        if( userId == gameState.blackId ){
+        if( userId === gameState.blackId ){
             return ! isBlackMove( gameState.state );
         }
-        else if( userId == gameState.whiteId ){
+        else if( userId === gameState.whiteId ){
             return ! isWhiteMove( gameState.state );
         }
         return true;
@@ -84,12 +85,8 @@ export const GameLoader = ( { gameId } ) => {
 
     const getBoardState = () => {
         const index = Math.min( gameState.history.length-1, gameIndex );
-        var boardState = gameState.history[ index ];
+        let boardState = gameState.history[ index ];
         return boardState;
-    }
-
-    const debugIndex = ( index ) => {
-        console.log( "index: " + index.toString() + " history length: " + gameState.history.length );
     }
 
     const goToNextIndex = () => {
@@ -105,7 +102,7 @@ export const GameLoader = ( { gameId } ) => {
     }
 
     const goToMostRecentIndex = () => {
-        var nextIndex = gameState.history.length - 1;
+        let nextIndex = gameState.history.length - 1;
         handleGoToIndex( nextIndex );
     }
 
@@ -124,26 +121,8 @@ export const GameLoader = ( { gameId } ) => {
     }
 
     const isGamePlayable = () => {
-        var gameIsActive = gameState.state == "blackMove" || gameState.state == "whiteMove";
-        return gameIndex == gameState.history.length-1 && gameIsActive;
-    }
-
-
-
-    const renderBlackClock = () => {
-        return <Clock 
-            time={timeData.blackTime}
-            lastTimestamp={timeData.lastTimestamp}
-            ticking={isBlackMove( gameState.state )}
-        />
-    }
-
-    const renderWhiteClock = () => {
-        return <Clock
-            time={timeData.whiteTime}
-            lastTimestamp={timeData.lastTimestamp}
-            ticking={ isWhiteMove( gameState ) }
-        />
+        let gameIsActive = gameState.state === "blackMove" || gameState.state === "whiteMove";
+        return gameIndex === gameState.history.length-1 && gameIsActive;
     }
 
     return <div className='container'>

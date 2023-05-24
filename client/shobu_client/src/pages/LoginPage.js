@@ -8,11 +8,12 @@ export const LoginPage = () => {
     const navigate = useNavigate();
     const { redirect } = useParams();
     const loginState = useLoginState();
-    var defaultName = "";
+    let defaultName = "";
     if( loginState.loginInfo.name != null ){
         defaultName = loginState.loginInfo.name;
     }
     const [ name, setName ] = useState( defaultName );
+    // eslint-disable-next-line
     const [ password, setPassword ] = useState( "LOGGEDIN" );
 
     const handleChangeEvent = ( e, setStateFn ) => {
@@ -68,7 +69,7 @@ const LoginWidget = ({ loginIsRequired }) => {
                     {loginState.loginInfo.name}
                 </button>
             </div>
-            <a className='myLink logoutBtn' onClick={onLogout}>logout</a>
+            <button className='myLink logoutBtn' onClick={onLogout}>logout</button>
         </div>
     }
 
