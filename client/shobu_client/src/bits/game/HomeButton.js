@@ -8,8 +8,8 @@ export const HomeButton = () => {
     const navigate = useNavigate();
 
     const goHome = () => {
-        navigate('/');
+        navigate( '/' );
     }
 
-    return <button className='btn homeButton' onClick={goHome} >Shobu link</button>
+    return <button className='btn homeButton' onClick={goHome} >Shobu Link</button>
 }

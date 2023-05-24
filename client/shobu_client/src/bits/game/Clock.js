@@ -58,6 +58,7 @@ export const getPlayerTimeUsed = ( moves, startTime ) => {
     for( var move of moves ){
         var curTimestamp = move.t;
         var delta = curTimestamp - lastTimestamp;
+        lastTimestamp = curTimestamp;
         if( isBlackSide ){
             blackTime += delta;
         }

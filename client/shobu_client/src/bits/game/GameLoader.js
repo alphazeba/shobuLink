@@ -33,8 +33,31 @@ export const GameLoader = ( { gameId } ) => {
         const interval = setInterval( ()=>{
             onPeriodicUpdate();
         }, 10 * 1000 );
-        return () => clearInterval( interval );
+
+        let abortSignal = new AbortController();
+        document.addEventListener( 'keydown', handleKeyDownEvent, { signal: abortSignal.signal } );
+
+        return () => {
+            abortSignal.abort();
+            clearInterval( interval );
+        }
     } );
+
+    const handleKeyDownEvent = ( event ) => {
+        console.log( event.key );
+        if( event.key == "ArrowRight" ){
+            goToNextIndex();
+        }
+        if( event.key == "ArrowLeft" ){
+            goToPrevIndex();
+        }
+        if( event.key == "ArrowUp" ){
+            goToBeginningIndex();
+        }
+        if( event.key == "ArrowDown" ){
+            goToMostRecentIndex();
+        }
+    }
 
     const isViewingMostRecentMove = () => {
         return gameIndex >= gameState.history.length - 1;
