@@ -38,6 +38,7 @@ export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
         <div>
             {children}
         </div>
+        <div className='line' />
         <div className='moveListContainer'>
             {output}
         </div>

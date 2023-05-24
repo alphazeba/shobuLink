@@ -6,7 +6,7 @@ import { Header } from '../bits/Header';
 export const GamePage = () => {
     const { gameId } = useParams();
     return <div>
-            <Header />
+            <Header loginOptional={true}/>
             <div className='topSpace'>
                 .
             </div>

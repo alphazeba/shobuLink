@@ -104,6 +104,14 @@
     position: relative;
 }
 
+.nameLink {
+    pointer-events: all;
+    border: none;
+    font-size: inherit;
+    padding-top: 0;
+    padding-bottom: 0;;
+}
+
 .token {
     height: var(--pieceSize);
     width: var(--pieceSize);

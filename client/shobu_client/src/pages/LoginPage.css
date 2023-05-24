@@ -6,3 +6,17 @@
     right: 0;
     margin-right: 0.4em;
 }
+
+.myLink {
+    color: gray;
+}
+
+.myLink:hover {
+    cursor: pointer;
+    color: white;
+}
+
+.logoutBtn {
+    float: right;
+    font-size: 0.5em;
+}

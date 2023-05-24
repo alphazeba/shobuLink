@@ -21,6 +21,9 @@ export const Board = ({ boardState, playable,
     const [ activeMovesWhite, setActiveMovesWhite ] = useState( [] );
 
     const getPerspectiveColor = () => {
+        if( whiteId == null && blackId == null ){
+            return side.BLACK;
+        }
         if( userId == whiteId ){
             return side.WHITE;
         }
@@ -366,7 +369,7 @@ export const Board = ({ boardState, playable,
     }
 
     const drawName = ( name, id, sideValue ) => {
-        return <div className='nameBar'>{ renderBoardState( sideValue ) } {id} {renderClock(sideValue)}</div>
+        return <div className='nameBar'>{ renderBoardState( sideValue ) } <a href={'/user/' + id } className='btn myBtn nameLink'>{id} </a>{renderClock(sideValue)}</div>
     }
 
     return <div>

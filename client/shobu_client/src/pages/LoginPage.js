@@ -58,13 +58,17 @@ const LoginWidget = ({ loginIsRequired }) => {
 
     const onLogout = () => {
         loginState.logout();
-        // setForceLogin( true );
     }
 
     const renderLoggedInForm = () => {
         return <div className='loginBox'>
-            <p>logged in as: <button className='btn myBtn' onClick={()=>navigate( "/user/" + loginState.loginInfo.id )}>{loginState.loginInfo.name}</button></p>
-            <button className={"btn myBtn"} onClick={onLogout}>logout</button>
+            <div>
+                logged in as:&nbsp;
+                <button className='btn myBtn' onClick={()=>navigate( "/user/" + loginState.loginInfo.id )}>
+                    {loginState.loginInfo.name}
+                </button>
+            </div>
+            <a className='myLink logoutBtn' onClick={onLogout}>logout</a>
         </div>
     }
 

@@ -34,6 +34,10 @@ export function compareBoards( a, b ){
     return true;
 }
 
+export function isBlacksTurn( board ){
+    return board.playerTurn == side.BLACK;
+}
+
 export function buildBoard( suboards, playerSide ){
     return {
         board: [
@@ -55,6 +59,18 @@ export function initEmptySubboard(){
 
 function initRow( token ){
     return [ buildToken(token), buildToken(token), buildToken(token), buildToken(token) ]
+}
+
+export function getPassiveMoveSubboards( board ){
+    let subboards = [];
+    let sides = [ side.BLACK, side.WHITE ]
+    for( let side of sides ){
+        subboards.push( {
+            subboard: getPassiveMoveSubboard( board, side ),
+            side: side
+        } );
+    }
+    return subboards;
 }
 
 export function getPassiveMoveSubboard( board, playerSide ){
@@ -123,7 +139,6 @@ export function tokenBelongsToPlayer( board, targetToken ){
 export function spotIsEmpty( subboard, spot ){
     return subboardGetToken( subboard, spot ).type == token.EMPTY;
 }
-
 
 function boardCopy( board ){
     return JSON.parse( JSON.stringify( board ) );
