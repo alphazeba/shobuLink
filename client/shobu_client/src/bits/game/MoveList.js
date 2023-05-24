@@ -2,7 +2,6 @@ import React from 'react'
 import './Board.css'
 import './MoveList.css';
 
-
 export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
 
     if( moves == [] ){

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useGameState } from '../../webAppLogic/GameLogic';
 import { Board } from './Board';
 import { MoveList } from './MoveList';
-import { getLoginInfo } from '../../pages/LoginPage';
+import { useLoginState } from '../../pages/LoginPage';
 import { JoinGameButton } from './JoinGameButton';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
 import { Clock, getPlayerTimeUsed } from './Clock';
@@ -12,8 +12,8 @@ export const GameLoader = ( { gameId } ) => {
     var alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
-    const loginInfo = getLoginInfo();
-    const userId = loginInfo.id;
+    const loginState = useLoginState();
+    const userId = loginState.loginInfo.id;
     const timeData = getPlayerTimeUsed( gameState.moves, gameState.startTime );
 
     useEffect( () => {
@@ -44,7 +44,6 @@ export const GameLoader = ( { gameId } ) => {
     } );
 
     const handleKeyDownEvent = ( event ) => {
-        console.log( event.key );
         if( event.key == "ArrowRight" ){
             goToNextIndex();
         }
@@ -112,14 +111,11 @@ export const GameLoader = ( { gameId } ) => {
 
     const handleGoToIndex = ( index ) => {
         if( index >= gameState.history.length || index < 0 ){
-            console.log( "cannot go to index" );
-            debugIndex( index );
             return;
         }
         if( index < gameState.history.length - 1 ){
             setLiveUpdate( false );
         }
-        debugIndex( index );
         setGameIndex( index );
     }
 

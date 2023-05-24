@@ -1,24 +1,24 @@
 
-import React, { useEffect, useState } from 'react';
-import { getLoginInfo } from '../../pages/LoginPage';
+import React from 'react';
+import { useLoginState } from '../../pages/LoginPage';
 import './JoinGameButton.css';
 import { joinGame } from '../../webAppLogic/api';
 
 export const JoinGameButton = ({gameState}) => {
-    const loginInfo = getLoginInfo();
+    const loginState = useLoginState();
 
     const playerAlreadyInGame = ( userId ) => {
         return userId == gameState.blackId || userId == gameState.whiteId;
     }
     const playerCannotJoinGame = () => {
-        return loginInfo.id == null ||
+        return !loginState.isLoggedIn() ||
             gameState.state != "waitingForPlayer" ||
-            playerAlreadyInGame( loginInfo.id );
+            playerAlreadyInGame( loginState.loginInfo.id );
     }
     const handleJoinGame = () => {
-        joinGame( gameState.gameId )
+        joinGame( loginState.loginInfo, gameState.gameId )
             .then( ( sideValue ) => {
-                gameState.localJoinSide( sideValue, loginInfo.name, loginInfo.id );
+                gameState.localJoinSide( sideValue, loginState.loginInfo.name, loginState.loginInfo.id );
             } );
     }
 

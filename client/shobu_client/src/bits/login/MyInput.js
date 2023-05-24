@@ -1,10 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import './MyInput.css';
 
-export const MyInput = ({title,onChange,value}) => {
+export const MyInput = ({title,onChange,value,placeholder}) => {
 
-    return <span className='myInput'>
-        <p>{title}</p>
-        <input onChange={onChange} value={value} />
+    return <span className='myInput input-group'>
+        <span className='input-group-addon'>{title + " "}</span>
+        <input className='myInput-input' onChange={onChange} value={value} placeholder={placeholder} />
     </span>
 }

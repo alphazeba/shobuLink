@@ -1,12 +1,4 @@
-
-import React, { useState } from 'react'
-import { useGameState  } from '../../webAppLogic/GameLogic';
-import './Board.css'
-import { side, token } from '../../gameLogic/token'
-import { getSubboard, subboardGetToken } from '../../gameLogic/board';
-import { generateValidPassiveMoves, generateValidActiveMoves } from '../../gameLogic/moveGenerator';
-import { addSpotVec, compareVec, getDeltaVector } from '../../gameLogic/spot';
-import { buildPartialMove } from '../../gameLogic/move';
+import React from 'react'
 import { buildCellLocationStyle } from '../../util/styleHelper';
 
 export const Arrow = ({start,vec,flipped}) => {

@@ -1,12 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getLoginInfo } from './LoginPage';
+import React, { useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import { GamePreviewLogic } from '../webAppLogic/GamePreviewLogic';
 import { Board } from '../bits/game/Board';
 import { nameToSide, side } from '../gameLogic/token';
+import { Header } from '../bits/Header';
 
 export const PlayerPage = () => {
-    const loginInfo = getLoginInfo();
     const { userId } = useParams();
     const gamePreviewState = GamePreviewLogic();
     const navigate = useNavigate();
@@ -45,6 +44,7 @@ export const PlayerPage = () => {
     }
 
     return <div>
+        <Header loginOptional={true} />
         <div>
         userId: {userId}
         </div>

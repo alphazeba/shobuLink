@@ -1,5 +1,4 @@
-import React, { useId, useState } from 'react'
-import { useGameState  } from '../../webAppLogic/GameLogic';
+import React, { useState } from 'react'
 import './Board.css'
 import { side, token } from '../../gameLogic/token'
 import { getSubboard, subboardGetToken } from '../../gameLogic/board';
@@ -367,7 +366,7 @@ export const Board = ({ boardState, playable,
     }
 
     const drawName = ( name, id, sideValue ) => {
-        return <div className='nameBar'>{ renderBoardState( sideValue ) }{name} : {id}. {renderClock(sideValue)}</div>
+        return <div className='nameBar'>{ renderBoardState( sideValue ) } {id} {renderClock(sideValue)}</div>
     }
 
     return <div>

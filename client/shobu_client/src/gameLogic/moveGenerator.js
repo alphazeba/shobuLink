@@ -47,7 +47,6 @@ export function generateValidActiveMoves( board, passiveMove, activeSide ){
     return moves;
 }
 
-
 function getPlayerPieceSpots( subboard, playerColor ){
     var spots = []
     for( var iy=0;iy<4;iy++){

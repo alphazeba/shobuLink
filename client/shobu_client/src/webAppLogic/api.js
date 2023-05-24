@@ -25,8 +25,7 @@ export function getPlayerGames( userId ){
         } );
 }
 
-export function playMove( gameId, fullMove ){
-    const loginInfo = getLoginInfo();
+export function playMove( loginInfo, gameId, fullMove ){
     const request = {
         type: "PlayMove",
         gameId: gameId,
@@ -41,8 +40,7 @@ export function playMove( gameId, fullMove ){
 }
 
 
-export function createGame( side, secondsPerSide ){
-    const loginInfo = getLoginInfo();
+export function createGame( loginInfo, side, secondsPerSide ){
     const request = {
         type: "CreateGame",
         side: sideToName( side ),
@@ -58,8 +56,7 @@ export function createGame( side, secondsPerSide ){
 }
 
 
-export function joinGame( gameId ){
-    const loginInfo = getLoginInfo();
+export function joinGame( loginInfo, gameId ){
     const request = {
         type: "JoinGame",
         gameId: gameId,

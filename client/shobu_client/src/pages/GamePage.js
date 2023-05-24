@@ -1,16 +1,12 @@
-
-
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { useParams } from 'react-router-dom';
 import { GameLoader } from '../bits/game/GameLoader';
-import { HomeButton } from '../bits/game/HomeButton';
-import { ForceUserToLogin } from './LoginPage';
+import { Header } from '../bits/Header';
 
 export const GamePage = () => {
     const { gameId } = useParams();
     return <div>
-            <HomeButton />
-            <ForceUserToLogin />
+            <Header />
             <div className='topSpace'>
                 .
             </div>

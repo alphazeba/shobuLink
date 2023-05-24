@@ -1,10 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { GameLoader } from '../bits/game/GameLoader';
-import { ForceUserToLogin } from './LoginPage';
+import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { useLoginState } from './LoginPage';
 import { side } from '../gameLogic/token';
 import { createGame } from '../webAppLogic/api';
 import './CreateGamePage.css';
+import { Header } from '../bits/Header';
+import { MyInput } from '../bits/login/MyInput';
 
 export const CreateGamePage = () => {
     const SIDE_RANDOM = 777;
@@ -14,6 +15,7 @@ export const CreateGamePage = () => {
     const minTimeControl = 10;
     const maxTimeControl = 10 * 60;
     const navigate = useNavigate();
+    const loginState = useLoginState();
 
     const getLabel = ( sideValue ) => {
         switch( sideValue ){
@@ -55,7 +57,7 @@ export const CreateGamePage = () => {
         if( ! timeControlIsValid( chosenTimeControl ) ){
             return;
         }
-        createGame( chosenSide, chosenTimeControl )
+        createGame( loginState.loginInfo, chosenSide, chosenTimeControl )
             .then( (gameId) => {
                 navigate( "/game/" + gameId );
             } );
@@ -71,24 +73,26 @@ export const CreateGamePage = () => {
     }
 
     return <div>
-        <ForceUserToLogin />
-        <div>
-            {renderTimeControlError()}<input value={timeControl} onChange={ (e)=>handleTimeChange( e ) } />
+        <Header />
+        <h1>Create a game</h1>
+        <div className='inputSpace'>
+            {renderTimeControlError()}<MyInput title='Seconds' value={timeControl} onChange={ (e)=>handleTimeChange( e ) } />
         </div>
         <div>
             {renderSideSelectable(side.BLACK)}
             {renderSideSelectable(SIDE_RANDOM)}
             {renderSideSelectable(side.WHITE)}
         </div>
+        <div className='line'></div>
         <div>
-            <button onClick={handleCreateGame}>Create</button>
+            <button className='btn myBtn' onClick={handleCreateGame}>Create</button>
         </div>
     </div>
 }
 
 
 const Selectable = ({children,selected,onClick}) => {
-    var className = "sideSelector btn ";
+    var className = "btn myBtn sideSelector btn ";
     if( selected ){
         className += " selected";
     }

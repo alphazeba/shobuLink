@@ -1,60 +1,86 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { GameLoader } from '../bits/game/GameLoader';
 import { MyInput } from '../bits/login/MyInput';
 import './LoginPage.css';
+import { HomeButton } from '../bits/game/HomeButton';
 
 export const LoginPage = () => {
     const navigate = useNavigate();
     const { redirect } = useParams();
-    const loginInfo = getLoginInfo();
+    const loginState = useLoginState();
     var defaultName = "";
-    if( loginInfo.name != null ){
-        defaultName = loginInfo.name;
+    if( loginState.loginInfo.name != null ){
+        defaultName = loginState.loginInfo.name;
     }
-    const [ name, setName ] = useState(defaultName);
-    const [ password, setPassword ] = useState("LOGGEDIN");
+    const [ name, setName ] = useState( defaultName );
+    const [ password, setPassword ] = useState( "LOGGEDIN" );
 
     const handleChangeEvent = ( e, setStateFn ) => {
         setStateFn( e.target.value );
     }
     
     const submit = () => {
-        setLoginInfo( name, name, password );
+        loginState.login( name, name, password );
         navigate( decodeURIComponent( redirect ) );
     }
 
     return <div>
+        <HomeButton />
         <h1>Please log in</h1>
         <form >
-            <MyInput value={name} onChange={(e)=>handleChangeEvent(e,setName)} title="Name" />
-            <button className='btn joinGameButton' onClick={submit}>submit</button>
+            <div>
+                <MyInput value={name} onChange={(e)=>handleChangeEvent(e,setName)} title="Name" placeholder='username'/>
+            </div>
+            <div className='line' />
+            <button className='btn myBtn' onClick={submit}>submit</button>
         </form>
     </div>
 }
 
-export const ForceUserToLogin = () => {
+export const LoginRequired = () => {
+    return <LoginWidget loginIsRequired={true}/>;
+}
+
+export const LoginOptional = () => {
+    return <LoginWidget loginIsRequired={false}/>;
+}
+
+const LoginWidget = ({ loginIsRequired }) => {
     const [ forceLogin, setForceLogin ] = useState( false );
     const location = useLocation();
     const navigate = useNavigate();
-    const loginInfo = getLoginInfo();
+    const loginState = useLoginState();
     useEffect( () => {
-        if( loginInfo.name == null || loginInfo.id == null || forceLogin ){
+        if( (loginIsRequired && !loginState.isLoggedIn()) || forceLogin ){
             navigate( "/login/" + encodeURIComponent( location.pathname ) );
         }
     });
 
     const onLogout = () => {
-        logout();
-        setForceLogin( true );
+        loginState.logout();
+        // setForceLogin( true );
     }
-    return <div className='loginBox'>
-        <p>logged in as: <button className='btn myBtn' onClick={()=>navigate( "/user/" + loginInfo.id )}>{loginInfo.name}</button></p>
-        <button className={"btn myBtn"} onClick={onLogout}>logout</button>
-    </div>
+
+    const renderLoggedInForm = () => {
+        return <div className='loginBox'>
+            <p>logged in as: <button className='btn myBtn' onClick={()=>navigate( "/user/" + loginState.loginInfo.id )}>{loginState.loginInfo.name}</button></p>
+            <button className={"btn myBtn"} onClick={onLogout}>logout</button>
+        </div>
+    }
+
+    const renderLoggedOutForm = () => {
+        return <div className='loginBox'>
+            <button className='btn myBtn' onClick={()=>setForceLogin( true )}>login</button>
+        </div>
+    }
+
+    if( loginState.isLoggedIn() ){
+        return renderLoggedInForm();
+    }
+    return renderLoggedOutForm();
 }
 
-export const getLoginInfo = () => {
+const _getLoginInfo = () => {
     const loginInfo = {
         name: localStorage.getItem("name"),
         id: localStorage.getItem("id"),
@@ -63,14 +89,31 @@ export const getLoginInfo = () => {
     return loginInfo;
 }
 
-const setLoginInfo = ( name, id, token ) => {
-    localStorage.setItem("name", name );
-    localStorage.setItem("id", id );
-    localStorage.setItem("token", token );
-}
+export const useLoginState = () => {
+    const [ loginInfo, setLoginInfo ] = useState( _getLoginInfo() );
 
-const logout = () => {
-    localStorage.removeItem("id");
-    localStorage.removeItem("token");
-    localStorage.removeItem("name");
+    const login = ( name, id, token ) => {
+        localStorage.setItem("name", name );
+        localStorage.setItem("id", id );
+        localStorage.setItem("token", token );
+        setLoginInfo( _getLoginInfo() );
+    }
+
+    const isLoggedIn = () => {
+        return loginInfo.name != null && loginInfo.id != null;
+    }
+
+    const logout = () => {
+        localStorage.removeItem("id");
+        localStorage.removeItem("token");
+        localStorage.removeItem("name");
+        setLoginInfo( _getLoginInfo() );
+    }
+
+    return {
+        loginInfo: loginInfo,
+        login: login,
+        logout: logout,
+        isLoggedIn: isLoggedIn
+    }
 }

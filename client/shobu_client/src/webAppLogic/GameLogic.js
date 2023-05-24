@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState } from 'react'
 import { getGame, getGameUpdate, playMove } from './api.js'
 import { initBoard, makeValidatedMove } from '../gameLogic/board.js';
 import { validateFullMove } from '../gameLogic/moveValidation.js';
 import { parseMove } from '../gameLogic/moveParser.js';
 import { side } from '../gameLogic/token.js';
+import { useLoginState } from '../pages/LoginPage.js';
 
 export const useGameState = () => {
 
@@ -19,6 +20,7 @@ export const useGameState = () => {
     const [ gameState, setGameState ] = useState( null );
     const [ startTime, setStartTime ] = useState( 0 );
     const [ lastMoveTimestamp, setLastMoveTimestamp ] = useState( 0 );
+    const loginState = useLoginState();
 
     const loadGame = ( gameId ) => {
         if( waitingForResponse ){
@@ -43,7 +45,7 @@ export const useGameState = () => {
     }
 
     const sendMoveToServer = ( fullMove, loginInfo ) => {
-        playMove( loadedGameId, fullMove, loginInfo ).then( ( game ) =>{
+        playMove( loginState.loginInfo, loadedGameId, fullMove, loginInfo ).then( ( game ) =>{
             handleGameUpdate( game );
         } );
         setWaitingForResponse( true );

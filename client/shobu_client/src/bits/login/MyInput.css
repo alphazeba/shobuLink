@@ -1,5 +1,10 @@
 
 
 .myInput {
-    display: inline;
+    display: inline;   
+}
+
+.myInput-input {
+    border-color: gray;
+    border-width: 1px;
 }

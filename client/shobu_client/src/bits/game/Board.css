@@ -10,6 +10,7 @@
     --movet: 0.3s;
     --fakeSize: 1.2em;
     --crownOutlineScale: 0.90;
+    --betweenBoardSpace: 0.75em;
 }
 
 .preview {
@@ -84,7 +85,13 @@
 }
 
 .topBoardRow {
-    line-height: 3em;
+    margin-bottom: var(--betweenBoardSpace);
+    line-height: 0;
+}
+
+.betweenSubboard{
+    display: inline-block;
+    width: var(--betweenBoardSpace);
 }
 
 .coord {
@@ -102,7 +109,7 @@
     width: var(--pieceSize);
     border-radius: 50%;
     border-style: solid;
-    border-width: 2px;
+    border-width: 1px;
 }
 
 .fake {
@@ -159,11 +166,6 @@
 .token.black{
     background-color: black;
     border-color: white;
-}
-
-.betweenSubboard::after{
-    content: 'ml';
-    visibility: hidden;
 }
 
 .abso{

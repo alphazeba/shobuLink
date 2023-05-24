@@ -3,6 +3,7 @@ import {
   createBrowserRouter,
   RouterProvider
 } from 'react-router-dom';
+import { HomePage } from './pages/HomePage';
 import { GamePage } from './pages/GamePage';
 import { LoginPage } from './pages/LoginPage';
 import { CreateGamePage } from './pages/CreateGamePage';
@@ -15,7 +16,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <div> Try creating a game <a href={"/createGame"}> here</a> </div>,
+      element: <HomePage />,
     },
     {
       path: "game/:gameId",
