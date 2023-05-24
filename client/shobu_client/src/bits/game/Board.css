@@ -42,6 +42,9 @@
     content: ' '
 }
 
+.boardContainer {
+    position: relative;
+}
 
 .cell.selected {
     background-color: gray;

@@ -6,6 +6,7 @@ import { useLoginState } from '../../pages/LoginPage';
 import { JoinGameButton } from './JoinGameButton';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
 import { getPlayerTimeUsed } from './Clock';
+import { GameShareHelper } from './GameShareHelper';
 
 export const GameLoader = ( { gameId } ) => {
     const gameState = useGameState();
@@ -137,8 +138,10 @@ export const GameLoader = ( { gameId } ) => {
                         playable={isGamePlayable()}
                         gameState={gameState.state}
                         timeData={timeData}
-                    />
-                    <JoinGameButton gameState={gameState} />
+                    >
+                        <JoinGameButton gameState={gameState} />
+                        <GameShareHelper gameState={gameState} />
+                    </Board>
                 </div>
                 <div className="col col-md-5">
                     <MoveList curIndex={gameIndex} moves={gameState.moves} onGoToMove={handleGoToIndex}>

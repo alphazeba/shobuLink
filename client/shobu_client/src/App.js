@@ -8,9 +8,7 @@ import { GamePage } from './pages/GamePage';
 import { LoginPage } from './pages/LoginPage';
 import { CreateGamePage } from './pages/CreateGamePage';
 import { PlayerPage } from './pages/PlayerPage';
-import { Board } from './bits/game/Board'
-import { GameLoader } from './bits/game/GameLoader';
-import React, { useState } from 'react'
+import React from 'react'
 
 function App() {
   const router = createBrowserRouter([

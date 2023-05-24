@@ -13,7 +13,7 @@ import { isWhiteMove, isBlackMove } from '../../util/stateHelper';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 
-        gameState, onMove, userId, timeData }) => {
+        gameState, onMove, userId, timeData, children }) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );
@@ -148,9 +148,10 @@ export const Board = ({ boardState, playable,
 
     const drawBoard = ( board ) => {
         let flipped = usingFlippedPerspective();
-        return <div >
+        return <div className='boardContainer'>
             <div className="topBoardRow">{ drawSubboard( board, _sbdRot(0,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(1,flipped) ) }</div>
             <div>{ drawSubboard( board, _sbdRot(2,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(3,flipped) ) }</div>
+            { children }
         </div>
     }
 
