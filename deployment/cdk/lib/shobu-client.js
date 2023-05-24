@@ -14,10 +14,13 @@ class ShobuClient extends Construct {
 
         const indexDocument = "index.html";
         const shobuClientBucket = new s3.Bucket( this, "ShobuClientBucket", {
-            publicReadAccess: true,
+            bucketName: "shobu.link",
             removalPolicy: cdk.RemovalPolicy.DESTROY,
             websiteIndexDocument: indexDocument,
             websiteErrorDocument: indexDocument, // react router handles everything
+            accessControl: s3.BucketAccessControl.BUCKET_OWNER_FULL_CONTROL,
+            blockPublicAccess: s3.BlockPublicAccess.BLOCK_ACLS,
+            publicReadAccess: true,
         });
 
         const deployment = new s3Deployment.BucketDeployment( 
