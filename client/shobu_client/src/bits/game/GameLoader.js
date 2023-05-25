@@ -2,18 +2,15 @@ import React, { useEffect, useState } from 'react';
 import { useGameState } from '../../webAppLogic/GameLogic';
 import { Board } from './Board';
 import { MoveList } from './MoveList';
-import { useLoginState } from '../../pages/LoginPage';
-import { JoinGameButton } from './JoinGameButton';
+import { JoinShareWidget } from './JoinShareWidget';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
 import { getPlayerTimeUsed } from './Clock';
-import { GameShareHelper } from './GameShareHelper';
 
-export const GameLoader = ( { gameId } ) => {
+export const GameLoader = ( { gameId, loginState } ) => {
     const gameState = useGameState();
     let alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
-    const loginState = useLoginState();
     const userId = loginState.loginInfo.id;
     const timeData = getPlayerTimeUsed( gameState.moves, gameState.startTime );
 
@@ -139,8 +136,7 @@ export const GameLoader = ( { gameId } ) => {
                         gameState={gameState.state}
                         timeData={timeData}
                     >
-                        <JoinGameButton gameState={gameState} />
-                        <GameShareHelper gameState={gameState} />
+                        <JoinShareWidget gameState={gameState} loginState={loginState} />
                     </Board>
                 </div>
                 <div className="col col-md-5">

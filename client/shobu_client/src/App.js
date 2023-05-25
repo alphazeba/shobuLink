@@ -5,32 +5,33 @@ import {
 } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
 import { GamePage } from './pages/GamePage';
-import { LoginPage } from './pages/LoginPage';
+import { LoginPage, useLoginState } from './pages/LoginPage';
 import { CreateGamePage } from './pages/CreateGamePage';
 import { PlayerPage } from './pages/PlayerPage';
 import React from 'react'
 
 function App() {
+  const loginState = useLoginState();
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <HomePage />,
+      element: <HomePage loginState={loginState}/>,
     },
     {
       path: "game/:gameId",
-      element: <GamePage />
+      element: <GamePage loginState={loginState}/>
     },
     {
       path: "login/:redirect",
-      element: <LoginPage />
+      element: <LoginPage loginState={loginState}/>
     },
     {
       path: "createGame",
-      element: <CreateGamePage />
+      element: <CreateGamePage loginState={loginState}/>
     },
     {
       path: "user/:userId",
-      element: <PlayerPage />
+      element: <PlayerPage loginState={loginState}/>
     }
   ]);
 

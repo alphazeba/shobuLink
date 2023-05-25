@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useLoginState } from './LoginPage';
 import { side } from '../gameLogic/token';
 import { createGame } from '../webAppLogic/api';
 import './CreateGamePage.css';
 import { Header } from '../bits/Header';
 import { MyInput } from '../bits/login/MyInput';
 
-export const CreateGamePage = () => {
+export const CreateGamePage = ({loginState}) => {
     const SIDE_RANDOM = 777;
     const [ timeControl, setTimeControl ] = useState( 420 );
     const [ sideSelect, setSide ] = useState( SIDE_RANDOM );
@@ -15,7 +14,6 @@ export const CreateGamePage = () => {
     const minTimeControl = 10;
     const maxTimeControl = 10 * 60;
     const navigate = useNavigate();
-    const loginState = useLoginState();
 
     const getLabel = ( sideValue ) => {
         switch( sideValue ){
@@ -75,7 +73,7 @@ export const CreateGamePage = () => {
     }
 
     return <div>
-        <Header />
+        <Header loginState={loginState}/>
         <h1>Create a game</h1>
         <div className='inputSpace'>
             {renderTimeControlError()}<MyInput title='Seconds' value={timeControl} onChange={ (e)=>handleTimeChange( e ) } />

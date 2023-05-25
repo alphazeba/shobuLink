@@ -4,10 +4,9 @@ import { MyInput } from '../bits/login/MyInput';
 import './LoginPage.css';
 import { HomeButton } from '../bits/game/HomeButton';
 
-export const LoginPage = () => {
+export const LoginPage = ({loginState}) => {
     const navigate = useNavigate();
     const { redirect } = useParams();
-    const loginState = useLoginState();
     let defaultName = "";
     if( loginState.loginInfo.name != null ){
         defaultName = loginState.loginInfo.name;
@@ -38,19 +37,18 @@ export const LoginPage = () => {
     </div>
 }
 
-export const LoginRequired = () => {
-    return <LoginWidget loginIsRequired={true}/>;
+export const LoginRequired = ({loginState}) => {
+    return <LoginWidget loginIsRequired={true} loginState={loginState}/>;
 }
 
-export const LoginOptional = () => {
-    return <LoginWidget loginIsRequired={false}/>;
+export const LoginOptional = ({loginState}) => {
+    return <LoginWidget loginIsRequired={false} loginState={loginState}/>;
 }
 
-const LoginWidget = ({ loginIsRequired }) => {
+const LoginWidget = ({ loginIsRequired, loginState }) => {
     const [ forceLogin, setForceLogin ] = useState( false );
     const location = useLocation();
     const navigate = useNavigate();
-    const loginState = useLoginState();
     useEffect( () => {
         if( (loginIsRequired && !loginState.isLoggedIn()) || forceLogin ){
             navigate( "/login/" + encodeURIComponent( location.pathname ) );

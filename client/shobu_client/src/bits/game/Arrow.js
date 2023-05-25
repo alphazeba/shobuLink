@@ -1,5 +1,6 @@
 import React from 'react'
 import { buildCellLocationStyle } from '../../util/styleHelper';
+import './Arrow.css'
 
 export const Arrow = ({start,vec,flipped}) => {
     function getRotation( vec ){

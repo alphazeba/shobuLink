@@ -5,7 +5,7 @@ import { Board } from '../bits/game/Board';
 import { nameToSide, side } from '../gameLogic/token';
 import { Header } from '../bits/Header';
 
-export const PlayerPage = () => {
+export const PlayerPage = ({loginState}) => {
     const { userId } = useParams();
     const gamePreviewState = GamePreviewLogic();
     const navigate = useNavigate();
@@ -45,7 +45,7 @@ export const PlayerPage = () => {
     }
 
     return <div>
-        <Header loginOptional={true} />
+        <Header loginOptional={true} loginState={loginState} />
         <div>
         userId: {userId}
         </div>
