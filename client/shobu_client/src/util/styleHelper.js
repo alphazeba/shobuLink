@@ -1,14 +1,11 @@
 export function buildCellLocationStyle( x, y, flipped ){
-    if( flipped ){
-        x = 3-x;
-        y = 3-y;
-    }
     return {
-        left: _toPercent( x ),
-        top: _toPercent( y ),
+        left: toCellPercent( x, flipped ),
+        top: toCellPercent( y, flipped ),
     };
 }
 
-function _toPercent( n ){
-    return ( 100/4 * n ).toString() + "%";
+export function toCellPercent( coord, flipped ){
+    const val = flipped ? (3-coord) : coord;
+    return ( 100/4 * val ).toString() + "%";
 }

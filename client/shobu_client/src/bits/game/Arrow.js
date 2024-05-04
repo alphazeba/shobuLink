@@ -1,77 +1,66 @@
 import React from 'react'
-import { buildCellLocationStyle } from '../../util/styleHelper';
+import { buildCellLocationStyle, toCellPercent} from '../../util/styleHelper';
 import './Arrow.css'
 
 export const Arrow = ({start,vec,flipped}) => {
-    function getRotation( vec ){
-        let rotation = getBaseRotation( vec );
-        if( flipped ){
-            return rotation + 180;
-        }
-        return rotation;
-    }
 
-    function getBaseRotation( vec ){
-        let [x ,y] = vec;
-        if( x === 0 && y < 0 ){
-            return 0;
+    function getEndpoint(val, delta) {
+        const scaler = 0.25;
+        if (delta == 0) {
+            return val;
         }
-        if( x > 0 && y < 0 ){
-            return 180/4;
+        if (delta < 0) {
+            return val + delta + scaler;
         }
-        if( x > 0 && y === 0 ){
-            return 180/2;
-        }
-        if( x > 0 && y > 0 ){
-            return 3/4 * 180;   
-        }
-        if( x === 0 && y > 0 ){
-            return 180;
-        }
-        if( x < 0 && y < 0 ){
-            return 180 + 180*3/4;
-        }
-        if( x < 0 && y === 0 ){
-            return 180 + 180/2;
-        }
-        if( x < 0 && y > 0 ){
-            return 180 + 180/4;   
-        }
-        return 0;
+        return val + delta - scaler;
     }
-    
-    let [x,y] = start;
+    let [x1,y1] = start;
     let [vx,vy] = vec;
-    let className = 'arrow ';
-    let absx = Math.abs( vx );
-    let absy = Math.abs( vy );
-    if( absx > 0 && absy > 0 ){ // diag
-        if( absx === 1 ){
-            className += 'diagShort';
-        }
-        else {
-            className += 'diagLong';
-        }
-    }
-    else { // straight
-        if( Math.max( absx, absy ) === 1 ){
-            className += 'straightShort';
-        }
-        else{
-            className += 'straightLong';
-        }
-    }
-
-    let multiplier = 1
-    if( flipped ){
-        multiplier = -1;
-    }
-    let style = buildCellLocationStyle( x + 0.5 * multiplier, y + 0.5 * multiplier, flipped );
-    style.transform = 'rotate(' + getRotation( vec ) + 'deg)';
-   
-    return <div className={className} style={style}>
-        <div className='arrowBody'>
-            <div className='arrowHead' />
-        </div>
-    </div>;
+    let x2 = getEndpoint(x1, vx);
+    let y2 = getEndpoint(y1, vy);
+    const offset = flipped ? -0.5 : 0.5;
+    const color = "#00FF00"
+    return (<div className='arrow'>
+        <svg 
+            xmlns="http://www.w3.org/2000/svg" 
+            version="1.1" 
+            direction="ltr"
+            width="100%"
+            height="100%"
+        >
+            <defs>
+            <marker 
+                id='head' 
+                orient="auto" 
+                markerWidth='1' 
+                markerHeight='3' 
+                refX='0.5' 
+                refY='1'
+            >
+                <path d='M0,0 V2 L1,1 Z' fill={color} />
+            </marker>
+            <marker 
+                id='tail' 
+                orient="auto" 
+                markerWidth='10' 
+                markerHeight='10' 
+                refX='1' 
+                refY='1'
+            >
+                <circle cx="1" cy="1" r="0.5" fill={color}></circle>
+            </marker>
+            </defs>
+            <line
+            x1={toCellPercent(x1+offset, flipped)}
+            y1={toCellPercent(y1+offset, flipped)}
+            x2={toCellPercent(x2+offset, flipped)}
+            y2={toCellPercent(y2+offset, flipped)}
+            stroke-width="10" 
+            stroke={color}
+            marker-end="url(#head)"
+            marker-start="url(#tail)"
+            />
+        </svg>
+    </div>
+    );
 }
