@@ -1,5 +1,5 @@
 import React from 'react'
-import { buildCellLocationStyle, toCellPercent} from '../../util/styleHelper';
+import {toCellPercent} from '../../util/styleHelper';
 import './Arrow.css'
 
 export const Arrow = ({start,vec,flipped}) => {
@@ -29,26 +29,26 @@ export const Arrow = ({start,vec,flipped}) => {
             height="100%"
         >
             <defs>
-            <marker 
-                id='head' 
-                orient="auto" 
-                markerWidth='1' 
-                markerHeight='3' 
-                refX='0.5' 
-                refY='1'
-            >
-                <path d='M0,0 V2 L1,1 Z' fill={color} />
-            </marker>
-            <marker 
-                id='tail' 
-                orient="auto" 
-                markerWidth='10' 
-                markerHeight='10' 
-                refX='1' 
-                refY='1'
-            >
-                <circle cx="1" cy="1" r="0.5" fill={color}></circle>
-            </marker>
+                <marker 
+                    id='head' 
+                    orient="auto" 
+                    markerWidth='1' 
+                    markerHeight='3' 
+                    refX='0.5' 
+                    refY='1'
+                >
+                    <path d='M0,0 V2 L1,1 Z' fill={color} />
+                </marker>
+                <marker 
+                    id='tail' 
+                    orient="auto" 
+                    markerWidth='10' 
+                    markerHeight='10' 
+                    refX='1' 
+                    refY='1'
+                >
+                    <circle cx="1" cy="1" r="0.5" fill={color}></circle>
+                </marker>
             </defs>
             <line
             x1={toCellPercent(x1+offset, flipped)}

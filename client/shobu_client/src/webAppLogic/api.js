@@ -1,7 +1,6 @@
 
 import { moveToString } from "../gameLogic/moveParser";
 import { nameToSide, sideToName } from "../gameLogic/token";
-import { getLoginInfo } from "../pages/LoginPage";
 import { fetchJson } from "../util/apiHelper";
 
 export function getGame( gameId ){

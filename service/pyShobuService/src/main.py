@@ -17,9 +17,7 @@ def lambda_handler( event, context ):
     props = getProps()
     try:
         eventType = getValidatedMapKey( 'type', event, routes )
-        response = None
-        if eventType in routes:
-            response = routes[eventType]( event, context, props )
+        response = routes[eventType]( event, context, props )
         return buildResponse( response, 200 )
     except ExceptionToReturn as e:
         return e.getResponse()
