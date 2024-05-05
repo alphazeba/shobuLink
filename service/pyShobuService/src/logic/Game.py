@@ -72,7 +72,7 @@ def new( playerId, playerName, playerSide, secondPerSide ):
         _id: newGuid(),
         _secs: secondPerSide,
         _state: GameState.waitingForPlayer,
-        _startTime: time.getNow(),
+        _startTime: time.getNowMs(),
         _moves: [],
     }
     _updatePhaseTime( this )
@@ -85,7 +85,7 @@ def joinGame( this, playerId, playerName ):
         raise ExceptionToReturn( "Game is already full", 400 )
     side = _getMissingPlayerSide( this )
     _setPlayer( this, playerId, playerName, side )
-    setStartTime( this, time.getNow() )
+    setStartTime( this, time.getNowMs() )
     setGameState( this, GameState.blackMove )
     return side
 

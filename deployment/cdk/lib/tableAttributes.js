@@ -12,5 +12,10 @@ const gameTableKey = {
     gameId: 'id',
 }
 
+const connectionTableKey = {
+    playerId: 'pid',
+    gameId: 'gid',
+    expirationTimestamp: 'ttl',
+}
 
-module.exports = { gameTableKey }
+module.exports = { gameTableKey, connectionTableKey }

@@ -9,6 +9,7 @@ import { LoginPage, useLoginState } from './pages/LoginPage';
 import { CreateGamePage } from './pages/CreateGamePage';
 import { PlayerPage } from './pages/PlayerPage';
 import React from 'react'
+import * as wsapi from './webAppLogic/websocketApi'
 
 function App() {
   const loginState = useLoginState();

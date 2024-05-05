@@ -1,9 +1,11 @@
 const cdk = require( "aws-cdk-lib" );
 const { Construct } = require( "constructs" );
 const apigateway = require("aws-cdk-lib/aws-apigateway");
+const apigateway2 = require("aws-cdk-lib/aws-apigatewayv2");
 const lambda = require("aws-cdk-lib/aws-lambda");
 const ddb = require("aws-cdk-lib/aws-dynamodb");
 const { gameTableKey } = require("./tableAttributes");
+const { WebSocketLambdaIntegration } = require("aws-cdk-lib/aws-apigatewayv2-integrations");
 
 class ShobuService extends Construct {
     constructor( scope, id, props ){
@@ -16,9 +18,9 @@ class ShobuService extends Construct {
 
         // ddb tables
         const gameTableName = "GameTable"
-        const gameTable = new ddb.Table( this, "GameTable", {
+        const gameTable = new ddb.Table( this, gameTableName, {
             tableName: gameTableName,
-            partitionKey: { name: 'id', type: ddb.AttributeType.STRING },
+            partitionKey: { name: gameTableKey.gameId, type: ddb.AttributeType.STRING },
         } );
 
 
@@ -52,22 +54,20 @@ class ShobuService extends Construct {
 
         // lambda functions
         const lambdaEnv = {
-            AdminPasswordHash: "",
             region: props.env.region,
-            corsOrigin: corsOrigin
+            corsOrigin: corsOrigin,
+            websocketUrl: props.webSocketApi.callbackUrl,
         }
-        const lambdaFn = new lambda.Function( this, "pyShobuLambda", {
+        this.lambdaFn = new lambda.Function( this, "pyShobuLambda", {
             runtime: lambda.Runtime.PYTHON_3_9,
             code: lambda.Code.fromAsset( '../../service/pyShobuService/src'),
             handler: "main.lambda_handler",
             environment: lambdaEnv,
         });
-        // permissions
-        gameTable.grantReadWriteData( lambdaFn )
 
-        // api gateway
+        // rest api
         const api = new apigateway.LambdaRestApi( this, 'shobuApi', {
-            handler: lambdaFn,
+            handler: this.lambdaFn,
             proxy: false,
         });
         const items = api.root.addResource('api');
@@ -75,7 +75,12 @@ class ShobuService extends Construct {
         items.addCorsPreflight({
             allowOrigins: corsOrigin,
             allowMethods: [ 'POST' ]
-        })
+        });
+
+        // permissions
+        gameTable.grantReadWriteData( this.lambdaFn );
+        props.connectionTable.grantReadWriteData( this.lambdaFn );
+        props.webSocketApi.grantManagementApiAccess( this.lambdaFn );
     }
 }
 

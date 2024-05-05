@@ -1,5 +1,5 @@
 import handler.eventIO.ddb as DDB
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Key
 import logic.shobu.token as t
 import data.playerSide as PlayerSide
 

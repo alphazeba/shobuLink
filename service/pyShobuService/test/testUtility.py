@@ -28,8 +28,8 @@ def deepCompare( a, b ):
 
 
 def timeMethod( fn, repetitions ):
-    start = t.getNow()
+    start = t.getNowMs()
     for i in range( repetitions ):
         fn()
-    end = t.getNow()
+    end = t.getNowMs()
     print( "took " + str(end-start) + " ms " )

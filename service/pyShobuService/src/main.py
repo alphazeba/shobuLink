@@ -1,14 +1,17 @@
 from handler.eventIO.event import buildResponse
-from handler.eventIO.eventValidation import getValidatedMapKey
+from handler.eventIO.eventValidation import getValidatedMapKey, getValidatedStringValue
 from handler.CreateGame import CreateGame
 from handler.GetGame import GetGame
 from handler.GetPlayerGames import GetPlayerGames
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
+from handler_websocket.SubscribeToGame import SubscribeToGame, Test
 from exception.ExceptionToReturn import ExceptionToReturn
 import util.jsonHelp as json
 import handler.eventIO.ddb as DDB
 import dataAccess.GameTable as GameTable
+import dataAccess.ConnectionTable as ConnectionTable
+from handler_websocket.ConnectionClient import ConnectionClient
 
 _props = None
 
@@ -30,13 +33,62 @@ routes = {
     "PlayMove": PlayMove
 }
 
+def lambda_websocket_handler( event, context ):
+    # event is different here, because we are not parsing the body like is being done in the lambda_handler
+    props = getProps()
+    requestContext = getOrExcept( event, 'requestContext' )
+    print("logging event")
+    print(event)
+    try:
+        eventType = getValidatedMapKey( 'eventType', requestContext, websocketEventTypes )
+        response = websocketEventTypes[eventType]( event, context, props )
+        return buildResponse( response, 200 )
+    except ExceptionToReturn as e:
+        return e.getResponse()
+
+def testConnect(event, context, props):
+    # i don't know that there is anything we actually want to do on a connect event.
+    return buildResponse('success', 200)
+
+def testDisconnect(event, context, props):
+    connectionId = getConnectionId(event)
+    ConnectionTable.disconnectPlayer(props['connectionTable'], connectionId)
+    return buildResponse('success', 200)
+
+def handleWebSocketMessage(event, context, props):
+    connectionId = getConnectionId(event)
+    body = json.loads(event['body']) # not sure what websocket api looks like.  do we want to "loads" the body or is there some other spec?
+    print(body)
+    print("body is a: " + str(type(body)))
+    try: 
+        messageType = getValidatedMapKey('type', body, websocketMessageTypes)
+        response = websocketMessageTypes[messageType](connectionId, body, props)
+        return buildResponse(response, 200)
+    except ExceptionToReturn as e:
+        return e.getResponse()
+
+websocketEventTypes = {
+    "CONNECT": testConnect,
+    "DISCONNECT": testDisconnect,
+    "MESSAGE": handleWebSocketMessage,
+}
+
+websocketMessageTypes = {
+    "SubscribeToGame": SubscribeToGame,
+    "Test": Test,
+}
+
 def initProps():
     print( "initializing props, this should only happen once." )
     ddb = DDB.initProd()
     gameTable = GameTable.newGameTable( ddb )
+    connectionTable = ConnectionTable.newConnectionTable( ddb )
+    connectionClient = ConnectionClient()
     return {
         "ddb": ddb,
-        "gameTable": gameTable
+        "gameTable": gameTable,
+        "connectionTable": connectionTable,
+        "connectionClient": connectionClient,
     }
 
 def getProps():
@@ -44,3 +96,12 @@ def getProps():
     if _props == None:
         _props = initProps()
     return _props
+
+def getOrExcept(obj, key):
+    if key not in obj:
+        print(obj)
+        raise Exception('there was no ${key} in parent object')
+    return obj[key]
+
+def getConnectionId(event):
+    return event['requestContext']['connectionId']

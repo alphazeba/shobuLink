@@ -10,12 +10,12 @@
     "test": "jest"
   },
   "devDependencies": {
-    "aws-cdk": "2.59.0",
+    "aws-cdk": "^2.140.0",
     "jest": "^29.3.1"
   },
   "dependencies": {
     "@aws-cdk/aws-s3-deployment": "^1.190.0",
-    "aws-cdk-lib": "2.59.0",
+    "aws-cdk-lib": "2.140.0",
     "constructs": "^10.0.0"
   }
 }

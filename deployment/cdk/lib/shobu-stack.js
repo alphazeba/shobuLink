@@ -1,6 +1,6 @@
 const { Stack } = require('aws-cdk-lib');
 const ShobuService = require('./shobu-service');
-// const sqs = require('aws-cdk-lib/aws-sqs');
+const ShobuWebsocketService = require('./shobu-websocket-service');
 
 class ShobuStack extends Stack {
   /**
@@ -12,7 +12,12 @@ class ShobuStack extends Stack {
   constructor(scope, id, props) {
     super(scope, id, props);
   
-    new ShobuService.ShobuService( this, "ShobuService", props )
+    const shobuWebsocketService = new ShobuWebsocketService.ShobuWebsocketService(this, "ShobuWebsocketService", props);
+    const shobuService = new ShobuService.ShobuService( this, "ShobuService", {
+      ...props,
+      webSocketApi: shobuWebsocketService.webSocketApi,
+      connectionTable: shobuWebsocketService.connectionTable,
+    });
   }
 }
 

@@ -6,7 +6,7 @@ _time = "t"
 
 def new( fullMove ):
     return {
-        _time: time.getNow(),
+        _time: time.getNowMs(),
         _fullMove: fullMove
     }
 
