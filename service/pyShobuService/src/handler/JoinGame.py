@@ -3,6 +3,7 @@
 import logic.Game as Game
 import dataAccess.GameTable as GameTable
 from handler.eventIO.eventValidation import getValidatedStringValue
+from handler.PlayMove import updateSubscribedPlayers
 
 def JoinGame( event, context, props ):
     loginToken = getValidatedStringValue( "loginToken", event )
@@ -16,6 +17,11 @@ def JoinGame( event, context, props ):
     game = GameTable.getGame( gameTable, gameId )
     side = Game.joinGame(game, playerId, playerName )
     GameTable.saveGame( gameTable, game )
+    gameUpdate = {
+        "type": "gameUpdate",
+        "game": Game.toGetGameOutputForm(game, 0),
+    }
+    updateSubscribedPlayers(gameUpdate, props)
     return {
         "side": side
     }

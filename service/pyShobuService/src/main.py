@@ -5,7 +5,7 @@ from handler.GetGame import GetGame
 from handler.GetPlayerGames import GetPlayerGames
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
-from handler_websocket.SubscribeToGame import SubscribeToGame, Test
+from handler_websocket.SubscribeToGame import SubscribeToGame
 from exception.ExceptionToReturn import ExceptionToReturn
 import util.jsonHelp as json
 import handler.eventIO.ddb as DDB
@@ -57,9 +57,7 @@ def testDisconnect(event, context, props):
 
 def handleWebSocketMessage(event, context, props):
     connectionId = getConnectionId(event)
-    body = json.loads(event['body']) # not sure what websocket api looks like.  do we want to "loads" the body or is there some other spec?
-    print(body)
-    print("body is a: " + str(type(body)))
+    body = json.loads(event['body'])
     try: 
         messageType = getValidatedMapKey('type', body, websocketMessageTypes)
         response = websocketMessageTypes[messageType](connectionId, body, props)
@@ -75,7 +73,6 @@ websocketEventTypes = {
 
 websocketMessageTypes = {
     "SubscribeToGame": SubscribeToGame,
-    "Test": Test,
 }
 
 def initProps():

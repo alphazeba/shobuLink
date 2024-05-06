@@ -55,10 +55,10 @@ export const Arrow = ({start,vec,flipped}) => {
             y1={toCellPercent(y1+offset, flipped)}
             x2={toCellPercent(x2+offset, flipped)}
             y2={toCellPercent(y2+offset, flipped)}
-            stroke-width="10" 
+            strokeWidth="10" 
             stroke={color}
-            marker-end="url(#head)"
-            marker-start="url(#tail)"
+            markerEnd="url(#head)"
+            markerStart="url(#tail)"
             />
         </svg>
     </div>

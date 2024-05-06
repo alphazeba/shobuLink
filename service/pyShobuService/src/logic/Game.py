@@ -48,6 +48,12 @@ def toGetGameOutputForm( gameTableGame, latestTimeStamp ):
     output[_moves] = outputMoves
     return output
 
+def getLatestMoveTimestamp( gameTableGame ):
+    moves = gameTableGame[_moves]
+    if len(moves) <= 0:
+        return 0
+    return Move.getTime(moves[-1])
+
 def toGetPlayerGamesOutputForm( gameTablePreview ):
     output = filterObjByKeys( gameTablePreview, [
         _userId,

@@ -10,6 +10,9 @@ export const GamePage = ({loginState}) => {
             <div className='topSpace'>
                 .
             </div>
-            <GameLoader gameId={gameId} loginState={loginState}/>
+            <GameLoader
+                gameId={gameId}
+                loginState={loginState}
+            />
         </div>;
 }

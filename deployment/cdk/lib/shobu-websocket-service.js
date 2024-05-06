@@ -55,7 +55,6 @@ class ShobuWebsocketService extends Construct {
         this.connectionTable.addGlobalSecondaryIndex( {
             indexName: 'ConnectionTableByGameId',
             partitionKey: { name: connectionTableKey.gameId, type: ddb.AttributeType.STRING },
-            sortKey: { name: connectionTableKey.playerId, type: ddb.AttributeType.STRING },
             projectionType: ddb.ProjectionType.ALL,
         });
 

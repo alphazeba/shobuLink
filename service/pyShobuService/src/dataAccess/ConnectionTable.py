@@ -1,5 +1,5 @@
 import handler.eventIO.ddb as DDB
-from boto3.dynamodb.conditions import Key
+from boto3.dynamodb.conditions import Key, Attr
 import data.connection as connection
 import util.time as time
 
@@ -23,7 +23,8 @@ def getConnectedPlayers( connectionTable, gameId ):
         Select='ALL_PROJECTED_ATTRIBUTES',
         # it is suggested to filter out expired items even with ttl on table set.
         # https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/TTL.html
-        KeyConditionExpression=Key(connection._gid).eq(gameId) & Key(connection._ttl).gte(time.getNowSeconds()),
+        KeyConditionExpression=Key(connection._gid).eq(gameId),
+        FilterExpression=Attr(connection._ttl).gte(time.getNowSeconds()),
     )
     output = []
     for item in result['Items']:

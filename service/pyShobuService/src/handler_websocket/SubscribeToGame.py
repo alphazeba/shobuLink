@@ -4,15 +4,5 @@ from handler.eventIO.event import buildResponse
 
 def SubscribeToGame(connectionId, body, props):
     gameId = getValidatedStringValue("gameId", body)
+    print("subscribing player connection: " + connectionId + " to gameid: " + gameId)
     ConnectionTable.connectPlayer(props['connectionTable'], connectionId, gameId)
-    return buildResponse('success', 200)
-
-def Test(connectionId, body, props):
-    print("running test")
-    connectionClient = props['connectionClient']
-    connectionClient.sendToConnection(connectionId, {
-        "test": "this out",
-        "also": "this",
-    })
-    print(body)
-    print(connectionId)

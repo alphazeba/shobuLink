@@ -10,9 +10,7 @@ class ConnectionClient:
         print("built connectionClient with url " + url)
     
     def sendToConnection(self, connectionId, payload):
-        stringified = json.dumps({
-            "message": payload
-        })
+        stringified = json.dumps(payload)
         print("sending " + stringified + " to " + connectionId)
         self.socketClient.post_to_connection(
             Data=stringified,

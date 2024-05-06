@@ -235,21 +235,23 @@ export const Board = ({ boardState, playable,
             let [ [x,y], subboardN ] = selectedPassiveSpot;
             if( subboardN === n ){
                 // passive move options
-                output.push(<div className='cell selected abso' style={buildCellLocationStyle(x,y,flipped)}></div>)
+                output.push(<div className='cell selected abso' style={buildCellLocationStyle(x,y,flipped)} key={"passiveCell"}></div>)
                 for( let move of passiveMoves ){
                     let [mx,my] = addSpotVec( move.spot, move.vector);
-                    output.push(<div className='abso moveOption' style={buildCellLocationStyle(mx,my,flipped)}></div>)
+                    output.push(<div className='abso moveOption' style={buildCellLocationStyle(mx,my,flipped)} key={"passiveOption" + String([mx,my])}></div>)
                 }
                 // selected passive move
                 if( selectedPassiveMove != null ){
                     let start = selectedPassiveMove.spot;
                     let vec = selectedPassiveMove.vector;
-                    output.push( <Arrow start={start} vec={vec} flipped={flipped} /> );
+                    output.push( <Arrow start={start} vec={vec} flipped={flipped} key={"passiveArrow"}/> );
                 }
             }
         }
+        let i = 0;
         for( let move of getActiveMoves( n ) ){
-            output.push( <Arrow start={move.spot} vec={move.vector} flipped={flipped}/> );
+            output.push( <Arrow start={move.spot} vec={move.vector} flipped={flipped} key={"activeArrow" + i}/> );
+            i++;
         }
         return output;
     }

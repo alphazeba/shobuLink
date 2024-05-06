@@ -8,39 +8,37 @@ import { getPlayerTimeUsed } from './Clock';
 
 export const GameLoader = ( { gameId, loginState } ) => {
     const gameState = useGameState();
-    let alreadyRequestedGame = false;
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const userId = loginState.loginInfo.id;
     const timeData = getPlayerTimeUsed( gameState.moves, gameState.startTime );
 
-    useEffect( () => {
-        if( gameIsNotLoaded() && !alreadyRequestedGame ){
+    useEffect(() => {
+        if( gameIsNotLoaded() ){
             gameState.loadGame( gameId );
-            // eslint-disable-next-line
-            alreadyRequestedGame = true;
         }
+    }, [gameId]);
 
-        if( isViewingMostRecentMove() && ! liveUpdate ){
-            setLiveUpdate( true );
-        }
-
-        if( liveUpdate && ! isViewingMostRecentMove() ){
-            goToMostRecentIndex();
-        }
-
-        const interval = setInterval( ()=>{
-            onPeriodicUpdate();
-        }, 10 * 1000 );
-
+    useEffect(() => {
         let abortSignal = new AbortController();
         document.addEventListener( 'keydown', handleKeyDownEvent, { signal: abortSignal.signal } );
-
+        const interval = setInterval( ()=>{
+            onPeriodicUpdate();
+        }, 100 * 1000 );
         return () => {
             abortSignal.abort();
             clearInterval( interval );
         }
-    } );
+    }, [])
+
+    useEffect(() => {
+        if( isViewingMostRecentMove() && ! liveUpdate ){
+            setLiveUpdate( true );
+        }
+        if( liveUpdate && ! isViewingMostRecentMove() ){
+            goToMostRecentIndex();
+        }
+    });
 
     const handleKeyDownEvent = ( event ) => {
         if( event.key === "ArrowRight" ){
