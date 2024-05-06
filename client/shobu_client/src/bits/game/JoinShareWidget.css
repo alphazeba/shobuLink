@@ -3,7 +3,7 @@
 .joinGameButton {
     position: absolute;
     pointer-events: all;
-    font-size: 1.5em;
+    font-size: 1em;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50% );

@@ -4,8 +4,6 @@ import { joinGame } from '../../webAppLogic/api';
 
 export const JoinShareWidget = ({gameState, loginState}) => {
 
-    const [ linkCopied, setLinkCopied ] = useState( false );
-
     const gameIsJoinable = () => {
         return gameState.state === "waitingForPlayer";
     }
@@ -30,10 +28,6 @@ export const JoinShareWidget = ({gameState, loginState}) => {
     const getUrl = () => {
         return window.location.href;
     }
-    const copyShareLinkToClipboard = () => {
-        navigator.clipboard.writeText(getUrl());
-        setLinkCopied(true);
-    }
 
     if( ! gameIsJoinable() ){
         return <div/>;
@@ -49,12 +43,9 @@ export const JoinShareWidget = ({gameState, loginState}) => {
         </div>
     }
     if( thisPlayerIsInGame() ){
-        return <button className='joinGameButton btn myBtn' onClick={copyShareLinkToClipboard}>
-            {   linkCopied ?
-                "Challenge link copied, now share it" :
-                "Click here to copy challenge link"
-            }
-        </button>
+        return <div className='gameShareHelper'>
+            Share the url with your opponent
+        </div>
     }
     // player is not in game
     return <button className='joinGameButton btn myBtn' onClick={handleJoinGame}>
