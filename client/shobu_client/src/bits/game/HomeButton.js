@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import './HomeButton.css';
 
 
-export const HomeButton = () => {
+export const HomeButton = (smallVersion=true) => {
 
     const navigate = useNavigate();
 
@@ -11,5 +11,11 @@ export const HomeButton = () => {
         navigate( '/' );
     }
 
-    return <button className='btn homeButton' onClick={goHome} >Shobu Link</button>
+    return <button className='btn homeButton' onClick={goHome} >
+        <img
+            className="shobuIcon"
+            src={process.env.PUBLIC_URL + '/shobuLinkIcon.svg'}
+        />
+        <span className="shobuName">Shobu Link</span>
+    </button>
 }

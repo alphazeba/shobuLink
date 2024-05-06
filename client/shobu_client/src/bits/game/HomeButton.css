@@ -4,7 +4,23 @@
     position: absolute;
     left: 0;
     top: 0;
+    height: 0;
     border-radius: 0;
     color: white;
+}
+
+.shobuIcon {
+    position: absolute;
+    overflow: visible;
+}
+
+.shobuName {
     font-size: 2em;
+    position: absolute;
+    text-align:left;
+    left: 1.5em;
+    top: 1.5em;
+    width: 6em;
+    z-index: 1;
+    -webkit-text-stroke: 1px black;
 }
