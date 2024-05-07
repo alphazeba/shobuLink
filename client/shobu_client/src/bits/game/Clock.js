@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 export const Clock = ( { time, lastTimestamp, ticking } ) => {
 
-    const [ outputTime, setOutputTime ] = useState( 0 );
+    const [ outputTimeMs, setOutputTime ] = useState( 0 );
 
     useEffect( () => {
         const interval = setInterval( ()=>{
@@ -10,7 +10,7 @@ export const Clock = ( { time, lastTimestamp, ticking } ) => {
         }, 0.5 * 1000 );
 
         return () => clearInterval( interval )
-    });
+    }, [time, lastTimestamp, ticking]);
 
     const onPeriodicUpdate = () => {
         updateOutputTime();
@@ -31,23 +31,7 @@ export const Clock = ( { time, lastTimestamp, ticking } ) => {
         return output;
     }
 
-    const getTimeText = () => {
-        return getMinText() + ":" + getSecondText();
-    }
-
-    const getMinText = () => {
-        return Math.floor( ( outputTime / 1000 )/ 60 ).toString();
-    }
-
-    const getSecondText = () => {
-        const val = Math.floor( ( outputTime / 1000 ) % 60 );
-        if( val < 10 ){
-            return "0" + val.toString();
-        }
-        return val.toString();
-    }
-    
-    return <div>{getTimeText()}</div>;
+    return <div>{getTimeText(outputTimeMs)}</div>;
 }
 
 export const getPlayerTimeUsed = ( moves, startTime ) => {
@@ -67,10 +51,40 @@ export const getPlayerTimeUsed = ( moves, startTime ) => {
         }
         isBlackSide = ! isBlackSide;
     }
-    let output = {
+    return {
         blackTime: blackTime,
         whiteTime: whiteTime,
         lastTimestamp: lastTimestamp,
+    };
+}
+
+const getTimeText = (timeMs) => {
+    const hrs = getHours(timeMs);
+    const mins = getMinutes(timeMs)%60;
+    const seconds = getSeconds(timeMs)%60;
+    let segments = []
+    if (hrs >= 1) {
+        segments = [timeToSlot(hrs,0), timeToSlot(mins,2), timeToSlot(seconds,2)];
+    } else {
+        segments = [timeToSlot(mins,1), timeToSlot(seconds,2)]
     }
-    return output;
+    return segments.join(':');
+}
+
+const timeToSlot = (timeNum, minNumDigits) => {
+    let text = Math.floor(timeNum).toString();
+    while (text.length < minNumDigits) {
+        text = "0" + text;
+    }
+    return text;
+}
+
+const getSeconds = (ms) => {
+    return ms/1000;
+}
+const getMinutes = (ms) => {
+    return getSeconds(ms)/60;
+}
+const getHours = (ms) => {
+    return getMinutes(ms)/60;
 }
