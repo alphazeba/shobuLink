@@ -12,6 +12,8 @@
 .shobuIcon {
     position: absolute;
     overflow: visible;
+    width: 10em;
+    left: 0;
 }
 
 .shobuName {

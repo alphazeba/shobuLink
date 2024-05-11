@@ -14,7 +14,7 @@ export const HomeButton = (smallVersion=true) => {
     return <button className='btn homeButton' onClick={goHome} >
         <img
             className="shobuIcon"
-            src={process.env.PUBLIC_URL + '/shobuLinkIcon.svg'}
+            src={process.env.PUBLIC_URL + '/shobuLinkIcon2.svg'}
         />
         <span className="shobuName">Shobu Link</span>
     </button>

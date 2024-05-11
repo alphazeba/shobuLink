@@ -13,18 +13,17 @@ export const Clock = ( { timeData, sideValue } ) => {
     const [ outputTimeMs, setOutputTime ] = useState( 0 );
 
     useEffect( () => {
-        onPeriodicUpdate(false);
+        onPeriodicUpdate();
         if (!stateIsBeingPlayed(timeData.gameState)) {
             return;
         }
         const interval = setInterval( ()=>{
-            onPeriodicUpdate(true);
+            onPeriodicUpdate();
         }, 0.5 * 1000 );
         return () => clearInterval( interval )
     }, [timeData]);
 
-    const onPeriodicUpdate = (insideInterval) => {
-        console.log("clock update running inside interval: ", insideInterval);
+    const onPeriodicUpdate = () => {
         updateOutputTime();
     }
 

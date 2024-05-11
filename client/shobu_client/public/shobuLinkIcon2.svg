@@ -8,10 +8,9 @@
    version="1.1"
    id="svg5"
    inkscape:version="1.2.2 (b0a84865, 2022-12-01)"
-   sodipodi:docname="shobuLinkIconBaseProject.svg"
+   sodipodi:docname="shobuLinkIcon2.svg"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
-   xmlns:xlink="http://www.w3.org/1999/xlink"
    xmlns="http://www.w3.org/2000/svg"
    xmlns:svg="http://www.w3.org/2000/svg">
   <sodipodi:namedview
@@ -35,29 +34,7 @@
      inkscape:window-maximized="1"
      inkscape:current-layer="layer1" />
   <defs
-     id="defs2">
-    <linearGradient
-       inkscape:collect="always"
-       id="linearGradient1151">
-      <stop
-         style="stop-color:#f17900;stop-opacity:1;"
-         offset="0"
-         id="stop1147" />
-      <stop
-         style="stop-color:#fff655;stop-opacity:1;"
-         offset="1"
-         id="stop1149" />
-    </linearGradient>
-    <linearGradient
-       inkscape:collect="always"
-       xlink:href="#linearGradient1151"
-       id="linearGradient1153"
-       x1="12.336278"
-       y1="82.867714"
-       x2="84.681076"
-       y2="36.877613"
-       gradientUnits="userSpaceOnUse" />
-  </defs>
+     id="defs2" />
   <g
      inkscape:label="Layer 1"
      inkscape:groupmode="layer"
@@ -111,7 +88,7 @@
          r="50" />
       <path
          id="path3906"
-         style="fill:url(#linearGradient1153);fill-opacity:1;stroke:#000000;stroke-width:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
+         style="fill:#fff058;fill-opacity:1;stroke:#000000;stroke-width:4;stroke-dasharray:none;stroke-opacity:1;paint-order:stroke markers fill"
          inkscape:label="crown"
          d="M 63.405548,8.2431849 35.064365,42.829113 7.2007609,30.602264 9.8853469,73.556505 111.94562,73.143624 114.60467,30.602264 88.647142,41.992709 Z"
          sodipodi:nodetypes="cccccccc" />
