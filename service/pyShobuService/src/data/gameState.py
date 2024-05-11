@@ -1,7 +1,3 @@
-
-
-
-
 waitingForPlayer = "waitingForPlayer"
 
 blackMove = "blackMove"
@@ -33,13 +29,16 @@ options = [
     draw
 ]
 
-def isPending( gameState ):
+def isBlacksMove( gameState ) -> bool:
+    return gameState == blackMove
+
+def isPending( gameState ) -> bool:
     return gameState == waitingForPlayer
 
-def isActive( gameState ):
+def isActive( gameState ) -> bool:
     return gameState == blackMove or gameState == whiteMove
 
-def isComplete( gameState ):
+def isComplete( gameState ) -> bool:
     return gameState in [
             blackResigned,
             whiteResigned,

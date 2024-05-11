@@ -7,12 +7,13 @@ import { addSpotVec, compareVec, getDeltaVector } from '../../gameLogic/spot';
 import { buildFullMove, buildPartialMove } from '../../gameLogic/move';
 import { buildCellLocationStyle } from '../../util/styleHelper';
 import { Arrow } from './Arrow';
-import { isColorSideMove, stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
+import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
 import { Clock } from './Clock';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 
-        gameState, onMove, userId, timeData, children }) => {
+        gameState, onMove, userId, timeData, children
+}) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );
@@ -304,13 +305,19 @@ export const Board = ({ boardState, playable,
             }
         }
 
-        return <div className={className} onClick={ ()=>fn(x,y,n) } key={ "cell" + String(x) + String(y) }></div>
+        return <div
+            className={className}
+            onClick={ ()=>fn(x,y,n) }
+            key={ "cell" + String(x) + String(y) }/>
     }
 
     const drawToken = ( tokenObj, spot ) => {
         const [x,y] = spot
         let className = "real token " + ( (tokenObj.type === token.WHITE) ? "white" : "black" );
-        return <div className={className} style={buildCellLocationStyle(x,y,usingFlippedPerspective())} key={tokenObj.key} />
+        return <div
+            className={className}
+            style={buildCellLocationStyle(x, y, usingFlippedPerspective())}
+            key={tokenObj.key}/>
     }
 
     const renderBoardState = ( sideValue ) => {
@@ -351,12 +358,9 @@ export const Board = ({ boardState, playable,
         if( ! timeData ){
             return <div/>
         }
-        const time = (sideValue === side.BLACK) ? timeData.blackTime : timeData.whiteTime;
         return <Clock
-            time={time}
-            lastTimestamp={timeData.lastTimestamp}
-            ticking={isColorSideMove(sideValue, gameState)}
-            timeControlSeconds={timeData.timeControlSeconds}
+            timeData={timeData}
+            sideValue={sideValue}
         />
     }
 

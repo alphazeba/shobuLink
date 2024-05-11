@@ -1,4 +1,3 @@
-
 import data.playerSide as PlayerSide
 import data.gameState as GameState
 from exception.ExceptionToReturn import ExceptionToReturn
@@ -31,7 +30,7 @@ _userSide = "userSide"
 
 # main interactions
 def toGetGameOutputForm( gameTableGame, latestTimeStamp ):
-    output = filterObjByKeys( gameTableGame, [
+    output = _filterObjByKeys( gameTableGame, [
         _id,
         _buId,
         _wuId,
@@ -55,7 +54,7 @@ def getLatestMoveTimestamp( gameTableGame ):
     return Move.getTime(moves[-1])
 
 def toGetPlayerGamesOutputForm( gameTablePreview ):
-    output = filterObjByKeys( gameTablePreview, [
+    output = _filterObjByKeys( gameTablePreview, [
         _userId,
         _startTime,
         _preview,
@@ -64,13 +63,6 @@ def toGetPlayerGamesOutputForm( gameTablePreview ):
         _opponentName,
         _userSide
     ] )
-    return output
-
-def filterObjByKeys( obj, keys ):
-    output = {}
-    for key in keys:
-        if key in obj:
-            output[key] = obj[key]
     return output
 
 def new( playerId, playerName, playerSide, secondPerSide ):
@@ -98,8 +90,10 @@ def joinGame( this, playerId, playerName ):
 def playMove( this, playerSide, moveString ):
     if not _isPlayersTurn( this, playerSide ):
         raise ExceptionToReturn( "It is not the player's turn", 403 )
+    if isGameOutOfTime(this):
+        setTimeout(this)
+        return
     fullMove = mp.parseMove( moveString )
-    # TODO validate that the player is not already out of time 
     board = _getCurrentBoardState( this )
     if not mv.validateFullMove( board, fullMove ):
         raise ExceptionToReturn( "MOVE NOT LEGAL", 403 )
@@ -107,7 +101,39 @@ def playMove( this, playerSide, moveString ):
     _addMove( this, Move.new( moveString ), board )
     _handleGameOverCheck( this, board )
 
+def setTimeout(this):
+    if GameState.isBlacksMove(this[_state]):
+        setGameState(this, GameState.blackTimeout)
+    else:
+        setGameState(this, GameState.whiteTimeout)
+
+def isGameOutOfTime( this ):
+    # check if the player whose turn it is, is out of time
+    # check if game is active
+    gameState = getGameState(this)
+    if not GameState.isActive(gameState):
+        return False
+    timeControlSeconds = this[_secs]
+    # get how much time they've used
+    blackTime, whiteTime = _getPlayerUsedTimeMs(this)
+    curPlayerUsedTimeMs = whiteTime
+    if GameState.isBlacksMove(gameState):
+        curPlayerUsedTimeMs = blackTime
+    timeControlMs = timeControlSeconds * 1000
+    print("blackTime: ", blackTime,
+        " whiteTime: ", whiteTime,
+        " curPlayerTime: ", curPlayerUsedTimeMs,
+        " timeControlMs: ", timeControlMs)
+    return timeControlMs < curPlayerUsedTimeMs
+
 # private
+def _filterObjByKeys( obj, keys ):
+    output = {}
+    for key in keys:
+        if key in obj:
+            output[key] = obj[key]
+    return output
+
 def _handleGameOverCheck( this, board ):
     winResult = gameover.checkForWin( board )
     if winResult == t.SIDE_BLACK:
@@ -149,6 +175,9 @@ def getPlayerSide( this, playerId ):
     if playerId == get( this, _wuId ):
         return PlayerSide.white
     raise ExceptionToReturn( "Player is not in the game", 403 )
+
+def getStartTime( this ) -> int:
+    return this[_startTime]
 
 def setStartTime( this, startTime ):
     this[_startTime] = startTime
@@ -204,3 +233,24 @@ def _addMove( this, move, newBoard ):
 
 def _updatePhaseTime( this ):
     this[_phaseTime] = GameState.getPhase( getGameState( this ) ) + str( this[_startTime] )
+
+def _getPlayerUsedTimeMs( this ):
+    blackTime, whiteTime = 0, 0
+    lastTimestamp = getStartTime(this)
+    isBlackSide = True
+    for move in this[_moves]:
+        curTimestamp = Move.getTime(move)
+        delta = curTimestamp - lastTimestamp
+        lastTimestamp = curTimestamp
+        if (isBlackSide):
+            blackTime += delta
+        else:
+            whiteTime += delta
+        isBlackSide = not isBlackSide
+    # handle time elapsed since last move
+    extraTime = time.getNowMs() - lastTimestamp
+    if isBlackSide:
+        blackTime += extraTime
+    else:
+        whiteTime += extraTime
+    return blackTime, whiteTime

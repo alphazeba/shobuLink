@@ -3,6 +3,7 @@ from handler.eventIO.eventValidation import getValidatedStringValue
 import dataAccess.GameTable as GameTable
 import dataAccess.ConnectionTable as ConnectionTable
 import logic.Game as Game
+from handler_websocket.UpdatePlayers import updateSubscribedPlayers
 
 
 def PlayMove( event, context, props ):
@@ -23,16 +24,3 @@ def PlayMove( event, context, props ):
     return {
         "game": gameUpdate
     }
-
-def updateSubscribedPlayers(gameUpdate, props):
-    gameId = Game.getId(gameUpdate)
-    print("grabbing connections on game: " + gameId)
-    connectionIds = ConnectionTable.getConnectedPlayers(props['connectionTable'], gameId)
-    print("number of connections: " + str(len(connectionIds)))
-    connectionClient = props['connectionClient']
-    playerUpdate = {
-        "type": "gameUpdate",
-        "game": gameUpdate
-    }
-    for connectionId in connectionIds:
-        connectionClient.sendToConnection(connectionId, playerUpdate)

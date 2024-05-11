@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from 'react';
+import { isColorSideMove, isWhiteTimeout, isBlackTimeout } from '../../util/stateHelper';
+import { side } from '../../gameLogic/token'
 
-export const Clock = ( { time, lastTimestamp, ticking, timeControlSeconds } ) => {
+export const Clock = ( { timeData, sideValue } ) => {
+
+    const time = (sideValue === side.BLACK) ? timeData.blackTime : timeData.whiteTime;
+    const gameState = timeData.gameState;
+    const lastTimestamp=timeData.lastTimestamp;
+    const ticking=isColorSideMove(sideValue, gameState);
+    const timeControlSeconds=timeData.timeControlSeconds;
 
     const [ outputTimeMs, setOutputTime ] = useState( 0 );
 
@@ -25,11 +33,19 @@ export const Clock = ( { time, lastTimestamp, ticking, timeControlSeconds } ) =>
     }
 
     const updateOutputTime = () => {
+        if ( // handle visuals on timeout
+            (isWhiteTimeout(gameState) && sideValue === side.WHITE) ||
+            (isBlackTimeout(gameState) && sideValue === side.BLACK)
+        ) {
+            setOutputTime(0);
+            return;
+        }
         const timeUsed = getTimeUsed();
         if (timeControlSeconds <= 0) {
             setOutputTime(timeUsed);
         } else {
-            setOutputTime( Math.max(0, timeControlSeconds*1000 - timeUsed) );
+            setOutputTime(
+                Math.max(0, timeControlSeconds*1000 - timeUsed));
         }
     }
 
@@ -42,7 +58,12 @@ export const Clock = ( { time, lastTimestamp, ticking, timeControlSeconds } ) =>
     return <div>{getTimeText(outputTimeMs)}</div>;
 }
 
-export const buildTimeData = ( moves, startTime, timeControlSeconds ) => {
+export const buildTimeData = (
+    moves,
+    startTime,
+    timeControlSeconds,
+    gameState
+) => {
     let blackTime = 0;
     let whiteTime = 0;
     let lastTimestamp = startTime;
@@ -53,17 +74,17 @@ export const buildTimeData = ( moves, startTime, timeControlSeconds ) => {
         lastTimestamp = curTimestamp;
         if( isBlackSide ){
             blackTime += delta;
-        }
-        else {
+        } else {
             whiteTime += delta;
         }
         isBlackSide = ! isBlackSide;
     }
     const timeData = {
-        blackTime: blackTime,
-        whiteTime: whiteTime,
-        lastTimestamp: lastTimestamp,
-        timeControlSeconds: timeControlSeconds,
+        blackTime,
+        whiteTime,
+        lastTimestamp,
+        timeControlSeconds,
+        gameState
     };
     return timeData;
 }

@@ -11,7 +11,12 @@ export const GameLoader = ( { gameId, loginState } ) => {
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const userId = loginState.loginInfo.id;
-    const timeData = buildTimeData( gameState.moves, gameState.startTime, gameState.secs );
+    const timeData = buildTimeData(
+        gameState.moves,
+        gameState.startTime,
+        gameState.secs,
+        gameState.state
+    );
 
     useEffect(() => {
         if( gameIsNotLoaded() ){

@@ -9,12 +9,11 @@ const blackResign = "blackResign"; const whiteResign = "whiteResign";
 const blackWon = "blackWon"; const whiteWon = "whiteWon";
 const blackTimeout = "blackTimeout"; const whiteTimeout = "whiteTimeout";
 
-
 const blackStates = [
     blackMove,
     blackWon,
-    blackResign,
-    blackTimeout
+    whiteResign,
+    whiteTimeout
 ]
 const whiteStates = [
     whiteMove,
@@ -66,6 +65,14 @@ export const isBlackMove = ( state ) => {
 
 export const isWhiteMove = ( state ) => {
     return state === whiteMove;
+}
+
+export const isBlackTimeout = ( state ) => {
+    return state === blackTimeout;
+}
+
+export const isWhiteTimeout = ( state ) => {
+    return state === whiteTimeout;
 }
 
 export const parsePreview = ( preview ) => {
