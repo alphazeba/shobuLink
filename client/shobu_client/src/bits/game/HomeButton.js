@@ -16,6 +16,8 @@ export const HomeButton = (smallVersion=true) => {
             className="shobuIcon"
             src={process.env.PUBLIC_URL + '/shobuLinkIcon2.svg'}
         />
-        <span className="shobuName">Shobu Link</span>
+        <div className='nameHolder hoverLift'>
+            <span className="shobuName">Shobu Link</span>
+        </div>
     </button>
 }

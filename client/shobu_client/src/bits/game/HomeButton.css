@@ -1,6 +1,7 @@
 
 
 .homeButton {
+    display: inline-block;
     position: absolute;
     left: 0;
     top: 0;
@@ -10,19 +11,32 @@
 }
 
 .shobuIcon {
+    pointer-events: none;
     position: absolute;
     overflow: visible;
     width: 10em;
-    left: 0;
+    left: 1em;
 }
 
 .shobuName {
+    -webkit-text-stroke: 1px black;
+}
+
+.nameHolder {
     font-size: 2em;
-    position: absolute;
+    position: relative;
     text-align:left;
     left: 1.5em;
     top: 1.5em;
     width: 6em;
     z-index: 1;
-    -webkit-text-stroke: 1px black;
 }
+
+.hoverLift {
+    transition: transform 0.25s;
+    transform: translateY(0);
+  }
+  
+  .hoverLift:hover {
+    transform: translateY(-0.1em);
+  }
