@@ -11,7 +11,7 @@ export const CreateGamePage = ({loginState}) => {
     const [ timeControl, setTimeControl ] = useState( 420 );
     const [ sideSelect, setSide ] = useState( SIDE_RANDOM );
     const [ timeControlError, setTimeControlError ] = useState( false );
-    const minTimeControl = 10;
+    const minTimeControl = 30;
     const maxTimeControl = 10 * 60;
     const navigate = useNavigate();
 
@@ -44,7 +44,7 @@ export const CreateGamePage = ({loginState}) => {
     }
 
     const timeControlIsValid = ( value ) => {
-        return value < 10 * 60 && value >= 30;
+        return minTimeControl <= value && value < maxTimeControl;
     }
 
     const handleCreateGame = () => {
@@ -68,8 +68,8 @@ export const CreateGamePage = ({loginState}) => {
             return;
         }
         return <div className="error">
-            Time control must be greater than {minTimeControl} and less than {maxTimeControl}
-            </div>
+            Time control must be greater than {minTimeControl-1} and less than {maxTimeControl}
+        </div>
     }
 
     return <div>

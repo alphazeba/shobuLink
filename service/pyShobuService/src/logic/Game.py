@@ -90,9 +90,6 @@ def joinGame( this, playerId, playerName ):
 def playMove( this, playerSide, moveString ):
     if not _isPlayersTurn( this, playerSide ):
         raise ExceptionToReturn( "It is not the player's turn", 403 )
-    if isGameOutOfTime(this):
-        setTimeout(this)
-        return
     fullMove = mp.parseMove( moveString )
     board = _getCurrentBoardState( this )
     if not mv.validateFullMove( board, fullMove ):

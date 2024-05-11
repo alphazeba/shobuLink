@@ -4,19 +4,14 @@ import { Board } from './Board';
 import { MoveList } from './MoveList';
 import { JoinShareWidget } from './JoinShareWidget';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
-import { buildTimeData } from './Clock';
+import { isSomeoneOutOfTime } from './Clock';
 
 export const GameLoader = ( { gameId, loginState } ) => {
     const gameState = useGameState();
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const userId = loginState.loginInfo.id;
-    const timeData = buildTimeData(
-        gameState.moves,
-        gameState.startTime,
-        gameState.secs,
-        gameState.state
-    );
+    const timeData = gameState.timeData;
 
     useEffect(() => {
         if( gameIsNotLoaded() ){
@@ -26,13 +21,15 @@ export const GameLoader = ( { gameId, loginState } ) => {
 
     useEffect(() => {
         let abortSignal = new AbortController();
-        document.addEventListener( 'keydown', handleKeyDownEvent, { signal: abortSignal.signal } );
-        const interval = setInterval( ()=>{
-            onPeriodicUpdate();
+        document.addEventListener( 'keydown',
+            handleKeyDownEvent,
+            { signal: abortSignal.signal } );
+        const loadGameInterval = setInterval( ()=>{
+            onLoadGameInterval();
         }, 100 * 1000 );
         return () => {
             abortSignal.abort();
-            clearInterval( interval );
+            clearInterval( loadGameInterval );
         }
     }, [])
 
@@ -78,7 +75,7 @@ export const GameLoader = ( { gameId, loginState } ) => {
         return true;
     }
 
-    const onPeriodicUpdate = () => {
+    const onLoadGameInterval = () => {
         if( stateIsActive( gameState.state ) && itIsNotYourTurn() ){
             gameState.loadGame( gameId );
         }

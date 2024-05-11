@@ -1,58 +1,54 @@
 import React, { useEffect, useState } from 'react';
-import { isColorSideMove, isWhiteTimeout, isBlackTimeout } from '../../util/stateHelper';
+import { 
+    isWhiteTimeout,
+    isBlackTimeout,
+    stateIsActive,
+    stateIsBeingPlayed,
+    stateIsNotStarted
+} from '../../util/stateHelper';
 import { side } from '../../gameLogic/token'
 
 export const Clock = ( { timeData, sideValue } ) => {
 
-    const time = (sideValue === side.BLACK) ? timeData.blackTime : timeData.whiteTime;
-    const gameState = timeData.gameState;
-    const lastTimestamp=timeData.lastTimestamp;
-    const ticking=isColorSideMove(sideValue, gameState);
-    const timeControlSeconds=timeData.timeControlSeconds;
-
     const [ outputTimeMs, setOutputTime ] = useState( 0 );
 
     useEffect( () => {
-        onPeriodicUpdate();
+        onPeriodicUpdate(false);
+        if (!stateIsBeingPlayed(timeData.gameState)) {
+            return;
+        }
         const interval = setInterval( ()=>{
-            onPeriodicUpdate();
+            onPeriodicUpdate(true);
         }, 0.5 * 1000 );
-
         return () => clearInterval( interval )
-    }, [time, lastTimestamp, ticking]);
+    }, [timeData]);
 
-    const onPeriodicUpdate = () => {
+    const onPeriodicUpdate = (insideInterval) => {
+        console.log("clock update running inside interval: ", insideInterval);
         updateOutputTime();
     }
 
-    const getTimeUsed = () => {
-        if( ticking ){
-            return time + getTimeSinceLastTimestamp();
+    const getTime = () => {
+        if (sideValue === side.BLACK) {
+            return getBlackTime(timeData);
         }
-        return time;
+        return getWhiteTime(timeData);
     }
 
     const updateOutputTime = () => {
         if ( // handle visuals on timeout
-            (isWhiteTimeout(gameState) && sideValue === side.WHITE) ||
-            (isBlackTimeout(gameState) && sideValue === side.BLACK)
+            (isWhiteTimeout(timeData.gameState) && sideValue === side.WHITE) ||
+            (isBlackTimeout(timeData.gameState) && sideValue === side.BLACK)
         ) {
             setOutputTime(0);
             return;
         }
-        const timeUsed = getTimeUsed();
-        if (timeControlSeconds <= 0) {
-            setOutputTime(timeUsed);
+        if (timeData.timeControlSeconds <= 0) {
+            setOutputTime(getTime());
         } else {
             setOutputTime(
-                Math.max(0, timeControlSeconds*1000 - timeUsed));
+                Math.max(0, timeData.timeControlSeconds*1000 - getTime()));
         }
-    }
-
-    const getTimeSinceLastTimestamp = () => {
-        const output = Date.now() - lastTimestamp;
-        // console.log( output );
-        return output;
     }
 
     return <div>{getTimeText(outputTimeMs)}</div>;
@@ -84,9 +80,42 @@ export const buildTimeData = (
         whiteTime,
         lastTimestamp,
         timeControlSeconds,
-        gameState
+        gameState,
+        lastMoveWasBlack: isBlackSide,
     };
     return timeData;
+}
+
+export const getBlackTime = (timeData) => {
+    if ( stateIsNotStarted( timeData.gameState ) ){
+        return 0;
+    }
+    if (timeData.lastMoveWasBlack) {
+        return timeData.blackTime + getTickingMs(timeData);
+    }
+    return timeData.blackTime;
+}
+
+export const getWhiteTime = (timeData) => {
+    if ( stateIsNotStarted( timeData.gameState ) ){
+        return 0;
+    }
+    if (!timeData.lastMoveWasBlack) {
+        return timeData.whiteTime + getTickingMs(timeData);
+    }
+    return timeData.whiteTime;
+}
+
+const getTickingMs = (timeData) => {
+    if( stateIsActive(timeData.gameState) ){
+        return Date.now() - timeData.lastTimestamp;
+    }
+    return 0;
+}
+
+export const isSomeoneOutOfTime = (timeData) => {
+    const timeControlMs = timeData.timeControlSeconds * 1000;
+    return timeControlMs < Math.max(getBlackTime(timeData), getWhiteTime(timeData))
 }
 
 const getTimeText = (timeMs) => {

@@ -1,5 +1,5 @@
 import { useEffect, useState, useRef } from 'react'
-import { getGame, getGameUpdate, playMove } from './api.js'
+import { callTime, getGame, getGameUpdate, playMove } from './api.js'
 import { initBoard, makeValidatedMove } from '../gameLogic/board.js';
 import { validateFullMove } from '../gameLogic/moveValidation.js';
 import { parseMove } from '../gameLogic/moveParser.js';
@@ -8,8 +8,11 @@ import { useLoginState } from '../pages/LoginPage.js';
 import { useWebsocket } from './websocketApi.js';
 import { useStateRef } from '../util/stateRef.js';
 import { stateIsActive } from '../util/stateHelper.js';
+import { buildTimeData, isSomeoneOutOfTime } from '../bits/game/Clock.js';
 
 const SUBSCRIBE_REFRESH_MINS = 2;
+const CALL_TIME_PERIOD_SECONDS = 2;
+const CALL_TIME_JITTER_MS = 500;
 
 export const useGameState = () => {
 
@@ -22,11 +25,17 @@ export const useGameState = () => {
     const [ blackName, setBlackName ] = useState( null );
     const [ whiteName, setWhiteName ] = useState( null );
     const [ moves, movesRef, setMoves ] = useStateRef( [] );
-    const [ gameState, setGameState ] = useState( null );
+    const [ gameState, gameStateRef, setGameState ] = useStateRef( null );
     const [ startTime, setStartTime ] = useState( 0 );
     const [ secs, setSecs ] = useState( 0 );
     const [ lastMoveTimestamp, setLastMoveTimestamp ] = useState( 0 );
     const loginState = useLoginState();
+    const timeData = buildTimeData(
+        moves,
+        startTime,
+        secs,
+        gameState
+    );
 
     const loadGame = ( gameId ) => {
         if( waitingForResponse ){
@@ -67,6 +76,32 @@ export const useGameState = () => {
             setWhiteName( name );
         }
     }
+
+    const onPeriodicCallTime = async () => {
+        // sleep for jitter
+        const sleepTime = Math.random() * CALL_TIME_JITTER_MS;
+        await new Promise(r => setTimeout(r, sleepTime));
+        // check if we still in an active state
+        if (!stateIsActive(gameStateRef.current)) {
+            console.log("after jitter, gameState is: ", gameStateRef.current, " so not calling time");
+        }
+        // make the call.
+        if (isSomeoneOutOfTime(timeData)) {
+            callTime(loginState.loginInfo, loadedGameId);
+        }
+    }
+
+    useEffect(() => {
+        if ( ! stateIsActive(gameState) ){
+            return;
+        }
+        const callTimeInterval = setInterval(
+            onPeriodicCallTime, 
+            CALL_TIME_PERIOD_SECONDS * 1000);
+        return () => {
+            clearInterval(callTimeInterval);
+        }
+    }, [moves, gameState, loadedGameId]);
 
     // does this handle the api response?
     // this fn is getting passed in a callback and all state values are from a snapshot at that time.
@@ -123,11 +158,15 @@ export const useGameState = () => {
     const websocketConnection = useWebsocket(handleWebsocket, shouldHaveOpenConnection());
 
     useEffect(() => {
+        if (loadedGameId === null) {
+            console.log("loadedGameId is nothing, will not subscribe to it.");
+            return;
+        }
+        if (!stateIsActive(gameState)) {
+            console.log("game is not active, not subscribing");
+            return;
+        }
         const subscribeFn = () => {
-            if (loadedGameId === null) {
-                console.log("loadedGameId is nothing, will not subscribe to it.");
-                return;
-            }
             console.log("subscribing to gameId: ", loadedGameId);
             websocketConnection.send({
                 type: "SubscribeToGame",
@@ -139,7 +178,7 @@ export const useGameState = () => {
         return () => {
             clearInterval(interval);
         }
-    }, [loadedGameId]);
+    }, [loadedGameId, gameState]);
 
     const addMoveToHistory = ( history, moves, incomingMove ) => {
         if( gameIsCorrupted ){
@@ -182,9 +221,8 @@ export const useGameState = () => {
         blackName: blackName,
         whiteName: whiteName,
         state: gameState,
-        startTime: startTime,
-        secs: secs,
         localJoinSide: localJoinSideUpdate,
+        timeData,
     }
 }
 

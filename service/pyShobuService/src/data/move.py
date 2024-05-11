@@ -13,5 +13,5 @@ def new( fullMove ):
 def getFullMove( this ):
     return this[_fullMove]
 
-def getTime( this ):
+def getTime( this ) -> int:
     return this[_time]

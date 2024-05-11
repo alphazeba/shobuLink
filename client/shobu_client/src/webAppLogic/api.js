@@ -11,7 +11,11 @@ export function getGame( gameId ){
 }
 
 export function getGameUpdate( gameId, latestTimestamp ){
-    return fetchJson( { type: "GetGame", gameId: gameId, latestTimestamp: latestTimestamp } )
+    return fetchJson( {
+        type: "GetGame",
+        gameId: gameId,
+        latestTimestamp: latestTimestamp 
+    } )
         .then( ( jsonData ) => {
             return jsonData.game;
         } );
@@ -66,5 +70,18 @@ export function joinGame( loginInfo, gameId ){
     return fetchJson( request )
         .then( (jsonData) => {
             return nameToSide( jsonData.side );
+        } );
+}
+
+export function callTime( loginInfo, gameId ){
+    const request = {
+        type: "CallTime",
+        gameId: gameId,
+        userId: loginInfo.id,
+        loginToken: loginInfo.token,
+    }
+    return fetchJson( request )
+        .then( (jsonData) => {
+            return jsonData.gameTimedOut;
         } );
 }

@@ -26,8 +26,14 @@ const gameOverStates = [
     whiteResign, blackResign,
     whiteTimeout, blackTimeout,
 ]
+
 const activeStates = [
-    waitingForPlayer, blackMove, whiteMove
+    waitingForPlayer, 
+    blackMove, whiteMove
+]
+
+const gameIsBeingPlayed = [
+    whiteMove, blackMove
 ]
 
 export const winCheckToWinState = ( winCheckResult ) => {
@@ -50,6 +56,14 @@ export const stateIsRelatedToVictory = ( state ) => {
 
 export const stateIsActive = ( state ) => {
     return activeStates.includes( state );
+}
+
+export const stateIsNotStarted = ( state ) => {
+    return state === waitingForPlayer;
+}
+
+export const stateIsBeingPlayed = ( state ) => {
+    return gameIsBeingPlayed.includes( state );
 }
 
 export const isColorSideMove = ( colorSide, state) => {
