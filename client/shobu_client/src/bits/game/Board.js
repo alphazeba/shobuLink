@@ -7,9 +7,8 @@ import { addSpotVec, compareVec, getDeltaVector } from '../../gameLogic/spot';
 import { buildFullMove, buildPartialMove } from '../../gameLogic/move';
 import { buildCellLocationStyle } from '../../util/styleHelper';
 import { Arrow } from './Arrow';
-import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
+import { isColorSideMove, stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
 import { Clock } from './Clock';
-import { isWhiteMove, isBlackMove } from '../../util/stateHelper';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 
@@ -348,34 +347,27 @@ export const Board = ({ boardState, playable,
         return drawName( blackName, blackId, side.BLACK );
     }
 
-    const renderBlackClock = () => {
-        return <Clock 
-            time={timeData.blackTime}
-            lastTimestamp={timeData.lastTimestamp}
-            ticking={ isBlackMove( gameState ) }
-        />
-    }
-
-    const renderWhiteClock = () => {
-        return <Clock
-            time={timeData.whiteTime}
-            lastTimestamp={timeData.lastTimestamp}
-            ticking={ isWhiteMove( gameState ) }
-        />
-    }
-
     const renderClock = ( sideValue ) => {
         if( ! timeData ){
             return <div/>
         }
-        if( sideValue === side.BLACK ){
-            return renderBlackClock();
-        }
-        return renderWhiteClock();
+        const time = (sideValue === side.BLACK) ? timeData.blackTime : timeData.whiteTime;
+        return <Clock
+            time={time}
+            lastTimestamp={timeData.lastTimestamp}
+            ticking={isColorSideMove(sideValue, gameState)}
+            timeControlSeconds={timeData.timeControlSeconds}
+        />
     }
 
     const drawName = ( name, id, sideValue ) => {
-        return <div className='nameBar'>{ renderBoardState( sideValue ) } <a href={'/user/' + id } className='btn myBtn nameLink'>{id} </a>{renderClock(sideValue)}</div>
+        return <div className='nameBar'>
+            {renderBoardState( sideValue )}
+            <a href={'/user/' + id } className='btn myBtn nameLink'>
+                {name}
+            </a>
+            {renderClock(sideValue)}
+        </div>
     }
 
     return <div>

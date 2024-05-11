@@ -4,14 +4,14 @@ import { Board } from './Board';
 import { MoveList } from './MoveList';
 import { JoinShareWidget } from './JoinShareWidget';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
-import { getPlayerTimeUsed } from './Clock';
+import { buildTimeData } from './Clock';
 
 export const GameLoader = ( { gameId, loginState } ) => {
     const gameState = useGameState();
     const [ gameIndex, setGameIndex ] = useState( 0 );
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const userId = loginState.loginInfo.id;
-    const timeData = getPlayerTimeUsed( gameState.moves, gameState.startTime );
+    const timeData = buildTimeData( gameState.moves, gameState.startTime, gameState.secs );
 
     useEffect(() => {
         if( gameIsNotLoaded() ){

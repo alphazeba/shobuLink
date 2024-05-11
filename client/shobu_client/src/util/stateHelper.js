@@ -53,6 +53,13 @@ export const stateIsActive = ( state ) => {
     return activeStates.includes( state );
 }
 
+export const isColorSideMove = ( colorSide, state) => {
+    if (colorSide === side.BLACK) {
+        return isBlackMove(state);
+    }
+    return isWhiteMove(state);
+}
+
 export const isBlackMove = ( state ) => {
     return state === blackMove;
 }

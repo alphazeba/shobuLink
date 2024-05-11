@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
 
-export const Clock = ( { time, lastTimestamp, ticking } ) => {
+export const Clock = ( { time, lastTimestamp, ticking, timeControlSeconds } ) => {
 
     const [ outputTimeMs, setOutputTime ] = useState( 0 );
 
     useEffect( () => {
+        onPeriodicUpdate();
         const interval = setInterval( ()=>{
             onPeriodicUpdate();
         }, 0.5 * 1000 );
@@ -16,12 +17,19 @@ export const Clock = ( { time, lastTimestamp, ticking } ) => {
         updateOutputTime();
     }
 
-    const updateOutputTime = () => {
+    const getTimeUsed = () => {
         if( ticking ){
-            setOutputTime( time + getTimeSinceLastTimestamp() );
+            return time + getTimeSinceLastTimestamp();
         }
-        else{ 
-            setOutputTime( time );
+        return time;
+    }
+
+    const updateOutputTime = () => {
+        const timeUsed = getTimeUsed();
+        if (timeControlSeconds <= 0) {
+            setOutputTime(timeUsed);
+        } else {
+            setOutputTime( Math.max(0, timeControlSeconds*1000 - timeUsed) );
         }
     }
 
@@ -34,7 +42,7 @@ export const Clock = ( { time, lastTimestamp, ticking } ) => {
     return <div>{getTimeText(outputTimeMs)}</div>;
 }
 
-export const getPlayerTimeUsed = ( moves, startTime ) => {
+export const buildTimeData = ( moves, startTime, timeControlSeconds ) => {
     let blackTime = 0;
     let whiteTime = 0;
     let lastTimestamp = startTime;
@@ -51,11 +59,13 @@ export const getPlayerTimeUsed = ( moves, startTime ) => {
         }
         isBlackSide = ! isBlackSide;
     }
-    return {
+    const timeData = {
         blackTime: blackTime,
         whiteTime: whiteTime,
         lastTimestamp: lastTimestamp,
+        timeControlSeconds: timeControlSeconds,
     };
+    return timeData;
 }
 
 const getTimeText = (timeMs) => {
