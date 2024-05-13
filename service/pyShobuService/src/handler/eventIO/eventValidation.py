@@ -6,6 +6,11 @@ def getOptionalValue( key, event, default ):
         return event[key]
     return default
 
+def getOptionalValidatedOptionValue(key, event, options, default):
+    value = getOptionalValue( key, event, default )
+    _validateOptions( key, value, options )
+    return value
+
 def getValidatedMapKey( key, event, map ):
     fn = lambda value: _validateOptions( key, value, map.keys() )
     return _getValidatedValue( key, event, fn )

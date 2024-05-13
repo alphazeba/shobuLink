@@ -38,7 +38,9 @@ def queryGamesByPlayerSide( gameTable, playerId, side ):
             "gameId": item["id"],
             "oName": item[enemyNameName],
             "oId": item[enemyIdName],
-            "userSide": userSide
+            "userSide": userSide,
+            # need gameState provided, because we can't tell if there is a
+            # timeout/resign from the board state.
         }
         output.append( outputItem )
     return output

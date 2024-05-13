@@ -6,13 +6,17 @@ import './CreateGamePage.css';
 import { Header } from '../bits/Header';
 import { MyInput } from '../bits/login/MyInput';
 
+const TIMEMODE_TIMED = "std";
+const TIMEMODE_CORRESPONDANCE = "cor";
+
 export const CreateGamePage = ({loginState}) => {
     const SIDE_RANDOM = 777;
+    const [ timeMode, setTimeMode ] = useState(TIMEMODE_TIMED)
     const [ timeControl, setTimeControl ] = useState( 420 );
     const [ sideSelect, setSide ] = useState( SIDE_RANDOM );
     const [ timeControlError, setTimeControlError ] = useState( false );
     const minTimeControl = 30;
-    const maxTimeControl = 10 * 60;
+    const maxTimeControl = 2 * 24 * 60 * 60; // 2 days, hours, min, seconds
     const navigate = useNavigate();
 
     const getLabel = ( sideValue ) => {
@@ -29,7 +33,10 @@ export const CreateGamePage = ({loginState}) => {
     }
 
     const renderSideSelectable = ( sideValue ) => {
-        return <Selectable selected={sideSelect===sideValue} onClick={()=>setSide(sideValue)}>
+        return <Selectable
+            selected={sideSelect===sideValue}
+            onClick={()=>setSide(sideValue)}
+        >
             {getLabel( sideValue )}
         </Selectable>
     }
@@ -43,6 +50,11 @@ export const CreateGamePage = ({loginState}) => {
         setTimeControl( value );
     }
 
+    const handleTimeModeChange = (e) => {
+        let value = e.target.value;
+        setTimeMode(value);
+    }
+
     const timeControlIsValid = ( value ) => {
         return minTimeControl <= value && value < maxTimeControl;
     }
@@ -51,16 +63,23 @@ export const CreateGamePage = ({loginState}) => {
         let chosenSide = sideSelect;
         if( !(sideSelect === side.BLACK || sideSelect === side.WHITE) ){
             let options = [ side.BLACK, side.WHITE ];
-            chosenSide = options[ Math.floor( options.length * Math.random() ) ];
+            chosenSide = options[ 
+                Math.floor( options.length * Math.random() )
+            ];
         }
         let chosenTimeControl = timeControl;
         if( ! timeControlIsValid( chosenTimeControl ) ){
             return;
         }
-        createGame( loginState.loginInfo, chosenSide, chosenTimeControl )
-            .then( (gameId) => {
-                navigate( "/game/" + gameId );
-            } );
+        let chosenTimeMode = timeMode;
+        createGame(
+            loginState.loginInfo,
+            chosenSide,
+            chosenTimeControl,
+            chosenTimeMode
+        ).then( (gameId) => {
+            navigate( "/game/" + gameId );
+        } );
     }
 
     const renderTimeControlError = () => {
@@ -72,20 +91,57 @@ export const CreateGamePage = ({loginState}) => {
         </div>
     }
 
+    const renderSideInput = () => {
+        return <div>
+            {renderSideSelectable(side.BLACK)}
+            {renderSideSelectable(SIDE_RANDOM)}
+            {renderSideSelectable(side.WHITE)}
+        </div>;
+    }
+
+    const renderTimeModeInput = () => {
+        return <div className='input-group'>
+            <span className='input-group-addon'>
+                Time mode&nbsp;
+            </span>
+            <select
+                className='myInput-input'
+                value={timeMode}
+                onChange={(e)=>handleTimeModeChange(e)}
+            >
+                <option value={TIMEMODE_TIMED}>
+                    Timed
+                </option>
+                <option value={TIMEMODE_CORRESPONDANCE}>
+                    Correspondance
+                </option>
+            </select>
+        </div>
+    }
+
     return <div>
         <Header loginState={loginState}/>
         <h1>Create a game</h1>
         <div className='inputSpace'>
-            {renderTimeControlError()}<MyInput title='Seconds' value={timeControl} onChange={ (e)=>handleTimeChange( e ) } />
+            {renderTimeModeInput()}
         </div>
-        <div>
-            {renderSideSelectable(side.BLACK)}
-            {renderSideSelectable(SIDE_RANDOM)}
-            {renderSideSelectable(side.WHITE)}
+        <div className='inputSpace'>
+            {renderTimeControlError()}
+            <MyInput
+                title='Seconds'
+                value={timeControl}
+                onChange={(e)=>handleTimeChange( e )}
+            />
         </div>
-        <div className='line'></div>
+        {renderSideInput()}
+        <div className='line'/>
         <div>
-            <button className='btn myBtn' onClick={handleCreateGame}>Create</button>
+            <button
+                className='btn myBtn'
+                onClick={handleCreateGame}
+            >
+                Create
+            </button>
         </div>
     </div>
 }

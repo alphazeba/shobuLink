@@ -43,14 +43,15 @@ export function playMove( loginInfo, gameId, fullMove ){
 }
 
 
-export function createGame( loginInfo, side, secondsPerSide ){
+export function createGame( loginInfo, side, secondsPerSide, timeMode ){
     const request = {
         type: "CreateGame",
         side: sideToName( side ),
         secondsPerSide: secondsPerSide,
         loginToken: loginInfo.token,
         userId: loginInfo.id,
-        userName: loginInfo.name
+        userName: loginInfo.name,
+        timeMode: timeMode,
     }
     return fetchJson( request )
         .then( ( jsonData ) => {

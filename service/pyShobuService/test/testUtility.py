@@ -9,7 +9,7 @@ def buildTestShobuBoard( moveStringArray ):
     return G._getCurrentBoardState( game )
 
 def buildTestGame( moveStringArray ):
-    game = G.new( "id1", "name1", ps.black, 420 )
+    game = G.new_standard_game( "id1", "name1", ps.black, 420 )
     G.joinGame( game, "id2", "name2" )
     side = ps.black
     for move in moveStringArray:

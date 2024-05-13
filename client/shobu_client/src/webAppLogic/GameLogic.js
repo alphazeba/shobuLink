@@ -28,13 +28,15 @@ export const useGameState = () => {
     const [ gameState, gameStateRef, setGameState ] = useStateRef( null );
     const [ startTime, setStartTime ] = useState( 0 );
     const [ secs, setSecs ] = useState( 0 );
+    const [ rules, setRules ] = useState( null );
     const [ lastMoveTimestamp, setLastMoveTimestamp ] = useState( 0 );
     const loginState = useLoginState();
     const timeData = buildTimeData(
         moves,
         startTime,
         secs,
-        gameState
+        gameState,
+        rules
     );
 
     const loadGame = ( gameId ) => {
@@ -140,6 +142,7 @@ export const useGameState = () => {
         setGameState( game.state );
         setStartTime( game.startTime );
         setSecs( game.secs );
+        setRules( game?.rules );
         console.log("mutable moves after udpate: ", mutableMoves);
         console.log("mutable history after update: ", mutableHistory);
     }

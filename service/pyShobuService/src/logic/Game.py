@@ -27,6 +27,11 @@ _gameId = "gameId"
 _opponentId = "oId"
 _opponentName = "oName"
 _userSide = "userSide"
+_rules = "rules"
+
+_rules_timeMode = "tm"
+_rules_timeMode_correspondance = "cor"
+_rules_timeMode_standard = "std" # standard games do not have a timeMode, this is for internal usage
 
 # main interactions
 def toGetGameOutputForm( gameTableGame, latestTimeStamp ):
@@ -39,6 +44,7 @@ def toGetGameOutputForm( gameTableGame, latestTimeStamp ):
         _startTime,
         _state,
         _secs,
+        _rules,
     ] )
     outputMoves = []
     for move in gameTableGame[_moves]:
@@ -46,12 +52,6 @@ def toGetGameOutputForm( gameTableGame, latestTimeStamp ):
             outputMoves.append( move )
     output[_moves] = outputMoves
     return output
-
-def getLatestMoveTimestamp( gameTableGame ):
-    moves = gameTableGame[_moves]
-    if len(moves) <= 0:
-        return 0
-    return Move.getTime(moves[-1])
 
 def toGetPlayerGamesOutputForm( gameTablePreview ):
     output = _filterObjByKeys( gameTablePreview, [
@@ -65,10 +65,10 @@ def toGetPlayerGamesOutputForm( gameTablePreview ):
     ] )
     return output
 
-def new( playerId, playerName, playerSide, secondPerSide ):
+def new_standard_game( playerId, playerName, playerSide, seconds ):
     this = {
         _id: newGuid(),
-        _secs: secondPerSide,
+        _secs: seconds,
         _state: GameState.waitingForPlayer,
         _startTime: time.getNowMs(),
         _moves: [],
@@ -76,6 +76,13 @@ def new( playerId, playerName, playerSide, secondPerSide ):
     _updatePhaseTime( this )
     _setPreviewBoard( this, B.initBoard() )
     _setPlayer( this, playerId, playerName, playerSide )
+    return this
+
+def new_correspondance_game( playerId, playerName, playerSide, secondsPerTurn):
+    this = new_standard_game( playerId, playerName, playerSide, secondsPerTurn)
+    this[_rules] = {
+        _rules_timeMode: _rules_timeMode_correspondance
+    }
     return this
 
 def joinGame( this, playerId, playerName ):
@@ -105,18 +112,29 @@ def setTimeout(this):
         setGameState(this, GameState.whiteTimeout)
 
 def isGameOutOfTime( this ):
+    timeMode = getTimeMode(this)
+    if timeMode == _rules_timeMode_correspondance:
+        return _isGameOutOfTime_correspondance(this)
+    return _isGameOutOfTime_standard(this)
+
+def _isGameOutOfTime_correspondance(this):
+    timeControlMs = getSecsMs(this)
+    latestTimeStamp = getLatestMoveTimestamp(this)
+    deltaMs = _timeSinceTimestampMs(latestTimeStamp)
+    return timeControlMs < deltaMs
+
+def _isGameOutOfTime_standard(this):
     # check if the player whose turn it is, is out of time
     # check if game is active
     gameState = getGameState(this)
     if not GameState.isActive(gameState):
         return False
-    timeControlSeconds = this[_secs]
     # get how much time they've used
-    blackTime, whiteTime = _getPlayerUsedTimeMs(this)
+    blackTime, whiteTime = _getPlayerTotalUsedTimeMs(this)
     curPlayerUsedTimeMs = whiteTime
     if GameState.isBlacksMove(gameState):
         curPlayerUsedTimeMs = blackTime
-    timeControlMs = timeControlSeconds * 1000
+    timeControlMs = getSecsMs(this)
     print("blackTime: ", blackTime,
         " whiteTime: ", whiteTime,
         " curPlayerTime: ", curPlayerUsedTimeMs,
@@ -156,8 +174,35 @@ def get( this, key ):
         return this[key]
     return None
 
+def getSecs( this ):
+    return get(this,_secs)
+
+def getSecsMs( this ):
+    return getSecs(this) * 1000
+
+def getLatestMoveTimestamp( this ):
+    moves = getMoves(this)
+    if len(moves) <= 0:
+        return getStartTime(this)
+    return Move.getTime(moves[-1])
+
 def getId( this ):
     return get(this,_id)
+
+def getRules( this ):
+    return get(this, _rules)
+
+def getMoves( this ):
+    return get(this, _moves)
+
+def getTimeMode( this ):
+    rules = getRules(this)
+    if rules is None:
+        return _rules_timeMode_standard
+    timeMode = get(rules, _rules_timeMode)
+    if timeMode is None:
+        return _rules_timeMode_standard
+    return timeMode
 
 def getGameState( this ):
     return get(this,_state)
@@ -231,7 +276,7 @@ def _addMove( this, move, newBoard ):
 def _updatePhaseTime( this ):
     this[_phaseTime] = GameState.getPhase( getGameState( this ) ) + str( this[_startTime] )
 
-def _getPlayerUsedTimeMs( this ):
+def _getPlayerTotalUsedTimeMs( this ):
     blackTime, whiteTime = 0, 0
     lastTimestamp = getStartTime(this)
     isBlackSide = True
@@ -245,9 +290,12 @@ def _getPlayerUsedTimeMs( this ):
             whiteTime += delta
         isBlackSide = not isBlackSide
     # handle time elapsed since last move
-    extraTime = time.getNowMs() - lastTimestamp
+    extraTime = _timeSinceTimestampMs( lastTimestamp )
     if isBlackSide:
         blackTime += extraTime
     else:
         whiteTime += extraTime
     return blackTime, whiteTime
+
+def _timeSinceTimestampMs(timeStampMs):
+    return time.getNowMs() - timeStampMs

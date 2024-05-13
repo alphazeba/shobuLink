@@ -4,7 +4,8 @@ import {
     isBlackTimeout,
     stateIsActive,
     stateIsBeingPlayed,
-    stateIsNotStarted
+    stateIsNotStarted,
+    isBlackMove
 } from '../../util/stateHelper';
 import { side } from '../../gameLogic/token'
 
@@ -57,8 +58,40 @@ export const buildTimeData = (
     moves,
     startTime,
     timeControlSeconds,
-    gameState
+    gameState,
+    rules
 ) => {
+    let blackTime, whiteTime;
+    const timeMode = rules?.tm;
+    if (!timeMode || timeMode === "std") {
+        [blackTime, whiteTime] = getTimeModeTimedTimes(moves, startTime);
+    } else if (timeMode === "cor") {
+        [blackTime, whiteTime] = getTimeModeCorrespondanceTimes();
+    }
+
+    const timeData = {
+        blackTime,
+        whiteTime,
+        lastTimestamp: getLastTimeStamp(moves, startTime),
+        timeControlSeconds,
+        gameState,
+        lastMoveWasBlack: !isBlackMove(gameState),
+    };
+    return timeData;
+}
+
+const getLastTimeStamp = (moves, startTime) => {
+    if (moves.length > 0) {
+        return moves[moves.length-1].t;
+    }
+    return startTime;
+}
+
+const getTimeModeCorrespondanceTimes = () => {
+    return [0, 0];
+}
+
+const getTimeModeTimedTimes = (moves, startTime) => {
     let blackTime = 0;
     let whiteTime = 0;
     let lastTimestamp = startTime;
@@ -74,22 +107,14 @@ export const buildTimeData = (
         }
         isBlackSide = ! isBlackSide;
     }
-    const timeData = {
-        blackTime,
-        whiteTime,
-        lastTimestamp,
-        timeControlSeconds,
-        gameState,
-        lastMoveWasBlack: isBlackSide,
-    };
-    return timeData;
+    return [blackTime, whiteTime];
 }
 
 export const getBlackTime = (timeData) => {
     if ( stateIsNotStarted( timeData.gameState ) ){
         return 0;
     }
-    if (timeData.lastMoveWasBlack) {
+    if (!timeData.lastMoveWasBlack) {
         return timeData.blackTime + getTickingMs(timeData);
     }
     return timeData.blackTime;
@@ -99,7 +124,7 @@ export const getWhiteTime = (timeData) => {
     if ( stateIsNotStarted( timeData.gameState ) ){
         return 0;
     }
-    if (!timeData.lastMoveWasBlack) {
+    if (timeData.lastMoveWasBlack) {
         return timeData.whiteTime + getTickingMs(timeData);
     }
     return timeData.whiteTime;
