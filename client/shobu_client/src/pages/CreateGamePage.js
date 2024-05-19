@@ -5,58 +5,61 @@ import { createGame } from '../webAppLogic/api';
 import './CreateGamePage.css';
 import { Header } from '../bits/Header';
 import { MyInput } from '../bits/login/MyInput';
+import { ToggleButtons } from '../bits/ToggleButtons';
 
 const TIMEMODE_TIMED = "std";
 const TIMEMODE_CORRESPONDANCE = "cor";
+function newTv(title,value) {
+    return {
+        title,
+        value
+    };
+};
+function minTv(minutes) {
+    return newTv(minutes.toString() + " min", minutes * 60);
+}
+function dayTv(days) {
+    return newTv(days.toString() + " day", days * 24 * 60 * 60);
+}
+const SIDE_RANDOM = 777;
+const SIDE_TOGGLES_TV = [
+    newTv("Black", side.BLACK),
+    newTv("Random", SIDE_RANDOM),
+    newTv("White", side.WHITE)];
+const TIME_MODE_TV = [
+    newTv("Real Time", TIMEMODE_TIMED), newTv("Correspondance", TIMEMODE_CORRESPONDANCE)
+]
+const TIME_CONTROLS_TIMED_TV = [
+    minTv(1), minTv(5), minTv(10), minTv(30), minTv(60)
+];
+const TIME_CONTROLS_CORRESPONDANCE_TV = [
+    dayTv(1), dayTv(2), dayTv(3)
+];
+const TIME_CONTROLS_TIMED_DEFAULT = TIME_CONTROLS_TIMED_TV[1].value;
+const TIME_CONTROLS_CORRESPONDANCE_DEFAULT = TIME_CONTROLS_CORRESPONDANCE_TV[1].value;
 
 export const CreateGamePage = ({loginState}) => {
-    const SIDE_RANDOM = 777;
     const [ timeMode, setTimeMode ] = useState(TIMEMODE_TIMED)
-    const [ timeControl, setTimeControl ] = useState( 420 );
+    const [ timeControlTimed, setTimeControlTimed ] = useState( TIME_CONTROLS_TIMED_DEFAULT );
+    const [ timeControlCorrespondance, setTimeControlCorrespondance ] = useState( TIME_CONTROLS_CORRESPONDANCE_DEFAULT );
     const [ sideSelect, setSide ] = useState( SIDE_RANDOM );
-    const [ timeControlError, setTimeControlError ] = useState( false );
-    const minTimeControl = 30;
-    const maxTimeControl = 2 * 24 * 60 * 60; // 2 days, hours, min, seconds
     const navigate = useNavigate();
 
-    const getLabel = ( sideValue ) => {
-        switch( sideValue ){
-            case side.BLACK:
-                return "Black";
-            case side.WHITE:
-                return "White";
-            case SIDE_RANDOM:
-                return "Random";
-            default:
-                throw new Error( "an invalid sideValue was provided" );
-        }
-    }
-
-    const renderSideSelectable = ( sideValue ) => {
-        return <Selectable
-            selected={sideSelect===sideValue}
-            onClick={()=>setSide(sideValue)}
-        >
-            {getLabel( sideValue )}
-        </Selectable>
-    }
-
-    const handleTimeChange = (e) => {
-        let value = parseInt( e.target.value );
-        if( isNaN(value) ){
-            value = 0;
-        }
-        setTimeControlError( !timeControlIsValid( value ) );
-        setTimeControl( value );
-    }
-
-    const handleTimeModeChange = (e) => {
-        let value = e.target.value;
-        setTimeMode(value);
-    }
-
     const timeControlIsValid = ( value ) => {
-        return minTimeControl <= value && value < maxTimeControl;
+        const allTimeControlsTvs = TIME_CONTROLS_TIMED_TV.concat(TIME_CONTROLS_CORRESPONDANCE_TV);
+        for (let tv of allTimeControlsTvs) {
+            if (value === tv.value) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    const getTimeControl = () => {
+        if (timeMode === TIMEMODE_CORRESPONDANCE) {
+            return timeControlCorrespondance;
+        }
+        return timeControlTimed;
     }
 
     const handleCreateGame = () => {
@@ -67,7 +70,7 @@ export const CreateGamePage = ({loginState}) => {
                 Math.floor( options.length * Math.random() )
             ];
         }
-        let chosenTimeControl = timeControl;
+        let chosenTimeControl = getTimeControl();
         if( ! timeControlIsValid( chosenTimeControl ) ){
             return;
         }
@@ -82,58 +85,41 @@ export const CreateGamePage = ({loginState}) => {
         } );
     }
 
-    const renderTimeControlError = () => {
-        if( ! timeControlError ){
-            return;
+    const renderTimeControlInput = () => {
+        if (timeMode === TIMEMODE_CORRESPONDANCE) {
+            return <ToggleButtons
+                titleValues={TIME_CONTROLS_CORRESPONDANCE_TV}
+                value={timeControlCorrespondance}
+                onChange={setTimeControlCorrespondance}
+            />
         }
-        return <div className="error">
-            Time control must be greater than {minTimeControl-1} and less than {maxTimeControl}
-        </div>
-    }
-
-    const renderSideInput = () => {
-        return <div>
-            {renderSideSelectable(side.BLACK)}
-            {renderSideSelectable(SIDE_RANDOM)}
-            {renderSideSelectable(side.WHITE)}
-        </div>;
-    }
-
-    const renderTimeModeInput = () => {
-        return <div className='input-group'>
-            <span className='input-group-addon'>
-                Time mode&nbsp;
-            </span>
-            <select
-                className='myInput-input'
-                value={timeMode}
-                onChange={(e)=>handleTimeModeChange(e)}
-            >
-                <option value={TIMEMODE_TIMED}>
-                    Timed
-                </option>
-                <option value={TIMEMODE_CORRESPONDANCE}>
-                    Correspondance
-                </option>
-            </select>
-        </div>
+        return <ToggleButtons
+            titleValues={TIME_CONTROLS_TIMED_TV}
+            value={timeControlTimed}
+            onChange={setTimeControlTimed}
+        />
     }
 
     return <div>
         <Header loginState={loginState}/>
         <h1>Create a game</h1>
         <div className='inputSpace'>
-            {renderTimeModeInput()}
-        </div>
-        <div className='inputSpace'>
-            {renderTimeControlError()}
-            <MyInput
-                title='Seconds'
-                value={timeControl}
-                onChange={(e)=>handleTimeChange( e )}
+            <ToggleButtons
+                titleValues={TIME_MODE_TV}
+                value={timeMode}
+                onChange={setTimeMode}
             />
         </div>
-        {renderSideInput()}
+        <div className='inputSpace'>
+            {renderTimeControlInput()}
+        </div>
+        <div className='inputSpace'>
+            <ToggleButtons
+                titleValues={SIDE_TOGGLES_TV}
+                value={sideSelect}
+                onChange={setSide}
+            />
+        </div>
         <div className='line'/>
         <div>
             <button

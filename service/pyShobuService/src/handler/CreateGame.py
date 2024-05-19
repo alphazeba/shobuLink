@@ -14,10 +14,10 @@ def CreateGame( event, context, props ):
     playerId = getValidatedStringValue( "userId", event )
     playerName = getValidatedStringValue( "userName", event )
     playerSide = getValidatedOptionValue( "side", event, PlayerSide.options )
-    secondsPerSide = getValidatedRangeValue( "secondsPerSide", event, 10, 20 * 60 )
+    secondsPerSide = getValidatedRangeValue( "secondsPerSide", event, 10, (3 * 24 * 60 * 60) + 1 )
     timeMode = getOptionalValidatedOptionValue(
-        "timeMode", event, 
-        VALID_TIME_MODES, 
+        "timeMode", event,
+        VALID_TIME_MODES,
         Game._rules_timeMode_standard )
     gameTable = props["gameTable"]
     game = None
