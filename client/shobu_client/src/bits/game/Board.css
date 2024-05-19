@@ -1,7 +1,3 @@
-.preview {
-    --boxSize: 20px;
-}
-
 .cell {
     position: relative;
     width: var(--boxSize);
@@ -13,7 +9,7 @@
 }
 
 .fullBoardContainer {
-    width: 500px;
+    width: calc(8 * var(--boxSize) + var(--betweenBoardSpace));
     pointer-events: none;
 }
 
@@ -174,6 +170,16 @@
 }
 
 .topSpace {
-    height: 4em;
+    height: var(--contentVerticalMargin);
     color: transparent;
+}
+
+.titlesContainer {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 0.5em;
+}
+
+.sideBySide {
+    display: inline-block;
 }

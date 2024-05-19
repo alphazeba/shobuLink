@@ -1,0 +1,37 @@
+.playerPageContent {
+    padding: var(--contentVerticalMargin);
+    padding-left: 0;
+    padding-right: 0;
+    vertical-align: top;
+}
+
+.preview {
+    position: relative;
+    --boxSize: 0.75em;
+    --betweenBoardSpace: 1px;
+    --pieceSize: 23%;
+    --notificationSize: 0.25em;
+    --notificationSpace: 0.4em;
+}
+
+.previewBoardContainer {
+    padding-left: 1em;
+    position: relative;
+    display: inline-block;
+}
+
+.metaDataContainer {
+    padding-left: 0.5em;
+    display: inline-block;
+    vertical-align: top;
+}
+
+.activeNotification {
+    position: absolute;
+    left: var(--notificationSpace);
+    top: var(--notificationSpace);
+    background-color: red;
+    width: var(--notificationSize);
+    height: var(--notificationSize);
+    border-radius: 50%;
+}

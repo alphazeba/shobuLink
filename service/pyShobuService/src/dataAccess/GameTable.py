@@ -3,6 +3,10 @@ from boto3.dynamodb.conditions import Key
 import logic.shobu.token as t
 import data.playerSide as PlayerSide
 
+GAME_PHASE_PENDING_TOKEN = 'p'
+GAME_PHASE_ACTIVE_TOKEN = 'a'
+GAME_PHASE_COMPLETE_TOKEN = 'c'
+
 def newGameTable( ddb ):
     return DDB.getTable( ddb, "GameTable" )
 
@@ -13,7 +17,7 @@ def getGame( gameTable, gameId ):
 def saveGame( gameTable, game ):
     gameTable.put_item( Item=game )
 
-def queryGamesByPlayerSide( gameTable, playerId, side ):
+def queryGamesByPlayerSide( gameTable, playerId, side, gamePhaseToken ):
     indexName = 'blackGameIndex'
     keyName = 'buId'
     enemyIdName = 'wuId'
@@ -28,7 +32,8 @@ def queryGamesByPlayerSide( gameTable, playerId, side ):
     result = gameTable.query(
         IndexName=indexName,
         Select='ALL_PROJECTED_ATTRIBUTES',
-        KeyConditionExpression=Key( keyName ).eq( playerId ) & Key( 'phsT' ).begins_with( 'c' )
+        KeyConditionExpression=Key( keyName ).eq( playerId )\
+            & Key( 'phsT' ).begins_with( gamePhaseToken )
     )
     output = []
     for item in result['Items']:
@@ -48,5 +53,13 @@ def phaseTimeToStartTime( phaseTime ):
     strippedPhaseTime = phaseTime[1:]
     return int( strippedPhaseTime )
 
-def queryGamesByPlayerId( gameTable, playerId ):
-    return queryGamesByPlayerSide( gameTable, playerId, t.SIDE_BLACK ) + queryGamesByPlayerSide( gameTable, playerId, t.SIDE_WHITE )
+def queryGamesByPlayerId( gameTable, playerId, gamePhaseToken ):
+    # should this be sorted by time?
+    return queryGamesByPlayerSide( gameTable, playerId, t.SIDE_BLACK, gamePhaseToken )\
+        + queryGamesByPlayerSide( gameTable, playerId, t.SIDE_WHITE, gamePhaseToken )
+
+def queryCompleteGamesByPlayerId( gameTable, playerId ):
+    return queryGamesByPlayerId( gameTable, playerId, GAME_PHASE_COMPLETE_TOKEN )
+
+def queryActiveGamesByPlayerId( gameTable, playerId ):
+    return queryGamesByPlayerId( gameTable, playerId, GAME_PHASE_ACTIVE_TOKEN )

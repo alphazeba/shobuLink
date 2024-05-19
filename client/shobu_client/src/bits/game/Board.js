@@ -12,7 +12,8 @@ import { Clock } from './Clock';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 
-        gameState, onMove, userId, timeData, children
+        gameState, onMove, userId, timeData, children,
+        justBoard
 }) => {
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
@@ -374,6 +375,20 @@ export const Board = ({ boardState, playable,
         </div>
     }
 
+    if (justBoard) {
+        return <div>
+            <div className='titlesContainer'>
+                {drawTopName()}
+                <div>
+                    vs
+                </div>
+                {drawBottomName()}
+            </div>
+            <div className='fullBoardContainer sideBySide'>
+                { drawBoard( boardState ) }
+            </div>
+        </div>;
+    }
     return <div>
         <div className='fullBoardContainer'>
             { drawTopName() }
@@ -382,5 +397,3 @@ export const Board = ({ boardState, playable,
         </div>
     </div>
 }
-
-

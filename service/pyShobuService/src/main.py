@@ -3,6 +3,7 @@ from handler.eventIO.eventValidation import getValidatedMapKey, getValidatedStri
 from handler.CreateGame import CreateGame
 from handler.GetGame import GetGame
 from handler.GetPlayerGames import GetPlayerGames
+from handler.GetPlayerActiveGames import GetPlayerActiveGames
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
 from handler_websocket.SubscribeToGame import SubscribeToGame
@@ -30,6 +31,7 @@ routes = {
     "CreateGame": CreateGame,
     "GetGame": GetGame,
     "GetPlayerGames": GetPlayerGames,
+    "GetPlayerActiveGames": GetPlayerActiveGames,
     "JoinGame": JoinGame,
     "PlayMove": PlayMove,
     "CallTime": CallTime

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-export const ToggleButtons = ({titleValues, value, onChange}) => {
+export const ToggleButtons = ({toggleValues, value, onChange}) => {
 
     const renderButton = (buttonTitle, buttonValue
     ) => {
@@ -13,7 +13,7 @@ export const ToggleButtons = ({titleValues, value, onChange}) => {
         </Selectable>
     }
 
-    return titleValues.map((tv) => renderButton(tv.title, tv.value));
+    return toggleValues.map((tv) => renderButton(tv.title, tv.value));
 }
 
 const Selectable = ({children,selected,onClick}) => {
@@ -25,3 +25,10 @@ const Selectable = ({children,selected,onClick}) => {
         {children}
     </button>
 }
+
+export const newToggleValue = (title,value) => {
+    return {
+        title,
+        value
+    };
+};

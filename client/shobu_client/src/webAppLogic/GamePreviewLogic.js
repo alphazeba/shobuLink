@@ -1,18 +1,34 @@
 import { useState } from 'react'
-import { getPlayerGames } from './api.js'
+import { getPlayerActiveGames, getPlayerGames } from './api.js'
 import { parsePreview } from '../util/stateHelper.js';
 
-export const GamePreviewLogic = () => {
+const MODE_ACTIVE = 69;
+const MODE_COMPLETE = 420;
 
+export const useActivePreview = () => {
+    return GamePreviewLogic(MODE_ACTIVE);
+}
+
+export const useCompletePreview = () => {
+    return GamePreviewLogic(MODE_COMPLETE);
+}
+
+const GamePreviewLogic = (mode) => {
     const [ loadedUserId, setLoadedUserId ] = useState( null );
     const [ gamePreviews, setGamePreviews ] = useState( [] );
     const [ waitingForResponse, setWaitingForResponse ] = useState( false );
 
+    const getGetGamesFn = (mode) => {
+        if (mode === MODE_ACTIVE) {
+            return getPlayerActiveGames;
+        }
+        return getPlayerGames;
+    }
     const loadGamePreviews = ( userId ) => {
         if( waitingForResponse || userId == loadedUserId ){
             return false;
         }
-        getPlayerGames( userId ).then( ( gamePreviews ) => {
+        getGetGamesFn(mode)( userId ).then( ( gamePreviews ) => {
             handleGamePreviewUpdate( gamePreviews, userId );
         } );
         setWaitingForResponse( true );
@@ -29,7 +45,8 @@ export const GamePreviewLogic = () => {
     }
 
     return {
-        gamePreviews: gamePreviews,
-        loadGamePreviews: loadGamePreviews
+        loadedUserId,
+        gamePreviews,
+        loadGamePreviews,
     }
 }

@@ -14,7 +14,8 @@ def CreateGame( event, context, props ):
     playerId = getValidatedStringValue( "userId", event )
     playerName = getValidatedStringValue( "userName", event )
     playerSide = getValidatedOptionValue( "side", event, PlayerSide.options )
-    secondsPerSide = getValidatedRangeValue( "secondsPerSide", event, 10, (3 * 24 * 60 * 60) + 1 )
+    secondsPerSide = getValidatedRangeValue(
+        "secondsPerSide", event, 10, (3 * 24 * 60 * 60) + 1 )
     timeMode = getOptionalValidatedOptionValue(
         "timeMode", event,
         VALID_TIME_MODES,
@@ -22,9 +23,11 @@ def CreateGame( event, context, props ):
     gameTable = props["gameTable"]
     game = None
     if timeMode == Game._rules_timeMode_correspondance:
-        game = Game.new_correspondance_game( playerId, playerName, playerSide, secondsPerSide )
+        game = Game.new_correspondance_game(
+            playerId, playerName, playerSide, secondsPerSide )
     else:
-        game = Game.new_standard_game( playerId, playerName, playerSide, secondsPerSide )
+        game = Game.new_standard_game(
+            playerId, playerName, playerSide, secondsPerSide )
     # save the game object in ddb table.
     GameTable.saveGame( gameTable, game )
     return { "gameId": Game.getId( game ) }

@@ -28,6 +28,13 @@ export function getPlayerGames( userId ){
         } );
 }
 
+export function getPlayerActiveGames( userId ){
+    return fetchJson( { type: "GetPlayerActiveGames", userId: userId } )
+    .then( ( jsonData ) => {
+        return jsonData.games;
+    } );
+}
+
 export function playMove( loginInfo, gameId, fullMove ){
     const request = {
         type: "PlayMove",
