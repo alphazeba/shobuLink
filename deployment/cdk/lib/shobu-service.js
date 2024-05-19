@@ -35,7 +35,8 @@ class ShobuService extends Construct {
                 gameTableKey.gameId,
                 gameTableKey.preview,
                 gameTableKey.whiteId,
-                gameTableKey.whiteName
+                gameTableKey.whiteName,
+                gameTableKey.gameState,
             ]
         } );
         
@@ -48,7 +49,8 @@ class ShobuService extends Construct {
                 gameTableKey.gameId,
                 gameTableKey.preview,
                 gameTableKey.blackId,
-                gameTableKey.blackName
+                gameTableKey.blackName,
+                gameTableKey.gameState,
             ]
         } );
 

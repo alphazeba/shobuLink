@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { getPlayerGames } from './api.js'
-import { parsePreview, winCheckToWinState } from '../util/stateHelper.js';
-import { checkForWin } from '../gameLogic/gameoverChecker.js';
+import { parsePreview } from '../util/stateHelper.js';
 
 export const GamePreviewLogic = () => {
 
@@ -23,9 +22,7 @@ export const GamePreviewLogic = () => {
         setLoadedUserId( userId );
         setWaitingForResponse( false );
         for( let i=0; i<gamePreviews.length; i++ ){
-            let gp = gamePreviews[i];
             gamePreviews[i].boardState = parsePreview( gamePreviews[i].prv );
-            gamePreviews[i].gameState =  winCheckToWinState( checkForWin( gamePreviews[i].boardState ) );
         }
         setGamePreviews( gamePreviews );
         console.log( gamePreviews );

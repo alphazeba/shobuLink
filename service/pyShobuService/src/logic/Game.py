@@ -61,7 +61,8 @@ def toGetPlayerGamesOutputForm( gameTablePreview ):
         _gameId,
         _opponentId,
         _opponentName,
-        _userSide
+        _userSide,
+        _state,
     ] )
     return output
 

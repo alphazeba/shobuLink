@@ -39,7 +39,7 @@ export const PlayerPage = ({loginState}) => {
         return <div className='preview' key={gamePreview.gameId}>
             <button className='btn myBtn' onClick={()=>handleClickGame( gamePreview.gameId )}>
                 <Board boardState={ gamePreview.boardState }
-                    blackId={bId} blackName={bName} whiteId={wId} whiteName={wName} gameState={gamePreview.gameState} />
+                    blackId={bId} blackName={bName} whiteId={wId} whiteName={wName} gameState={gamePreview.state} />
             </button>
         </div>
     }

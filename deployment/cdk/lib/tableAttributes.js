@@ -10,6 +10,8 @@ const gameTableKey = {
     phaseTime: 'phsT',
     preview: 'prv',
     gameId: 'id',
+    gameState: 'state',
+    startTime: 'startTime',
 }
 
 const connectionTableKey = {
