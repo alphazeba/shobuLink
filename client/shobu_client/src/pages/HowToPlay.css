@@ -1,0 +1,22 @@
+.howToContainer {
+    text-align: start;
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+.howToBlock {
+    padding: 0.25em;
+    padding-bottom: 1em;
+}
+
+.howToBlock ul {
+    padding-left: 2em;
+}
+
+.good {
+    color: lightgreen;
+}
+
+.bad {
+    color: lightpink;
+}

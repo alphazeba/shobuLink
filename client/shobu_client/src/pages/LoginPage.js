@@ -26,7 +26,7 @@ export const LoginPage = ({loginState}) => {
 
     return <div>
         <HomeButton />
-        <h1>Please log in</h1>
+        <div className='Title'>Please log in</div>
         <form >
             <div>
                 <MyInput value={name} onChange={(e)=>handleChangeEvent(e,setName)} title="Name" placeholder='username'/>

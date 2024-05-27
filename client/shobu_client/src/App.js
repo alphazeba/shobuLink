@@ -10,7 +10,8 @@ import { CreateGamePage } from './pages/CreateGamePage';
 import { PlayerPage } from './pages/PlayerPage';
 import { FindGamePage } from './pages/FindGamePage';
 import React from 'react'
-import { Donate } from './bits/Donate';
+import { Footer } from './bits/Footer';
+import { HowToPlay } from './pages/HowToPlay';
 
 function App() {
     const loginState = useLoginState();
@@ -39,13 +40,19 @@ function App() {
             path: "findGame",
             element: <FindGamePage loginState={loginState} />,
         },
+        {
+            path: "howToPlay",
+            element: <HowToPlay loginState={loginState} />,
+        }
     ]);
 
     return (
         <div className="App">
-            <header className="App-header">
-                <RouterProvider router={router} />
-                <Donate/>
+            <header className="App-container">
+                <div className='mainContent'>
+                    <RouterProvider router={router} />
+                </div>
+                <Footer/>
             </header>
         </div>
     );

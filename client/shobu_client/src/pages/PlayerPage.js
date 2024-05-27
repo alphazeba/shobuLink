@@ -45,7 +45,7 @@ export const PlayerPage = ({loginState}) => {
     }
 
     const renderGamePreview = ( gamePreview, activeNotification=false ) => {
-        let userName = "User"
+        let userName = userId;
         let bId = gamePreview.oId;
         let bName = gamePreview.oName;
         let wId = userId;
@@ -146,8 +146,8 @@ export const PlayerPage = ({loginState}) => {
     return <div>
         <Header loginOptional={true} loginState={loginState} />
         <div className='playerPageContent'>
-            <div>
-            userId: {userId}
+            <div className='Title'>
+            {userId}'s games
             </div>
             <div>
                 <ToggleButtons

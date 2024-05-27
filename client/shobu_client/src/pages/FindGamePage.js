@@ -78,21 +78,27 @@ export const FindGamePage = ({loginState}) => {
     }
 
     const renderGame = (game) => {
-        return <div>
+        return <div key={game.id}>
             <button
                 className='btn myBtn'
                 onClick={()=>handleClickGame(game.id)}
             >
-                <div>
-                    <span className='floatLeft'>
+                <span className='findGamePlayerColomn'>
+                    <span className='findGameToken'>
                         {renderColor(game)}
                     </span>
-                    <span className='floatLeft findGamePlayerName'>
-                        {getPlayerName(game)}
+                    <span className=' findGamePlayerName'>
+                        vs {getPlayerName(game)} :
                     </span>
-                </div>
-                <div>{getTimeMode(game)}: {getTimeControl(game)}</div>
+                </span>
+                <span>{getTimeMode(game)} {getTimeControl(game)}</span>
             </button>
+        </div>
+    }
+
+    const renderCreateAGame = () => {
+        return <div>
+            Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
         </div>
     }
 
@@ -103,17 +109,21 @@ export const FindGamePage = ({loginState}) => {
             } else {
                 return <div>
                     <div>There are no games</div>
-                    <div >
-                        Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
-                    </div>
+                    {renderCreateAGame()}
                 </div>
             }
         }
-        return openGameState.games.map((game)=>renderGame(game));
+        return <div>
+            {openGameState.games.map((game)=>renderGame(game))}
+            <div className='findGameBottomOfResults'>
+                {renderCreateAGame()}
+            </div>
+        </div>;
     }
 
     return <div>
         <Header loginOptional={true} loginState={loginState} />
+        <div className='Title'>Find a game</div>
         <div className='findGamePageContent'>
             {renderFoundGames()}
         </div>

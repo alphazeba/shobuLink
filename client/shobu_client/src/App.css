@@ -12,6 +12,7 @@
   --betweenBoardSpace: 0.75em;
 
   --bgColor: #282c34;
+  --footerColor: #111317;
   --contentVerticalMargin: 0;
 }
 
@@ -23,7 +24,7 @@ div{
   margin: 0;
 }
 
-.App-header {
+.App-container {
   background-color: var(--bgColor);
   min-height: 100vh;
   display: flex;
@@ -31,8 +32,7 @@ div{
   align-items: center;
   font-size: calc(10px + 2vmin);
   color: white;
-  padding-bottom: 1em;
-  padding-top: 6em;
+  padding-top: 7rem;
 }
 
 .myBtn {
@@ -44,4 +44,12 @@ div{
 
 .myBtn:hover {
   background-color: gray;
+}
+
+.mainContent {
+  flex: 1;
+}
+
+.Title {
+  font-size: 2em;
 }

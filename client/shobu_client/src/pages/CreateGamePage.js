@@ -91,7 +91,7 @@ export const CreateGamePage = ({loginState}) => {
 
     return <div>
         <Header loginState={loginState}/>
-        <h1 className='topSpace'>Create a game</h1>
+        <div className='Title'>Create a game</div>
         <div className='inputSpace'>
             <ToggleButtons
                 toggleValues={TIME_MODE_TV}

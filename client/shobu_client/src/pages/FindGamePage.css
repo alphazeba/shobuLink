@@ -10,10 +10,20 @@
     width: 1em;
 }
 
-.floatLeft {
-    float: left;
+.findGameToken {
+    display: inline-block;
+    vertical-align: top;
+    padding-top: 0.25em;
 }
 
 .findGamePlayerName {
     margin-left: 0.5em;
+}
+
+.findGamePlayerColomn {
+    padding-right: 0.5em;
+}
+
+.findGameBottomOfResults {
+    padding-top: 1em;
 }
