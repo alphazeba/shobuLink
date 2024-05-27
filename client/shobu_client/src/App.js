@@ -10,6 +10,7 @@ import { CreateGamePage } from './pages/CreateGamePage';
 import { PlayerPage } from './pages/PlayerPage';
 import { FindGamePage } from './pages/FindGamePage';
 import React from 'react'
+import { Donate } from './bits/Donate';
 
 function App() {
     const loginState = useLoginState();
@@ -44,6 +45,7 @@ function App() {
         <div className="App">
             <header className="App-header">
                 <RouterProvider router={router} />
+                <Donate/>
             </header>
         </div>
     );
