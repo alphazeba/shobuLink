@@ -23,3 +23,12 @@
     float: right;
     font-size: 0.5em;
 }
+
+.loggedInAs {
+    font-size: 0.75em;
+    float: right;
+}
+
+.gameButton {
+    float: right;
+}

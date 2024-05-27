@@ -62,12 +62,18 @@ const LoginWidget = ({ loginIsRequired, loginState }) => {
     const renderLoggedInForm = () => {
         return <div className='loginBox'>
             <div>
-                logged in as:&nbsp;
-                <button className='btn myBtn' onClick={()=>navigate( "/user/" + loginState.loginInfo.id )}>
-                    {loginState.loginInfo.name}
+                <button className='btn myBtn gameButton' onClick={()=>navigate( "/user/" + loginState.loginInfo.id )}>
+                    My Games
                 </button>
             </div>
-            <button className='myLink logoutBtn' onClick={onLogout}>logout</button>
+            <div>
+                <div className='loggedInAs'>
+                    logged in as:&nbsp;{loginState.loginInfo.name}
+                </div>
+            </div>
+            <div>
+                <button className='myLink logoutBtn' onClick={onLogout}>logout</button>
+            </div>
         </div>
     }
 

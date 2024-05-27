@@ -7,9 +7,13 @@ export const HomePage = ({loginState}) => {
     return <div>
             <Header loginOptional={true} loginState={loginState}/>
             <div className='homeContainer'>
-                Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
+                Try joining a game <a className='btn myBtn' href={"/findGame"}> here</a>
             </div>
             <div className='line' />
             <Screensaver />
+            <div className='line' />
+            <div >
+                Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
+            </div>
         </div>;
 }

@@ -91,7 +91,7 @@ export const CreateGamePage = ({loginState}) => {
 
     return <div>
         <Header loginState={loginState}/>
-        <h1>Create a game</h1>
+        <h1 className='topSpace'>Create a game</h1>
         <div className='inputSpace'>
             <ToggleButtons
                 toggleValues={TIME_MODE_TV}
@@ -124,6 +124,7 @@ export const CreateGamePage = ({loginState}) => {
 function minTv(minutes) {
     return newToggleValue(minutes.toString() + " min", minutes * 60);
 }
+
 function dayTv(days) {
     return newToggleValue(days.toString() + " day", days * 24 * 60 * 60);
 }

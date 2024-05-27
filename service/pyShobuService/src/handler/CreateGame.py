@@ -1,5 +1,6 @@
 import logic.Game as Game
 import dataAccess.GameTable as GameTable
+import dataAccess.OpenGameTable as OpenGameTable
 from handler.eventIO.eventValidation import getValidatedOptionValue, getValidatedRangeValue, getValidatedStringValue, getOptionalValidatedOptionValue
 import data.playerSide as PlayerSide
 
@@ -21,6 +22,7 @@ def CreateGame( event, context, props ):
         VALID_TIME_MODES,
         Game._rules_timeMode_standard )
     gameTable = props["gameTable"]
+    openGameTable = props["openGameTable"]
     game = None
     if timeMode == Game._rules_timeMode_correspondance:
         game = Game.new_correspondance_game(
@@ -30,4 +32,6 @@ def CreateGame( event, context, props ):
             playerId, playerName, playerSide, secondsPerSide )
     # save the game object in ddb table.
     GameTable.saveGame( gameTable, game )
+    OpenGameTable.addOpenGame( openGameTable,
+        Game.toOpenGameDdbForm( game ) )
     return { "gameId": Game.getId( game ) }

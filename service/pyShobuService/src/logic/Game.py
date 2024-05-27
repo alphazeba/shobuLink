@@ -66,6 +66,28 @@ def toGetPlayerGamesOutputForm( gameTablePreview ):
     ] )
     return output
 
+def toOpenGameDdbForm( gameTableGame ):
+    output = _filterObjByKeys( gameTableGame, [
+        _id,
+        _buId, _buName,
+        _wuId, _wuName,
+        _startTime,
+        _secs,
+        _rules,
+    ])
+    return output
+
+def toOpenGameOutputForm( openGameTableGame ):
+    output = _filterObjByKeys( openGameTableGame, [
+        _id,
+        _buId, _buName,
+        _wuId, _wuName,
+        _startTime,
+        _secs,
+        _rules,
+    ])
+    return output
+
 def new_standard_game( playerId, playerName, playerSide, seconds ):
     this = {
         _id: newGuid(),

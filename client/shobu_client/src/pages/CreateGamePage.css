@@ -22,3 +22,7 @@
 .inputSpace {
     margin-bottom: 0.5em;
 }
+
+.topSpace {
+    padding-top: var(--contentVerticalMargin);
+}

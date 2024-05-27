@@ -1,0 +1,19 @@
+.findGamePageContent {
+    padding: var(--contentVerticalMargin);
+    padding-left: 0;
+    padding-right: 0;
+    vertical-align: top;
+}
+
+.findGameToken {
+    height: 1em;
+    width: 1em;
+}
+
+.floatLeft {
+    float: left;
+}
+
+.findGamePlayerName {
+    margin-left: 0.5em;
+}

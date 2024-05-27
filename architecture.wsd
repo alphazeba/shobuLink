@@ -1,0 +1,49 @@
+@startuml
+allow_mixing
+
+actor user
+
+component cloud {
+    component api
+    component webSocket
+
+    class getGame
+    class playMove
+    class subscribeToGame
+    class createGame
+    class getOpenGames
+    class joinGame
+
+    object GameTable
+    object ConnectionTable
+    object openGamesTable
+}
+
+user -> api
+user <-> webSocket: subscribe/updates
+
+api -> getGame
+getGame --> GameTable: get state
+
+api -> playMove
+playMove --> GameTable: updateGame
+playMove --> ConnectionTable: get subscribers
+playMove -> webSocket: update subscribers
+
+api -> createGame
+createGame --> openGamesTable: add new game
+createGame --> GameTable: add new game
+
+api --> getOpenGames
+getOpenGames --> openGamesTable: get games
+
+api ---> joinGame
+joinGame --> GameTable: update game
+joinGame --> openGamesTable: remove game
+joinGame -> ConnectionTable: get subscribers
+joinGame --> webSocket: update subscribers
+
+webSocket --> subscribeToGame
+subscribeToGame --> ConnectionTable: write new subscription
+
+@enduml

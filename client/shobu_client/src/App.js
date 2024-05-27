@@ -8,6 +8,7 @@ import { GamePage } from './pages/GamePage';
 import { LoginPage, useLoginState } from './pages/LoginPage';
 import { CreateGamePage } from './pages/CreateGamePage';
 import { PlayerPage } from './pages/PlayerPage';
+import { FindGamePage } from './pages/FindGamePage';
 import React from 'react'
 
 function App() {
@@ -19,22 +20,24 @@ function App() {
         },
         {
             path: "game/:gameId",
-            element: <GamePage
-                loginState={loginState}
-            />
+            element: <GamePage loginState={loginState} />,
         },
         {
             path: "login/:redirect",
-            element: <LoginPage loginState={loginState} />
+            element: <LoginPage loginState={loginState} />,
         },
         {
             path: "createGame",
-            element: <CreateGamePage loginState={loginState} />
+            element: <CreateGamePage loginState={loginState} />,
         },
         {
             path: "user/:userId",
-            element: <PlayerPage loginState={loginState} />
-        }
+            element: <PlayerPage loginState={loginState} />,
+        },
+        {
+            path: "findGame",
+            element: <FindGamePage loginState={loginState} />,
+        },
     ]);
 
     return (

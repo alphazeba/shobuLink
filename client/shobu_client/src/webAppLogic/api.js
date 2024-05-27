@@ -35,6 +35,14 @@ export function getPlayerActiveGames( userId ){
     } );
 }
 
+export function getOpenGames(){
+    return fetchJson( {
+        type: "GetOpenGames",
+    }).then( ( jsonData ) => {
+        return jsonData.games;
+    });
+}
+
 export function playMove( loginInfo, gameId, fullMove ){
     const request = {
         type: "PlayMove",

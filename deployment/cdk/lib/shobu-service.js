@@ -1,11 +1,8 @@
-const cdk = require( "aws-cdk-lib" );
 const { Construct } = require( "constructs" );
 const apigateway = require("aws-cdk-lib/aws-apigateway");
-const apigateway2 = require("aws-cdk-lib/aws-apigatewayv2");
 const lambda = require("aws-cdk-lib/aws-lambda");
 const ddb = require("aws-cdk-lib/aws-dynamodb");
 const { gameTableKey } = require("./tableAttributes");
-const { WebSocketLambdaIntegration } = require("aws-cdk-lib/aws-apigatewayv2-integrations");
 
 class ShobuService extends Construct {
     constructor( scope, id, props ){
@@ -17,12 +14,11 @@ class ShobuService extends Construct {
         // the certificate process through the cdk.
 
         // ddb tables
-        const gameTableName = "GameTable"
+        const gameTableName = "GameTable";
         const gameTable = new ddb.Table( this, gameTableName, {
             tableName: gameTableName,
             partitionKey: { name: gameTableKey.gameId, type: ddb.AttributeType.STRING },
         } );
-
 
         // due to bug with cdk, must add gsi one at a time https://github.com/aws/aws-cdk/issues/12246
         // comment gsi out and deploy cdk multiple times when first setting up.
@@ -37,9 +33,8 @@ class ShobuService extends Construct {
                 gameTableKey.whiteId,
                 gameTableKey.whiteName,
                 gameTableKey.gameState,
-            ]
+            ],
         } );
-        
         gameTable.addGlobalSecondaryIndex( {
             indexName: 'whiteGameIndex',
             partitionKey: { name: gameTableKey.whiteId, type: ddb.AttributeType.STRING },
@@ -51,7 +46,13 @@ class ShobuService extends Construct {
                 gameTableKey.blackId,
                 gameTableKey.blackName,
                 gameTableKey.gameState,
-            ]
+            ],
+        } );
+
+        const openGameTableName = "OpenGameTable";
+        const openGameTable = new ddb.Table( this, openGameTableName, {
+            tableName: openGameTableName,
+            partitionKey: { name: gameTableKey.gameId, type: ddb.AttributeType.STRING },
         } );
 
         // lambda functions
@@ -81,6 +82,7 @@ class ShobuService extends Construct {
 
         // permissions
         gameTable.grantReadWriteData( this.lambdaFn );
+        openGameTable.grantReadWriteData( this.lambdaFn );
         props.connectionTable.grantReadWriteData( this.lambdaFn );
         props.webSocketApi.grantManagementApiAccess( this.lambdaFn );
     }
