@@ -34,6 +34,9 @@ export const HowToPlay = ({loginState}) => {
             <HowToBlock title="Winning:">
                 At the end of your turn, if you have pushed all your opponents pieces off on any board, you have won!
             </HowToBlock>
+            <HowToBlock title="Now get out there!">
+                Join a game <a className='btn myBtn' href={"/findGame"}> here</a>
+            </HowToBlock>
         </div>
     </div>
 }

@@ -96,12 +96,6 @@ export const FindGamePage = ({loginState}) => {
         </div>
     }
 
-    const renderCreateAGame = () => {
-        return <div>
-            Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
-        </div>
-    }
-
     const renderFoundGames = () => {
         if (openGameState.games.length === 0) {
             if (openGameState.loading) {
@@ -109,14 +103,18 @@ export const FindGamePage = ({loginState}) => {
             } else {
                 return <div>
                     <div>There are no games</div>
-                    {renderCreateAGame()}
+                    <div>
+                        Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
+                    </div>
                 </div>
             }
         }
         return <div>
             {openGameState.games.map((game)=>renderGame(game))}
             <div className='findGameBottomOfResults'>
-                {renderCreateAGame()}
+                <div>
+                    ...or create a game <a className='btn myBtn' href={"/createGame"}> here</a>
+                </div>
             </div>
         </div>;
     }

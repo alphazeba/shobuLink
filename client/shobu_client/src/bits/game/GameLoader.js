@@ -119,7 +119,7 @@ export const GameLoader = ( { gameId, loginState } ) => {
     }
 
     const isGamePlayable = () => {
-        let gameIsActive = gameState.state === "blackMove" || gameState.state === "whiteMove";
+        const gameIsActive = gameState.state === "blackMove" || gameState.state === "whiteMove";
         return gameIndex === gameState.history.length-1 && gameIsActive;
     }
 
