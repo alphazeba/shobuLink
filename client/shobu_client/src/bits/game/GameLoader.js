@@ -4,7 +4,7 @@ import { Board } from './Board';
 import { MoveList } from './MoveList';
 import { JoinShareWidget } from './JoinShareWidget';
 import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
-import { isSomeoneOutOfTime } from './Clock';
+import './GameLoader.css';
 
 export const GameLoader = ( { gameId, loginState } ) => {
     const gameState = useGameState();
@@ -123,9 +123,8 @@ export const GameLoader = ( { gameId, loginState } ) => {
         return gameIndex === gameState.history.length-1 && gameIsActive;
     }
 
-    return <div className='container'>
-            <div className='row'>
-                <div className="col col-md-7">
+    return <div className='gameLoaderContainer'>
+                <div className="gameLoaderChild">
                     <Board 
                         boardState={getBoardState()} 
                         onMove={handleMoveMade} 
@@ -139,14 +138,21 @@ export const GameLoader = ( { gameId, loginState } ) => {
                         <JoinShareWidget gameState={gameState} loginState={loginState} />
                     </Board>
                 </div>
-                <div className="col col-md-5">
-                    <MoveList curIndex={gameIndex} moves={gameState.moves} onGoToMove={handleGoToIndex}>
-                        <button className={"btn myBtn"} onClick={goToBeginningIndex} >{"|<"}</button>
-                        <button className={"btn myBtn"} onClick={goToPrevIndex}>{"<"}</button>
-                        <button className={"btn myBtn"} onClick={goToNextIndex}>{">"}</button>
-                        <button className={"btn myBtn"} onClick={goToMostRecentIndex} >{">|"}</button>
+                <div className="gameLoaderChild">
+                    <MoveList
+                        curIndex={gameIndex}
+                        moves={gameState.moves}
+                        onGoToMove={handleGoToIndex}
+                    >
+                        <button className={"btn myBtn"} onClick={goToBeginningIndex} >
+                            {"|<"}</button>
+                        <button className={"btn myBtn biggerSelector"} onClick={goToPrevIndex}>
+                            {"<"}</button>
+                        <button className={"btn myBtn biggerSelector"} onClick={goToNextIndex}>
+                            {">"}</button>
+                        <button className={"btn myBtn"} onClick={goToMostRecentIndex} >
+                            {">|"}</button>
                     </MoveList>
                 </div>
-            </div>
         </div>;
 }

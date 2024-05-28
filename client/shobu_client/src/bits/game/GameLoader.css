@@ -1,0 +1,19 @@
+
+
+
+.gameLoaderContainer {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    width: 100vw;
+    justify-content: center;
+    gap: 1em
+}
+
+.gameLoaderChild {
+}
+
+.biggerSelector {
+    width: 5em;
+    min-width: min-content;
+}

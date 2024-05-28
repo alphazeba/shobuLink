@@ -2,48 +2,72 @@
 allow_mixing
 
 actor user
+component client
 
 component cloud {
-    component api
-    component webSocket
+    component gateway {
+        component api
+        component webSocket
+        component apiGateway
+    }
 
-    class getGame
-    class playMove
-    class subscribeToGame
-    class createGame
-    class getOpenGames
-    class joinGame
+    component s3 {
+        object clientBucket
+    }
 
-    object GameTable
-    object ConnectionTable
-    object openGamesTable
+    component lambdaFns {
+        class getGame
+        class playMove
+        class subscribeToGame
+        class createGame
+        class getOpenGames
+        class joinGame
+
+        diamond apiDiamond
+        circle updateSubscribers
+    }
+
+    component ddb {
+        object GameTable
+        object ConnectionTable
+        object openGamesTable
+    }
+
+    circle writeGameTable
 }
 
-user -> api
-user <-> webSocket: subscribe/updates
+apiGateway --> clientBucket
+user --> client
+user --> apiGateway: fetch client
+client --> api
+client <--> webSocket
 
-api -> getGame
-getGame --> GameTable: get state
+apiDiamond --> getGame
+getGame --> GameTable: get
 
-api -> playMove
-playMove --> GameTable: updateGame
-playMove --> ConnectionTable: get subscribers
-playMove -> webSocket: update subscribers
+apiDiamond --> playMove
+playMove --> writeGameTable
+playMove -up-> updateSubscribers
 
-api -> createGame
-createGame --> openGamesTable: add new game
-createGame --> GameTable: add new game
+apiDiamond --> createGame
+createGame --> openGamesTable: add
+createGame --> writeGameTable
 
-api --> getOpenGames
-getOpenGames --> openGamesTable: get games
+apiDiamond --> getOpenGames
+getOpenGames --> openGamesTable: scan
 
-api ---> joinGame
-joinGame --> GameTable: update game
-joinGame --> openGamesTable: remove game
-joinGame -> ConnectionTable: get subscribers
-joinGame --> webSocket: update subscribers
+apiDiamond --> joinGame
+joinGame --> writeGameTable
+joinGame --> openGamesTable: delete
+joinGame -up-> updateSubscribers
 
 webSocket --> subscribeToGame
-subscribeToGame --> ConnectionTable: write new subscription
+subscribeToGame -> ConnectionTable: write
+
+updateSubscribers --> ConnectionTable: list
+updateSubscribers -up-> webSocket
+
+writeGameTable --> GameTable
+api --> apiDiamond
 
 @enduml

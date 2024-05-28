@@ -4,7 +4,7 @@ import './MoveList.css';
 
 export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
 
-    if( moves === [] ){
+    if( moves.length === 0 ){
         return <div>no moves</div>
     }
 
