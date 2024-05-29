@@ -40,6 +40,8 @@ const GamePreviewLogic = (mode) => {
         for( let i=0; i<gamePreviews.length; i++ ){
             gamePreviews[i].boardState = parsePreview( gamePreviews[i].prv );
         }
+        // want newest on top
+        gamePreviews.sort((a, b) => b.startTime - a.startTime);
         setGamePreviews( gamePreviews );
         console.log( gamePreviews );
     }

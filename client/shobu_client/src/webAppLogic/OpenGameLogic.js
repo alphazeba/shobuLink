@@ -10,6 +10,8 @@ export const useListOpenGames = () => {
             return false;
         }
         getOpenGames().then( (gamesResponse) => {
+            // want oldest on top
+            gamesResponse.sort((a, b) => a.startTime - b.startTime)
             setGames(gamesResponse);
             setWaitingForResponse(false);
         });
