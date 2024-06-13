@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
+import React, { Fragment, useState } from 'react'
 import './Board.css'
 import { side, token } from '../../gameLogic/token'
-import { getSubboard, subboardGetToken } from '../../gameLogic/board';
+import { getSubboard, makeValidatedMove, subboardGetToken } from '../../gameLogic/board';
 import { generateValidPassiveMoves, generateValidActiveMoves } from '../../gameLogic/moveGenerator';
 import { addSpotVec, compareVec, getDeltaVector } from '../../gameLogic/spot';
 import { buildFullMove, buildPartialMove } from '../../gameLogic/move';
 import { buildCellLocationStyle } from '../../util/styleHelper';
 import { Arrow } from './Arrow';
 import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
-import { Clock } from './Clock';
+import { Clock, getTimeMode } from './Clock';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 
@@ -18,6 +18,8 @@ export const Board = ({ boardState, playable,
     const [ selectedPassiveSpot, setSelectedPassiveSpot ] = useState( null );
     const [ passiveMoves, setPassiveMoves ] = useState( [] );
     const [ selectedPassiveMove, setSelectedPassiveMove ] = useState( null );
+    const [ potentialNextMove, setPotentialNextMove ] = useState( null );
+    const [ potentialNextMoveBoardStateHash, setPotentialNextMoveBoardStateHash ] = useState( null );
     const [ activeMovesBlack, setActiveMovesBlack ] = useState( [] );
     const [ activeMovesWhite, setActiveMovesWhite ] = useState( [] );
 
@@ -32,6 +34,11 @@ export const Board = ({ boardState, playable,
             return side.BLACK;
         }
         return side.BLACK;
+    }
+
+    const hashBoardState = (boardState) => {
+        // there is definitely a better way to do this
+        return JSON.stringify(boardState);
     }
 
     const usingFlippedPerspective = () => {
@@ -77,16 +84,32 @@ export const Board = ({ boardState, playable,
         setActiveMovesWhite( generateValidActiveMoves( boardState, move, side.WHITE ) );
     }
 
+    const gameRequiresUserMoveConfirmation = () => {
+        /*
+        if (!timeData) {
+            return false;
+        }
+        return getTimeMode(timeData) === "cor";
+        */
+        // turns out this feature is nice. maybe add option to turn off?
+        return true;
+    }
+
     const cellSelect_activeMove = ( x, y, n ) => {
         let activeMove = getTargetMove( x,y,n );
         let passiveMove = selectedPassiveMove;
         let fullMove = buildFullMove( passiveMove, activeMove );
-        makeMove( fullMove );
-        clearSelections();
+        if (gameRequiresUserMoveConfirmation()) {
+            setPotentialNextMove( fullMove );
+            setPotentialNextMoveBoardStateHash( hashBoardState(boardState) );
+        } else {
+            makeMove( fullMove );
+        }
     }
 
     const makeMove = ( fullMove ) => {
         onMove( fullMove );
+        clearSelections();
     }
 
     const getTargetMove = ( x, y, n ) => {
@@ -138,6 +161,10 @@ export const Board = ({ boardState, playable,
         setSelectedPassiveMove( null );
         setActiveMovesBlack( [] );
         setActiveMovesWhite( [] );
+        // may want to find a way to not immediately
+        // clear the potential move so it looks cleaner
+        setPotentialNextMove( null );
+        setPotentialNextMoveBoardStateHash( null );
     }
 
     const _sbdRot = ( n, flipped ) => {
@@ -150,8 +177,16 @@ export const Board = ({ boardState, playable,
     const drawBoard = ( board ) => {
         let flipped = usingFlippedPerspective();
         return <div className='boardContainer'>
-            <div className="topBoardRow">{ drawSubboard( board, _sbdRot(0,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(1,flipped) ) }</div>
-            <div>{ drawSubboard( board, _sbdRot(2,flipped) ) }<span className='betweenSubboard'/>{ drawSubboard( board, _sbdRot(3,flipped) ) }</div>
+            <div className="topBoardRow">
+                { drawSubboard( board, _sbdRot(0,flipped) ) }
+                <span className='betweenSubboard'/>
+                { drawSubboard( board, _sbdRot(1,flipped) ) }
+            </div>
+            <div>
+                { drawSubboard( board, _sbdRot(2,flipped) ) }
+                <span className='betweenSubboard'/>
+                { drawSubboard( board, _sbdRot(3,flipped) ) }
+            </div>
             { children }
         </div>
     }
@@ -375,6 +410,46 @@ export const Board = ({ boardState, playable,
         </div>
     }
 
+
+    const thereIsAPotentialMoveForCurrentBoardState = () => {
+        return potentialNextMove != null
+            && potentialNextMoveBoardStateHash === hashBoardState(boardState);
+    }
+
+    const getBoardState = () => {
+        if (thereIsAPotentialMoveForCurrentBoardState()) {
+            return makeValidatedMove(boardState, potentialNextMove);
+        }
+        return boardState;
+    }
+
+    const drawConfirmMoveButtons = () => {
+        let content;
+        let className = 'confirmationBox';
+        if (!thereIsAPotentialMoveForCurrentBoardState()) {
+            content = <div/>;
+        } else {
+            className += ' confirmationBoxActivated'
+            content = <Fragment>
+                <button
+                    className='btn myBtn confirmationButton boardUndoButton'
+                    onClick={clearSelections}
+                >
+                    undo
+                </button>
+                <button
+                    className='btn myBtn confirmationButton boardConfirmButton'
+                    onClick={()=>makeMove(potentialNextMove)}
+                >
+                    confirm
+                </button>
+            </Fragment>
+        }
+        return <div className={className}>
+            {content}
+        </div>
+    }
+
     if (justBoard) {
         return <div>
             <div className='titlesContainer'>
@@ -385,15 +460,18 @@ export const Board = ({ boardState, playable,
                 {drawBottomName()}
             </div>
             <div className='fullBoardContainer sideBySide'>
-                { drawBoard( boardState ) }
+                { drawBoard( getBoardState() ) }
             </div>
         </div>;
     }
     return <div>
         <div className='fullBoardContainer'>
             { drawTopName() }
-            { drawBoard( boardState ) }
-            { drawBottomName() }
+            { drawBoard( getBoardState() ) }
+            <div className='boardBottomContainer'>
+                { drawBottomName() }
+                { drawConfirmMoveButtons() }
+            </div>
         </div>
     </div>
 }

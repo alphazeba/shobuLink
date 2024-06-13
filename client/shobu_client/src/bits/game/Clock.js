@@ -62,8 +62,8 @@ export const buildTimeData = (
     rules
 ) => {
     let blackTime, whiteTime;
-    const timeMode = rules?.tm;
-    if (!timeMode || timeMode === "std") {
+    const timeMode = rules?.tm || "std";
+    if (timeMode === "std") {
         [blackTime, whiteTime] = getTimeModeTimedTimes(moves, startTime);
     } else if (timeMode === "cor") {
         [blackTime, whiteTime] = getTimeModeCorrespondanceTimes();
@@ -76,6 +76,7 @@ export const buildTimeData = (
         timeControlSeconds,
         gameState,
         lastMoveWasBlack: !isBlackMove(gameState),
+        timeMode,
     };
     return timeData;
 }
@@ -88,6 +89,8 @@ const getLastTimeStamp = (moves, startTime) => {
 }
 
 const getTimeModeCorrespondanceTimes = () => {
+    // always zero because correspondance games reset
+    // used time each turn.
     return [0, 0];
 }
 
@@ -140,6 +143,10 @@ const getTickingMs = (timeData) => {
 export const isSomeoneOutOfTime = (timeData) => {
     const timeControlMs = timeData.timeControlSeconds * 1000;
     return timeControlMs < Math.max(getBlackTime(timeData), getWhiteTime(timeData))
+}
+
+export const getTimeMode = (timeData) => {
+    return timeData.timeMode;
 }
 
 const getTimeText = (timeMs) => {

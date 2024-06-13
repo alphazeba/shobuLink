@@ -183,3 +183,35 @@
 .sideBySide {
     display: inline-block;
 }
+
+.confirmationBox {
+    position: absolute;
+    pointer-events: all;
+    transition: top var(--movet), opacity var(--movet);
+    top: -3em;
+    display: flex;
+    gap: var(--betweenBoardSpace);
+    opacity: 0;
+    width: 100%;
+}
+
+.confirmationBoxActivated {
+    top: 0;
+    opacity: 1;
+}
+
+.confirmationButton {
+    flex: 1;
+}
+
+.boardBottomContainer {
+    position: relative;
+}
+
+.boardUndoButton {
+    background-color: rgba(255, 190, 190, 0.7);
+}
+
+.boardConfirmButton {
+    background-color: rgba(190, 255, 190, 0.7);
+}
