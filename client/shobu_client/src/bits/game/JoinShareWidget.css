@@ -24,6 +24,18 @@
     border: gray solid 1px;
 }
 
+.gameShareCancelButton {
+    top: 75%;
+    color: white;
+    background-color: red;
+    opacity: 0.65;
+    border-color: white;
+}
+
+.gameShareCancelButton:hover {
+    opacity: 1;
+}
+
 .gameShareHelperInner {
     pointer-events: none;
     user-select: none;

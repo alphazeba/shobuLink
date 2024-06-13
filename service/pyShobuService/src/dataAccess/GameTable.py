@@ -17,6 +17,11 @@ def getGame( gameTable, gameId ):
 def saveGame( gameTable, game ):
     gameTable.put_item( Item=game )
 
+def deleteGame( gameTable, gameId ):
+    gameTable.delete_item(
+        Key={ "id": gameId }
+    )
+
 def queryGamesByPlayerSide( gameTable, playerId, side, gamePhaseToken ):
     indexName = 'blackGameIndex'
     keyName = 'buId'

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useGameState } from '../../webAppLogic/GameLogic';
 import { Board } from './Board';
 import { MoveList } from './MoveList';
 import { JoinShareWidget } from './JoinShareWidget';
-import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
+import { isBlackMove, isWhiteMove, stateIsActive, stateIsNotStarted } from '../../util/stateHelper';
 import './GameLoader.css';
 
 export const GameLoader = ( { gameId, loginState } ) => {
@@ -12,6 +13,7 @@ export const GameLoader = ( { gameId, loginState } ) => {
     const [ liveUpdate, setLiveUpdate ] = useState( true );
     const userId = loginState.loginInfo.id;
     const timeData = gameState.timeData;
+    const navigate = useNavigate();
 
     useEffect(() => {
         if( gameIsNotLoaded() ){
@@ -118,6 +120,10 @@ export const GameLoader = ( { gameId, loginState } ) => {
         gameState.playMove( fullMove );
     }
 
+    const handleGameCancelled = () => {
+        navigate("/");
+    }
+
     const isGamePlayable = () => {
         const gameIsActive = gameState.state === "blackMove" || gameState.state === "whiteMove";
         return gameIndex === gameState.history.length-1 && gameIsActive;
@@ -135,8 +141,9 @@ export const GameLoader = ( { gameId, loginState } ) => {
                         gameState={gameState.state}
                         timeData={timeData}
                     >
-                        <JoinShareWidget gameState={gameState} loginState={loginState} />
+                        <JoinShareWidget gameState={gameState} loginState={loginState} onGameCancelled={handleGameCancelled}/>
                     </Board>
+                    
                 </div>
                 <div className="gameLoaderChild">
                     <MoveList

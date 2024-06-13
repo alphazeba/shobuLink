@@ -15,6 +15,10 @@ def listOpenGames( openGameTable ):
     )
     return response['Items']
 
+def getOpenGame( openGameTable, gameId ):
+    response = openGameTable.get_item( Key={'id':gameId})
+    return response['Item']
+
 def closeOpenGame( openGameTable, gameId ):
     openGameTable.delete_item(
         Key={ "id": gameId }

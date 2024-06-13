@@ -6,10 +6,11 @@ from handler.GetPlayerGames import GetPlayerGames
 from handler.GetPlayerActiveGames import GetPlayerActiveGames
 from handler.JoinGame import JoinGame
 from handler.PlayMove import PlayMove
+from handler.CallTime import CallTime
 from handler.GetOpenGames import GetOpenGames
+from handler.CancelGame import CancelGame
 from handler_websocket.SubscribeToGame import SubscribeToGame
 from exception.ExceptionToReturn import ExceptionToReturn
-from handler.CallTime import CallTime
 import util.jsonHelp as json
 import handler.eventIO.ddb as DDB
 import dataAccess.GameTable as GameTable
@@ -38,7 +39,7 @@ routes = {
     "PlayMove": PlayMove,
     "CallTime": CallTime,
     "GetOpenGames": GetOpenGames,
-
+    "CancelGame": CancelGame,
 }
 
 def lambda_websocket_handler( event, context ):

@@ -11,9 +11,6 @@ def JoinGame( event, context, props ):
     playerId = getValidatedStringValue( "userId", event )
     playerName = getValidatedStringValue( "userName", event )
     gameId = getValidatedStringValue( "gameId", event )
-    # verify logged in 
-    # TODO
-    # do stuff.
     gameTable = props['gameTable']
     openGameTable = props['openGameTable']
     game = GameTable.getGame( gameTable, gameId )

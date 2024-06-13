@@ -1,8 +1,10 @@
-import React, {useState} from 'react';
+import React, {Fragment, useState} from 'react';
 import './JoinShareWidget.css';
-import { joinGame } from '../../webAppLogic/api';
+import { cancelGame, joinGame } from '../../webAppLogic/api';
 
-export const JoinShareWidget = ({gameState, loginState}) => {
+export const JoinShareWidget = ({gameState, loginState, onGameCancelled}) => {
+
+    const [waitingForCancel, setWaitingForCancel] = useState(false);
 
     const gameIsJoinable = () => {
         return gameState.state === "waitingForPlayer";
@@ -25,6 +27,26 @@ export const JoinShareWidget = ({gameState, loginState}) => {
             } );
     }
 
+    const initiateCancel = () => {
+        setWaitingForCancel(true);
+        cancelGame(loginState.loginInfo, gameState.gameId)
+            .then( (result) => {
+                setWaitingForCancel(false);
+                if (result.gameCancelled) {
+                    onGameCancelled();
+                    return;
+                }
+                console.log(result.reason);
+            });
+    }
+
+    const handleCancelGame = () => {
+        if (waitingForCancel) {
+            return;
+        }
+        initiateCancel();
+    }
+
     const getUrl = () => {
         return window.location.href;
     }
@@ -39,13 +61,21 @@ export const JoinShareWidget = ({gameState, loginState}) => {
     }
     if( waitingForStart() ) {
         return <div className='gameShareHelper'>
-            Waiting for game to start
-        </div>
+                Waiting for game to start
+            </div>
     }
     if( thisPlayerIsInGame() ){
-        return <div className='gameShareHelper'>
-            Share the url with your opponent
-        </div>
+        return <Fragment>
+            <div className='gameShareHelper'>
+                Share the url with your opponent
+            </div>
+            <button
+                className='gameShareHelper gameShareCancelButton'
+                onClick={handleCancelGame}
+            >
+                { waitingForCancel ? "loading..." : "Cancel game" }
+            </button>
+        </Fragment>
     }
     // player is not in game
     return <button className='joinGameButton btn myBtn' onClick={handleJoinGame}>

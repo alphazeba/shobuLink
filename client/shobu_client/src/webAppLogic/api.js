@@ -43,6 +43,17 @@ export function getOpenGames(){
     });
 }
 
+export function cancelGame(loginInfo, gameId){
+    return fetchJson( {
+        type: "CancelGame",
+        gameId: gameId,
+        loginToken: loginInfo.token,
+        userId: loginInfo.id
+    }).then( ( jsonData ) => {
+        return jsonData;
+    });
+}
+
 export function playMove( loginInfo, gameId, fullMove ){
     const request = {
         type: "PlayMove",
