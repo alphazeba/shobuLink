@@ -124,6 +124,7 @@ export const FindGamePage = ({loginState}) => {
         <div className='Title'>Find a game</div>
         <div className='findGamePageContent'>
             {renderFoundGames()}
+            <div className='tiny'>Not seeing your game? Open games are culled if unaccepted for over a day.</div>
         </div>
     </div>
 }

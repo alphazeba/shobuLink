@@ -35,8 +35,8 @@
 .hoverLift {
     transition: transform 0.25s;
     transform: translateY(0);
-  }
-  
-  .hoverLift:hover {
+}
+
+.hoverLift:hover {
     transform: translateY(-0.1em);
-  }
+}

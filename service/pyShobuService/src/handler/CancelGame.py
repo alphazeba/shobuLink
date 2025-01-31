@@ -18,9 +18,9 @@ def CancelGame( event, context, props ):
         openGame = OpenGameTable.getOpenGame(openGameTable, gameId)
     except:
         return respondGenericClientIssue()
+    # if the player is in the game,
     if playerId != getPlayerId(openGame):
         return respondGenericClientIssue()
-    # if the player is in the game,
     print("deleting pending game" + gameId)
     OpenGameTable.closeOpenGame(openGameTable, gameId)
     GameTable.deleteGame(gameTable, gameId)
