@@ -1,6 +1,7 @@
 import React from "react";
 import './HowToPlay.css';
 import { Header } from '../bits/Header';
+import { Link } from "react-router-dom";
 
 export const HowToPlay = ({loginState}) => {
     return <div>
@@ -35,7 +36,7 @@ export const HowToPlay = ({loginState}) => {
                 At the end of your turn, if you have pushed all your opponents pieces off on any board, you have won!
             </HowToBlock>
             <HowToBlock title="Now get out there!">
-                Join a game <a className='btn myBtn' href={"/findGame"}> here</a>
+                Join a game <Link className='btn myBtn' to={"/findGame"}> here</Link>
             </HowToBlock>
         </div>
     </div>

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Donate } from './Donate';
 import './Footer.css';
+import { Link } from 'react-router-dom';
 
 export const Footer = () => {
     return <div className='footer'>
@@ -8,9 +9,9 @@ export const Footer = () => {
             <Donate/>
         </div>
         <div className='footerRightSide'>
-            <a className='btn myBtn' href="/howToPlay">
+            <Link className='btn myBtn' to="/howToPlay">
                 How To Play
-            </a>
+            </Link>
         </div>
     </div>
 }

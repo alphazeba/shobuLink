@@ -25,7 +25,7 @@ const GamePreviewLogic = (mode) => {
         return getPlayerGames;
     }
     const loadGamePreviews = ( userId ) => {
-        if( waitingForResponse || userId == loadedUserId ){
+        if( waitingForResponse || userId === loadedUserId ){
             return false;
         }
         getGetGamesFn(mode)( userId ).then( ( gamePreviews ) => {

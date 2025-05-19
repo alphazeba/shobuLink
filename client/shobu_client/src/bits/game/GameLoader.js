@@ -4,7 +4,7 @@ import { useGameState } from '../../webAppLogic/GameLogic';
 import { Board } from './Board';
 import { MoveList } from './MoveList';
 import { JoinShareWidget } from './JoinShareWidget';
-import { isBlackMove, isWhiteMove, stateIsActive, stateIsNotStarted } from '../../util/stateHelper';
+import { isBlackMove, isWhiteMove, stateIsActive } from '../../util/stateHelper';
 import './GameLoader.css';
 
 export const GameLoader = ( { gameId, loginState } ) => {

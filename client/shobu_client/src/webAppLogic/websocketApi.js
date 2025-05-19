@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 
 const websocketApiUrl = 'wss://tj2xkkho5c.execute-api.us-west-2.amazonaws.com/prod/';
 

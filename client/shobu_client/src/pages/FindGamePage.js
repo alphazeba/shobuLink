@@ -1,10 +1,8 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { side } from '../gameLogic/token';
-import { createGame } from '../webAppLogic/api';
 import './FindGamePage.css';
 import { Header } from '../bits/Header';
-import { ToggleButtons, newToggleValue } from '../bits/ToggleButtons';
 import { useListOpenGames } from '../webAppLogic/OpenGameLogic';
 
 export const FindGamePage = ({loginState}) => {
@@ -57,11 +55,6 @@ export const FindGamePage = ({loginState}) => {
         return days.toString() + " day";
     }
 
-    const getGameType = (game) => {
-        let timeMode = getTimeMode(game);
-        let timeControl = game.secs;
-    }
-
     const handleClickGame = ( gameId ) => {
         navigate( "/game/" + gameId );
     }
@@ -104,7 +97,7 @@ export const FindGamePage = ({loginState}) => {
                 return <div>
                     <div>There are no games</div>
                     <div>
-                        Try creating a game <a className='btn myBtn' href={"/createGame"}> here</a>
+                        Try creating a game <Link className='btn myBtn' to="/createGame"> here</Link>
                     </div>
                 </div>
             }
@@ -113,7 +106,7 @@ export const FindGamePage = ({loginState}) => {
             {openGameState.games.map((game)=>renderGame(game))}
             <div className='findGameBottomOfResults'>
                 <div>
-                    ...or create a game <a className='btn myBtn' href={"/createGame"}> here</a>
+                    ...or create a game <Link className='btn myBtn' to="/createGame"> here</Link>
                 </div>
             </div>
         </div>;

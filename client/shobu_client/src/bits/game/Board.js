@@ -8,7 +8,8 @@ import { buildFullMove, buildPartialMove } from '../../gameLogic/move';
 import { buildCellLocationStyle } from '../../util/styleHelper';
 import { Arrow } from './Arrow';
 import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
-import { Clock, getTimeMode } from './Clock';
+import { Clock } from './Clock';
+import { Link } from 'react-router-dom';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 
@@ -403,9 +404,9 @@ export const Board = ({ boardState, playable,
     const drawName = ( name, id, sideValue ) => {
         return <div className='nameBar'>
             {renderBoardState( sideValue )}
-            <a href={'/user/' + id } className='btn myBtn nameLink'>
+            <Link to={'/user/' + id } className='btn myBtn nameLink'>
                 {name}
-            </a>
+            </Link>
             {renderClock(sideValue)}
         </div>
     }

@@ -63,8 +63,6 @@ export const PlayerPage = ({loginState}) => {
             month: "2-digit",
             day: "2-digit"
         });
-        let rule = "?";
-        let timeControl = "?";
         let state = gamePreview.state;
 
         return <div className='preview' key={gamePreview.gameId}>

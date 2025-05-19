@@ -17,7 +17,7 @@ export const JoinShareWidget = ({gameState, loginState, onGameCancelled}) => {
     }
     const waitingForStart = () => {
         // check if both blackid and whiteId are filled.
-        return gameState.blackId != undefined && gameState.whiteId != undefined;
+        return gameState.blackId !== undefined && gameState.whiteId !== undefined;
     }
 
     const handleJoinGame = () => {
@@ -45,10 +45,6 @@ export const JoinShareWidget = ({gameState, loginState, onGameCancelled}) => {
             return;
         }
         initiateCancel();
-    }
-
-    const getUrl = () => {
-        return window.location.href;
     }
 
     if( ! gameIsJoinable() ){

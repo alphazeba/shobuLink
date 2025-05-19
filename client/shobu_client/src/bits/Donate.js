@@ -3,7 +3,7 @@ import './Donate.css';
    
 export const Donate = () => {
     return <div className='donateSpace hoverLift'>
-        <a href='https://ko-fi.com/U6U3XZW0G' target='_blank'>
+        <a href='https://ko-fi.com/U6U3XZW0G' target='_blank' rel="noreferrer">
             <img 
                 height='36' 
                 style={{border:'0px',height:'36px'}}

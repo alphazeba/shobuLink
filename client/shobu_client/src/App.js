@@ -1,6 +1,6 @@
 import './App.css';
 import {
-    createBrowserRouter,
+    createHashRouter,
     RouterProvider
 } from 'react-router-dom';
 import { HomePage } from './pages/HomePage';
@@ -15,44 +15,51 @@ import { HowToPlay } from './pages/HowToPlay';
 
 function App() {
     const loginState = useLoginState();
-    const router = createBrowserRouter([
+
+    const wrap = (content) => {
+        return <>
+            <div className='mainContent'>
+                {content}
+            </div>
+            <Footer/>
+        </>
+    }
+
+    const router = createHashRouter([
         {
             path: "/",
-            element: <HomePage loginState={loginState} />,
+            element: wrap(<HomePage loginState={loginState} />),
         },
         {
             path: "game/:gameId",
-            element: <GamePage loginState={loginState} />,
+            element: wrap(<GamePage loginState={loginState} />),
         },
         {
             path: "login/:redirect",
-            element: <LoginPage loginState={loginState} />,
+            element: wrap(<LoginPage loginState={loginState} />),
         },
         {
             path: "createGame",
-            element: <CreateGamePage loginState={loginState} />,
+            element: wrap(<CreateGamePage loginState={loginState} />),
         },
         {
             path: "user/:userId",
-            element: <PlayerPage loginState={loginState} />,
+            element: wrap(<PlayerPage loginState={loginState} />),
         },
         {
             path: "findGame",
-            element: <FindGamePage loginState={loginState} />,
+            element: wrap(<FindGamePage loginState={loginState} />),
         },
         {
             path: "howToPlay",
-            element: <HowToPlay loginState={loginState} />,
+            element: wrap(<HowToPlay loginState={loginState} />),
         }
     ]);
 
     return (
         <div className="App">
             <header className="App-container">
-                <div className='mainContent'>
-                    <RouterProvider router={router} />
-                </div>
-                <Footer/>
+                <RouterProvider router={router} />
             </header>
         </div>
     );

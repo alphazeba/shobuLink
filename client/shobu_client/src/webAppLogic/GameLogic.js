@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { callTime, getGame, getGameUpdate, playMove } from './api.js'
 import { initBoard, makeValidatedMove } from '../gameLogic/board.js';
 import { validateFullMove } from '../gameLogic/moveValidation.js';

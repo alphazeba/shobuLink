@@ -6,7 +6,7 @@ export const Arrow = ({start,vec,flipped}) => {
 
     function getEndpoint(val, delta) {
         const scaler = 0.25;
-        if (delta == 0) {
+        if (delta === 0) {
             return val;
         }
         if (delta < 0) {
