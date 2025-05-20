@@ -8,10 +8,7 @@ class ShobuService extends Construct {
     constructor( scope, id, props ){
         super( scope, id );
 
-        const domainName = "shobu.link"
         const corsOrigin = "*";
-        // idk how to make the link get a certificate so maybe i won't be handling the 
-        // the certificate process through the cdk.
 
         // ddb tables
         const gameTableName = "GameTable";
