@@ -1,7 +1,7 @@
 import React from "react";
 import './HowToPlay.css';
 import { Header } from '../bits/Header';
-import { Link } from "react-router-dom";
+import { Link } from "react-router";
 
 export const HowToPlay = ({loginState}) => {
     return <div>

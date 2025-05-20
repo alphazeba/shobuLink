@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { side } from '../gameLogic/token';
 import { createGame } from '../webAppLogic/api';
 import './CreateGamePage.css';

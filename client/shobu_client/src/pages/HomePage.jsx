@@ -2,7 +2,7 @@ import React from 'react';
 import { Header } from '../bits/Header';
 import { Screensaver } from '../bits/screensaver/screensaver';
 import './HomePage.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export const HomePage = ({loginState}) => {
     return <div>

@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import { HomeButton } from './game/HomeButton';
-import { LoginOptional, LoginRequired } from '../pages/LoginPage';
+import { LoginOptional, LoginRequired, LoginWidget} from '../pages/LoginPage';
 
 export const Header = ({loginOptional, loginState}) => {
     let loginRequired =  true;
@@ -10,6 +10,6 @@ export const Header = ({loginOptional, loginState}) => {
 
     return <Fragment>
         <HomeButton/>
-        { loginRequired ? <LoginRequired loginState={loginState}/> : <LoginOptional loginState={loginState}/> }
+        <LoginWidget loginState={loginState} loginIsRequired={!loginOptional}/>
     </Fragment>
 }

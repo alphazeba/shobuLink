@@ -6,9 +6,6 @@ echo running from ${baseDirectory}
 echo building client program
 cd ../client/shobu_client
 npm run build
+echo deploying to github page
+npm run deploy
 
-cd ${baseDirectory}
-cd ./cdk 
-
-serviceStack=ShobuClientStack
-cdk synth ${serviceStack} && cdk deploy ${serviceStack} --profile cliAdmin

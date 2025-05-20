@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router';
 import { useCompletePreview, useActivePreview } from '../webAppLogic/GamePreviewLogic';
 import { Board } from '../bits/game/Board';
 import { nameToSide, side } from '../gameLogic/token';

@@ -9,7 +9,7 @@ import { buildCellLocationStyle } from '../../util/styleHelper';
 import { Arrow } from './Arrow';
 import { stateIsRelatedToSide, stateIsRelatedToVictory } from '../../util/stateHelper';
 import { Clock } from './Clock';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export const Board = ({ boardState, playable, 
         blackId, blackName, whiteId, whiteName, 

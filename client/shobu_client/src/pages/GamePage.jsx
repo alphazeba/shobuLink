@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams } from 'react-router';
 import { GameLoader } from '../bits/game/GameLoader';
 import { Header } from '../bits/Header';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router";
 import './HomeButton.css';
 
 
@@ -14,7 +14,7 @@ export const HomeButton = (smallVersion=true) => {
     return <button className='btn homeButton' onClick={goHome} >
         <img
             className="shobuIcon"
-            src={process.env.PUBLIC_URL + '/shobuLinkIcon2.svg'}
+            src={'/shobuLinkIcon2.svg'}
             alt=""
         />
         <div className='nameHolder hoverLift'>

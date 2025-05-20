@@ -4,11 +4,11 @@ import { initBoard, makeValidatedMove } from '../gameLogic/board.js';
 import { validateFullMove } from '../gameLogic/moveValidation.js';
 import { parseMove } from '../gameLogic/moveParser.js';
 import { side } from '../gameLogic/token.js';
-import { useLoginState } from '../pages/LoginPage.js';
+import { useLoginState } from '../pages/LoginPage.jsx';
 import { useWebsocket } from './websocketApi.js';
 import { useStateRef } from '../util/stateRef.js';
 import { stateIsActive } from '../util/stateHelper.js';
-import { buildTimeData, isSomeoneOutOfTime } from '../bits/game/Clock.js';
+import { buildTimeData, isSomeoneOutOfTime } from '../bits/game/Clock.jsx';
 
 const SUBSCRIBE_REFRESH_MINS = 2;
 const CALL_TIME_PERIOD_SECONDS = 2;
@@ -61,8 +61,8 @@ export const useGameState = () => {
         return lastMoveTimestamp;
     }
 
-    const sendMoveToServer = ( fullMove, loginInfo ) => {
-        playMove( loginState.loginInfo, loadedGameId, fullMove, loginInfo ).then( ( game ) =>{
+    const sendMoveToServer = ( fullMove ) => {
+        playMove( loginState.loginInfo, loadedGameId, fullMove ).then( ( game ) =>{
             handleGameUpdate( game );
         } );
         setWaitingForResponse( true );

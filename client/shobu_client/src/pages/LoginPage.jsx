@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router';
 import { MyInput } from '../bits/login/MyInput';
 import './LoginPage.css';
 import { HomeButton } from '../bits/game/HomeButton';
@@ -45,7 +45,7 @@ export const LoginOptional = ({loginState}) => {
     return <LoginWidget loginIsRequired={false} loginState={loginState}/>;
 }
 
-const LoginWidget = ({ loginIsRequired, loginState }) => {
+export const LoginWidget = ({ loginIsRequired, loginState }) => {
     const [ forceLogin, setForceLogin ] = useState( false );
     const location = useLocation();
     const navigate = useNavigate();

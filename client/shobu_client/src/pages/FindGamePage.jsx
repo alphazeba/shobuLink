@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { side } from '../gameLogic/token';
 import './FindGamePage.css';
 import { Header } from '../bits/Header';

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Donate } from './Donate';
 import './Footer.css';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 export const Footer = () => {
     return <div className='footer'>
