@@ -13,5 +13,12 @@ export const Footer = () => {
                 How To Play
             </Link>
         </div>
+        <div className="footerLinks">
+            <a href="https://github.com/alphazeba/shobuLink">github</a>
+            -
+            <a href="https://github.com/alphazeba/shobuLink/issues">feedback</a>
+            -
+            <a href="https://aronhommas.com">about</a>
+        </div>
     </div>
 }

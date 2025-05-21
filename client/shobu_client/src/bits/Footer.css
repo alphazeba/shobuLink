@@ -18,3 +18,24 @@
     display: inline-block;
     text-align: end;
 }
+
+.footerLinks {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--footerLinkColor);
+    font-size: 0.7em;
+}
+
+.footerLinks a {
+    margin: 0.5em;
+    margin-top: 0;
+    margin-bottom: 0;
+    font-size: 0.75em;
+    color: var(--footerLinkColor);
+}
+
+.footerLinks a:hover {
+    color: var(--footerLinkHoverColor);
+}

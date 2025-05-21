@@ -14,6 +14,8 @@
   --bgColor: #282c34;
   --footerColor: #111317;
   --contentVerticalMargin: 0;
+  --footerLinkColor: #4c4e51;
+  --footerLinkHoverColor: white;
 }
 
 .App {
