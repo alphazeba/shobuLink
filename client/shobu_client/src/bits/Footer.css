@@ -39,3 +39,8 @@
 .footerLinks a:hover {
     color: var(--footerLinkHoverColor);
 }
+
+.howToPlayBtn {
+    overflow: hidden;
+    white-space: nowrap;
+}

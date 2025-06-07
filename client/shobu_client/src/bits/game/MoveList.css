@@ -1,9 +1,10 @@
 .moveRow {
-    font-size: 1rem;
-    display: inline-block;
-    width: 100%;
-    height: 100%;
+    font-size: 0.75em;
     max-width: 20em;
+    height: 2em;
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
 }
 
 .moveRow.even {
@@ -11,12 +12,13 @@
 }
 
 .rowItem {
-    float: left;
+    /* float: left; */
+    flex: 1 1 auto;
 }
 
 .numberHolder {
     width: 9%;
-    font-size: 1rem;
+    font-size: 0.75em;
     padding-top: 0.3em;
 }
 
@@ -36,8 +38,7 @@
 }
 
 .moveListContainer {
-    font-size: 0;
-    max-width: 25rem;
+    max-width: 20em;
 }
 
 .moveListSuperContainer {

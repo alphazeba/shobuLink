@@ -1,5 +1,5 @@
 :root{
-  --boxSize: 50px;
+  --boxSize: 2em;
   --maxBoxSize: 11vw;
   --subboardMargin: 1em;
   --pieceSize: 15%;
@@ -9,7 +9,7 @@
   --movet: 0.3s;
   --fakeSize: 1.2em;
   --crownOutlineScale: 0.90;
-  --betweenBoardSpace: 0.75em;
+  --betweenBoardSpace: 1.5vmin;
 
   --bgColor: #282c34;
   --footerColor: #111317;
@@ -32,9 +32,9 @@ div{
   display: flex;
   flex-direction: column;
   align-items: center;
-  font-size: calc(10px + 2vmin);
+  font-size: calc(10px + 2vh);
   color: white;
-  padding-top: 7rem;
+  padding-top: 4em;
 }
 
 .myBtn {
@@ -54,4 +54,12 @@ div{
 
 .Title {
   font-size: 2em;
+}
+
+.btn {
+  font-size: min(1em, 5vw);
+}
+
+.btn.disabled {
+  border: 0;
 }

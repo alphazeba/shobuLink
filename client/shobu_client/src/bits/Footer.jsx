@@ -9,7 +9,7 @@ export const Footer = () => {
             <Donate/>
         </div>
         <div className='footerRightSide'>
-            <Link className='btn myBtn' to="/howToPlay">
+            <Link className='btn myBtn howToPlayBtn' to="/howToPlay">
                 How To Play
             </Link>
         </div>

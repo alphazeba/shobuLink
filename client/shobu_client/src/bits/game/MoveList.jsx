@@ -5,10 +5,10 @@ import './MoveList.css';
 export const MoveList = ({curIndex, moves, onGoToMove, children}) => {
 
     const renderMove = ( index ) => {
-        if( index >= moves.length ){
-            return <div/>;
-        }
         let className = 'rowItem moveDisplay btn';
+        if( index >= moves.length ){
+            return <div className={className + " disabled"} > </div>;
+        }
         if( index === curIndex-1 ){
             className += " selected";
         }

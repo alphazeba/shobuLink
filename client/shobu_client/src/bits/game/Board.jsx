@@ -196,9 +196,9 @@ export const Board = ({ boardState, playable,
         let dark = n === 0 || n === 2;
         let subboard = getSubboard( board, n );
 
-        let output = []
+        let output = [];
         for( let iy=0; iy < 4; iy++ ){
-            let row = []
+            let row = [];
             for( let ix =0;ix<4;ix++ ){
                 row.push( drawCell( subboard, n, ix, iy, dark ));
             }
@@ -344,6 +344,7 @@ export const Board = ({ boardState, playable,
 
         return <div
             className={className}
+            style={buildCellLocationStyle(x, y, usingFlippedPerspective())}
             onClick={ ()=>fn(x,y,n) }
             key={ "cell" + String(x) + String(y) }/>
     }
